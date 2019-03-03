@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.148
+// @version      0.0.31.146
 // @date         01/07/2018
 // @modified     03/02/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4004,9 +4004,9 @@
             $.post(S.serverUrl + "/sharejk", { username: usernaem, json: JSON.stringify(json) }, (res) => {
                 if (res && res.code == 0) {
                     GM_setClipboard(res.shareid);
-                    messageAppend("复制成功" + res.msg, res.shareid);
+                    messageAppend("复制成功" + res.msg+":"+ res.shareid);
                 } else {
-                    messageAppend("失败了" + res.msg);
+                    messageAppend("失败了"+res.msg);
                 }
             })
         },
@@ -4015,7 +4015,7 @@
                 if (res && res.code == 0) {
                     callback(res);
                 } else {
-                    messageAppend("失败了" + res.msg);
+                   messageAppend("失败了" + res.msg);
                 }
             });
 
