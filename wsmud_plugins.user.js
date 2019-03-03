@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.144
+// @version      0.0.31.148
 // @date         01/07/2018
 // @modified     03/02/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2819,14 +2819,10 @@
                                                 WG.SendCmd(v.send);
                                             }
                                         }
-                                    } else if (item == "谣言" && data.ch == "rumor") {
-                                        for (var keyworditem of keywords) {
-                                            if (data.content.indexOf(keyworditem) >= 0) {
-                                                messageAppend("已触发" + v.name, 1);
-                                                WG.SendCmd(v.send);
-                                            }
-                                        }
-                                    } else if (item == "系统" && data.ch == 'sys') {
+                                    } else if ((item == "谣言" && data.ch == "rumor") ||
+                                        (item == "系统" && data.ch == 'sys') ||
+                                        (item == "门派" && data.ch == 'fam') ||
+                                        (item == "帮派" && data.ch == 'pty')) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 messageAppend("已触发" + v.name, 1);
@@ -2834,6 +2830,14 @@
                                             }
                                         }
                                     }
+                                    // else if (item == "系统" && data.ch == 'sys') {
+                                    //     for (var keyworditem of keywords) {
+                                    //         if (data.content.indexOf(keyworditem) >= 0) {
+                                    //             messageAppend("已触发" + v.name, 1);
+                                    //             WG.SendCmd(v.send);
+                                    //         }
+                                    //     }
+                                    // }
                                 }
                                 break;
 
@@ -4002,7 +4006,7 @@
                     GM_setClipboard(res.shareid);
                     messageAppend("复制成功" + res.msg, res.shareid);
                 } else {
-                    messageAppend("失败了"+res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             })
         },
@@ -4011,7 +4015,7 @@
                 if (res && res.code == 0) {
                     callback(res);
                 } else {
-                   messageAppend("失败了" + res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             });
 
