@@ -2819,14 +2819,10 @@
                                                 WG.SendCmd(v.send);
                                             }
                                         }
-                                    } else if (item == "谣言" && data.ch == "rumor") {
-                                        for (var keyworditem of keywords) {
-                                            if (data.content.indexOf(keyworditem) >= 0) {
-                                                messageAppend("已触发" + v.name, 1);
-                                                WG.SendCmd(v.send);
-                                            }
-                                        }
-                                    } else if (item == "系统" && data.ch == 'sys') {
+                                    } else if ((item == "谣言" && data.ch == "rumor") ||
+                                        (item == "系统" && data.ch == 'sys') ||
+                                        (item == "门派" && data.ch == 'fam') ||
+                                        (item == "帮派" && data.ch == 'pty')) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 messageAppend("已触发" + v.name, 1);
@@ -2834,6 +2830,14 @@
                                             }
                                         }
                                     }
+                                    // else if (item == "系统" && data.ch == 'sys') {
+                                    //     for (var keyworditem of keywords) {
+                                    //         if (data.content.indexOf(keyworditem) >= 0) {
+                                    //             messageAppend("已触发" + v.name, 1);
+                                    //             WG.SendCmd(v.send);
+                                    //         }
+                                    //     }
+                                    // }
                                 }
                                 break;
 
