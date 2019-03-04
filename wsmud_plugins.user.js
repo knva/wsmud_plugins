@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.146
+// @version      0.0.31.149
 // @date         01/07/2018
-// @modified     03/02/2019
+// @modified     04/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -156,141 +156,169 @@
             place: "扬州城-醉仙楼"
         },
         "包子": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "鸡腿": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "面条": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "扬州炒饭": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "米酒": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "花雕酒": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "女儿红": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "醉仙酿": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "神仙醉": {
-            "id": null, "type": "hiy",
+            "id": null,
+            "type": "hiy",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         //扬州城-杂货铺
         "布衣": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "钢刀": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "木棍": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "英雄巾": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "布鞋": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "铁戒指": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "簪子": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "长鞭": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "钓鱼竿": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "鱼饵": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
 
         //扬州城-打铁铺
         "铁剑": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "钢刀": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁棍": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁杖": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁镐": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
-        }, "飞镖": {
-            "id": null, "type": "wht",
+        },
+        "飞镖": {
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
 
         //扬州城-药铺
         "金创药": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "药铺老板 平一指",
             place: "扬州城-药铺"
         },
         "引气丹": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "药铺老板 平一指",
             place: "扬州城-药铺"
         },
@@ -1925,7 +1953,7 @@
                 // }
                 var listener = this.hooks[i];
                 if (listener.types == data.type || (listener.types instanceof Array && $
-                    .inArray(data.type, listener.types) >= 0)) {
+                        .inArray(data.type, listener.types) >= 0)) {
                     listener.fn(data);
                 }
             }
@@ -2781,8 +2809,7 @@
                                                             messageAppend("当前层数" + data.count + ",已触发" + v.name, 1);
                                                             WG.SendCmd(v.send);
                                                         }
-                                                    }
-                                                    else {
+                                                    } else {
                                                         messageAppend("已触发" + v.name, 1);
                                                         WG.SendCmd(v.send);
                                                     }
@@ -2888,7 +2915,7 @@
                                 let item = G.items.get(G.id);
                                 if (v.ishave == "0") {
                                     //查找id
-                                    if (!v.senduser) { }
+                                    if (!v.senduser) {}
                                     let pid = Helper.find_item(v.senduser);
                                     item = G.items.get(pid);
                                 }
@@ -2969,8 +2996,6 @@
                     }
                 }
             });
-            WG.Send("stopstate");
-            WG.sm_state = 0;
 
             KEY.do_command("tasks");
             KEY.do_command("tasks");
@@ -2994,7 +3019,21 @@
             // await WG.sleep(1000);
 
         },
+        oneKeyQA: async function () {
+            WG.Send("stopstate");
+            WG.sm_state = 0;
+            var sxplace = sm_array[family].sxplace;
+            var sx = sm_array[family].sx;
+            if (sxplace.indexOf("-") == 0) {
+                WG.Send(sxplace.replace('-', ''));
+            } else {
+                WG.go(sxplace);
+            }
+            await WG.sleep(1000);
+            WG.SendCmd("ask2 $findPlayerByName(\"" + sx + "\")");
+            await WG.sleep(1000);
 
+        },
         sd_hook: undefined,
         oneKeySD: function () {
             var n = 0;
@@ -3398,6 +3437,9 @@
         },
         daily: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
+            await Helper.oneKeyQA();
+            await WG.sleep(1000);
+
             await Helper.oneKeyyj();
             Helper.oneKeyDaily();
             await WG.sleep(1000);
@@ -3422,7 +3464,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, yamen: async function (idx = 0, n, cmds) {
+        },
+        yamen: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.go_yamen_task();
             await WG.sleep(1000);
@@ -3431,9 +3474,12 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, boss: async function (idx = 0, n, cmds) {
+        },
+        boss: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            Helper.kksBoss({ content: "听说xxx出现在逍遥派-青草坪一带。" });
+            Helper.kksBoss({
+                content: "听说xxx出现在逍遥派-青草坪一带。"
+            });
             await WG.sleep(1000);
             while (Helper.ksboss) {
                 await WG.sleep(1000);
@@ -3450,7 +3496,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, startpfm: async function (idx = 0, n, cmds) {
+        },
+        startpfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             if (!G.auto_preform) {
                 G.auto_preform = true;
@@ -3459,7 +3506,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, stopautopfm: async function (idx = 0, n, cmds) {
+        },
+        stopautopfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             var dellist = n.split(",");
             for (let p of dellist) {
@@ -3470,7 +3518,8 @@
             console.log("当前自动施法黑名单为:" + blackpfm);
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, startautopfm: async function (idx = 0, n, cmds) {
+        },
+        startautopfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             let dellist = n.split(",");
             for (var i = 0; i < blackpfm.length; i++) {
@@ -3844,13 +3893,18 @@
                     G.skills = data.skills;
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
-                        if (data.distime) { }
+                        if (data.distime) {}
                         G.cds.set(data.id, true);
                         var _id = data.id;
                         setTimeout(function () {
                             G.cds.set(_id, false);
                             //技能cd时间到
-                            let pfmtimeTips = { data: JSON.stringify({ type: "enapfm", id: _id }) };
+                            let pfmtimeTips = {
+                                data: JSON.stringify({
+                                    type: "enapfm",
+                                    id: _id
+                                })
+                            };
                             WG.receive_message(pfmtimeTips);
                         }, data.distime);
                     }
@@ -3873,7 +3927,10 @@
                     }
                 } else if (data.type == "status") {
                     if (data.count != undefined) {
-                        G.status.set(data.id, { "sid": data.sid, "count": data.count });
+                        G.status.set(data.id, {
+                            "sid": data.sid,
+                            "count": data.count
+                        });
                     }
                 }
             });
@@ -4001,21 +4058,26 @@
             return res;
         },
         shareJson: function (usernaem, json) {
-            $.post(S.serverUrl + "/sharejk", { username: usernaem, json: JSON.stringify(json) }, (res) => {
+            $.post(S.serverUrl + "/sharejk", {
+                username: usernaem,
+                json: JSON.stringify(json)
+            }, (res) => {
                 if (res && res.code == 0) {
                     GM_setClipboard(res.shareid);
-                    messageAppend("复制成功" + res.msg+":"+ res.shareid);
+                    messageAppend("复制成功" + res.msg + ":" + res.shareid);
                 } else {
-                    messageAppend("失败了"+res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             })
         },
         getShareJson: function (id, callback) {
-            $.post(S.serverUrl + "/getjk", { shareid: id }, (res) => {
+            $.post(S.serverUrl + "/getjk", {
+                shareid: id
+            }, (res) => {
                 if (res && res.code == 0) {
                     callback(res);
                 } else {
-                   messageAppend("失败了" + res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             });
 
