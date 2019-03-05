@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.151
+// @version      0.0.31.153
 // @date         01/07/2018
 // @modified     04/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1001,7 +1001,6 @@
 
                 }, 500);
                 KEY.do_command("showcombat");
-                WG.Send("taskover zz1");
             }, 1000);
         },
         updete_goods_id: function () {
@@ -1396,29 +1395,29 @@
             }
         },
         zb_next: 0,
-        check_zb_npc: function () {
-            var lists = $(".room_items .room-item");
-            var found = false;
+         check_zb_npc: function () {
+             var lists = $(".room_items .room-item");
+             var found = false;
 
-            for (var npc of lists) {
-                if (npc.innerText.indexOf(zb_npc) != -1) {
-                    found = true;
-                    WG.Send("kill " + $(npc).attr("itemid"));
-                    messageAppend("找到" + zb_npc + "，自动击杀！！！");
-                    WG.zb_next = 0;
-                    return;
-                }
-            }
-            var fj = needfind[zb_place];
-            if (!found && needfind[zb_place] != undefined && WG.zb_next < fj.length) {
-                messageAppend("寻找附近");
-                WG.Send(fj[WG.zb_next]);
-                WG.zb_next++;
-            }
-            if (!found) {
-                window.setTimeout(WG.check_zb_npc, 1000);
-            }
-        },
+             for (var npc of lists) {
+                 if (npc.innerText.indexOf(zb_npc) != -1) {
+                     found = true;
+                     WG.Send("kill " + $(npc).attr("itemid"));
+                     messageAppend("找到" + zb_npc + "，自动击杀！！！");
+                     WG.zb_next = 0;
+                     return;
+                 }
+             }
+             var fj = needfind[zb_place];
+             if (!found && needfind[zb_place] != undefined && WG.zb_next < fj.length) {
+                 messageAppend("寻找附近");
+                 WG.Send(fj[WG.zb_next]);
+                 WG.zb_next++;
+             }
+             if (!found) {
+                 window.setTimeout(WG.check_zb_npc, 1000);
+             }
+         },
 
         kill_all: function () {
 
