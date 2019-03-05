@@ -135,6 +135,7 @@
     var zb_npc;
     var zb_place;
     var next = 0;
+    var zb_next = 0;
     var roomData = [];
     var blacklist = "";
     var blackpfm = [];
@@ -384,7 +385,7 @@
         "少林派-方丈楼": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north",
         "少林派-戒律院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go east",
         "少林派-达摩院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go west",
-        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north",
+        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north",
         "少林派-藏经阁": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go west",
         "少林派-达摩洞": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north;go north",
         "华山派-镇岳宫": "jh fam 3 start;",
@@ -1398,6 +1399,7 @@
         },
         check_zb_npc: function () {
             var lists = $(".room_items .room-item");
+            var found = false;
             for (var npc of lists) {
                 if (npc.innerText.indexOf(zb_npc) != -1) {
                     WG.Send("kill " + $(npc).attr("itemid"));
@@ -1405,7 +1407,17 @@
                     return;
                 }
             }
-            window.setTimeout(WG.check_zb_npc, 1000);
+            var fj = needfind[zb_place];
+            if (!found && needfind[zb_place] != undefined && zb_next < fj.length) {
+                messageAppend("寻找附近")
+                WG.Send(fj[zb_next]);
+                zb_next++;
+            }
+            if (!found) {
+                setTimeout(function () {
+                    WG.check_zb_npc();
+                }, 1000)
+            }
         },
 
         kill_all: function () {
