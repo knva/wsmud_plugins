@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.149
+// @version      0.0.31.151
 // @date         01/07/2018
 // @modified     04/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -135,7 +135,6 @@
     var zb_npc;
     var zb_place;
     var next = 0;
-    var zb_next = 0;
     var roomData = [];
     var blacklist = "";
     var blackpfm = [];
@@ -1217,34 +1216,33 @@
                 case 1:
                     //接受任务
                     var lists = $(".room_items .room-item");
-                    var id = WG.getIdByName(sm_array[family].npc);
+                    var id = null;
 
-                    // for (var npc of lists) {
-                    //     if (npc.lastElementChild.innerText.indexOf("[") >= 0) {
-                    //         if (npc.lastElementChild.lastElementChild.lastElementChild.lastElementChild == null) {
-                    //             if (npc.lastElementChild.firstChild.nodeType == 3 &&
-                    //                 npc.lastElementChild.firstChild.nextSibling.tagName == "SPAN") {
+                    for (var npc of lists) {
+                        if (npc.lastElementChild.innerText.indexOf("[") >= 0) {
+                            if (npc.lastElementChild.lastElementChild.lastElementChild.lastElementChild == null) {
+                                if (npc.lastElementChild.firstChild.nodeType == 3 &&
+                                    npc.lastElementChild.firstChild.nextSibling.tagName == "SPAN") {
 
-                    //                 if (npc.lastElementChild.innerText.split('[')[0] == sm_array[family].npc)
-                    //                     id = $(npc).attr("itemid");
-                    //             }
-                    //         }
-                    //     } else {
-                    //         if (npc.lastElementChild.lastElementChild == null) {
-                    //             if (npc.lastElementChild.innerText == sm_array[family].npc) {
-                    //                 id = $(npc).attr("itemid");
-                    //             }
-                    //         }
-                    //     }
-                    // }
+                                    if (npc.lastElementChild.innerText.split('[')[0] == sm_array[family].npc)
+                                        id = $(npc).attr("itemid");
+                                }
+                            }
+                        } else {
+                            if (npc.lastElementChild.lastElementChild == null) {
+                                if (npc.lastElementChild.innerText == sm_array[family].npc) {
+                                    id = $(npc).attr("itemid");
+                                }
+                            }
+                        }
+                    }
                     console.log(id);
                     if (id != undefined) {
                         WG.Send("task sm " + id);
                         WG.Send("task sm " + id);
                         WG.sm_state = 2;
                     } else {
-                        WG.sm_state = 0;
-                        //WG.updete_npc_id();
+                        WG.updete_npc_id();
                     }
                     setTimeout(WG.sm, 300);
                     break;
@@ -1397,26 +1395,28 @@
                 window.setTimeout(WG.check_yamen_task, 1000);
             }
         },
+        zb_next: 0,
         check_zb_npc: function () {
             var lists = $(".room_items .room-item");
             var found = false;
+
             for (var npc of lists) {
                 if (npc.innerText.indexOf(zb_npc) != -1) {
+                    found = true;
                     WG.Send("kill " + $(npc).attr("itemid"));
                     messageAppend("找到" + zb_npc + "，自动击杀！！！");
+                    WG.zb_next = 0;
                     return;
                 }
             }
-            var fj = needfind[zb_place];
-            if (!found && needfind[zb_place] != undefined && zb_next < fj.length) {
-                messageAppend("寻找附近")
+            var fj = needfind[zb_npc];
+            if (!found && needfind[zb_npc] != undefined && WG.zb_next < fj.length) {
+                messageAppend("寻找附近");
                 WG.Send(fj[zb_next]);
-                zb_next++;
+                WG.zb_next++;
             }
             if (!found) {
-                setTimeout(function () {
-                    WG.check_zb_npc();
-                }, 1000)
+                window.setTimeout(WG.check_zb_npc, 1000);
             }
         },
 
@@ -2971,6 +2971,8 @@
         },
         daily_hook: undefined,
         oneKeyDaily: async function () {
+            messageAppend("执行请安.", 1);
+            await Helper.oneKeyQA();
             messageAppend("本脚本会自动执行师门及自动进退小树林,请确保精力足够再执行", 1);
             var fbnums = 0;
             Helper.daily_hook = WG.add_hook("dialog", async function (data) {
@@ -3067,7 +3069,7 @@
                             await WG.sleep(1000);
                         }
 
-                        //messageAppend("追捕已完成", 1);                       
+                        //messageAppend("追捕已完成", 1);
                         //WG.Send("ask3 " + id);
                         //WG.zdwk();
                         //WG.remove_hook(Helper.sd_hook);
@@ -3449,9 +3451,6 @@
         },
         daily: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            await Helper.oneKeyQA();
-            await WG.sleep(1000);
-
             await Helper.oneKeyyj();
             Helper.oneKeyDaily();
             await WG.sleep(1000);
