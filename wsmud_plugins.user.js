@@ -384,7 +384,7 @@
         "少林派-方丈楼": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north",
         "少林派-戒律院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go east",
         "少林派-达摩院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go west",
-        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north",
+        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north",
         "少林派-藏经阁": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go west",
         "少林派-达摩洞": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north;go north",
         "华山派-镇岳宫": "jh fam 3 start;",
@@ -1405,14 +1405,15 @@
                     found = true;
                     WG.Send("kill " + $(npc).attr("itemid"));
                     messageAppend("找到" + zb_npc + "，自动击杀！！！");
+                    WG.zb_next = 0;
                     return;
                 }
             }
-            var fj = needfind[zb_npc];
-            if (!found && needfind[zb_npc] != undefined && zb_next < fj.length) {
+            var fj = needfind[zb_place];
+            if (!found && needfind[zb_place] != undefined && WG.zb_next < fj.length) {
                 messageAppend("寻找附近");
-                WG.Send(fj[zb_next]);
-                zb_next++;
+                WG.Send(fj[WG.zb_next]);
+                WG.zb_next++;
             }
             if (!found) {
                 window.setTimeout(WG.check_zb_npc, 1000);
