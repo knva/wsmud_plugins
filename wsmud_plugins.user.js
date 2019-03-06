@@ -1396,6 +1396,7 @@
             }
         },
         zb_next: 0,
+
         check_zb_npc: function () {
             var lists = $(".room_items .room-item");
             var found = false;
@@ -1419,6 +1420,7 @@
                 window.setTimeout(WG.check_zb_npc, 1000);
             }
         },
+
 
         kill_all: function () {
 
@@ -1965,7 +1967,7 @@
                 // }
                 var listener = this.hooks[i];
                 if (listener.types == data.type || (listener.types instanceof Array && $
-                    .inArray(data.type, listener.types) >= 0)) {
+                        .inArray(data.type, listener.types) >= 0)) {
                     listener.fn(data);
                 }
             }
@@ -2927,7 +2929,7 @@
                                 let item = G.items.get(G.id);
                                 if (v.ishave == "0") {
                                     //查找id
-                                    if (!v.senduser) { }
+                                    if (!v.senduser) {}
                                     let pid = Helper.find_item(v.senduser);
                                     item = G.items.get(pid);
                                 }
@@ -3904,7 +3906,7 @@
                     G.skills = data.skills;
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
-                        if (data.distime) { }
+                        if (data.distime) {}
                         G.cds.set(data.id, true);
                         var _id = data.id;
                         setTimeout(function () {
