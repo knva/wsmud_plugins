@@ -4301,7 +4301,7 @@ look men;open men
         uploadConfig: function () {
             let all = {};
             let keys = GM_listValues();
-            alert(keys)
+            // alert(keys)
             keys.forEach(key => {
                 if (key != 'roles') {
                     all[key] = GM_getValue(key);
