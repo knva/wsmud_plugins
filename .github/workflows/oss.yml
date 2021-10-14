@@ -32,6 +32,6 @@ jobs:
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-qingdao
           bucket: ii74
-          asset-path: ./wsmud_plugins.user.js
-          target-path: /wsmud_pluginss.user.js
+          asset-path: ./
+          target-path: /
           
