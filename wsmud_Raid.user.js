@@ -4301,6 +4301,7 @@ look men;open men
         uploadConfig: function () {
             let all = {};
             let keys = GM_listValues();
+            alert(keys)
             keys.forEach(key => {
                 if (key != 'roles') {
                     all[key] = GM_getValue(key);
@@ -4328,7 +4329,10 @@ look men;open men
                         }
                         continue;
                     }
-                    GM_setValue(key, config[key]);
+                    if(key !="roles"){
+                        GM_setValue(key, config[key]);
+                    }
+                   
                 }
                 alert("wsmud_Raid 配置下载成功！");
             }, _ => {
