@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            wsmud_Raid
 // @namespace       cqv
-// @version         2.4.45
+// @version         2.4.44
 // @date            23/12/2018
 // @modified        20/04/2021
 // @homepage        https://greasyfork.org/zh-CN/scripts/375851
@@ -1342,9 +1342,9 @@
                 return worker;
             }
             return new Promise(resolve => {
-                var wa = createWorker("setTimeout(() =>  postMessage('0'), " + param + ")")
+                var wa = createWorker("setTimeout(() =>  postMessage('0'), "+param+")")
                 wa.onmessage = function (event) {
-                    console.log(new Date, event.data);
+                    console.log(new Date,event.data);
                     wa.terminate();
                     resolve();
                 };
@@ -1722,7 +1722,7 @@
         items: {}, // {id: object}
         stores: {}, // {id: object}
         _weaponType: '',
-        skills: {},
+        skills:{},
         kongfu: {
             quan: null,
             nei: null,
@@ -2136,7 +2136,7 @@
             var action = function (id, value, s_name) {
                 switch (id) {
                     case "unarmed":
-                        Role.kongfu.quan = value; Role.kongfu.quan_c = s_name; break;
+                        Role.kongfu.quan = value;Role.kongfu.quan_c = s_name; break;
                     case "force":
                         Role.kongfu.nei = value; Role.kongfu.nei_c = s_name; break;
                     case "parry":
@@ -3187,7 +3187,7 @@
             this._skillStack = {};
         },
         _skillStack: {},
-        _performNum: 0
+        _performNum : 0
     }
 
     //---------------------------------------------------------------------------
@@ -4297,7 +4297,7 @@ look men;open men
         Server
     \***********************************************************************************/
 
-    const Server = {
+   const Server = {
         uploadConfig: function () {
             let all = {};
             let keys = GM_listValues();
