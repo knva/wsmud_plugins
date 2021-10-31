@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name            wsmud_Raid
 // @namespace       cqv
-// @version         2.4.44
+// @version         2.4.46
 // @date            23/12/2018
-// @modified        20/04/2021
+// @modified        31/10/2021
 // @homepage        https://greasyfork.org/zh-CN/scripts/375851
 // @description     武神传说 MUD
 // @author          Bob.cn, 初心, 白三三
@@ -1887,10 +1887,6 @@
             return Role._weaponType
         },
 
-        // beep: function () {
-        //     document.getElementById("beep-alert").play();
-        // },
-
         _renewHookIndex: null,
         _renewStatus: "resting",
 
@@ -3137,6 +3133,13 @@
         CmdExecuteCenter.addExecutor(executor);
     })();
 
+    (function () {
+        const executor = new AtCmdExecutor("push", function (performer, param) {
+            Push(param);
+        });
+        CmdExecuteCenter.addExecutor(executor);
+    })();
+
     //---------------------------------------------------------------------------
     //  Skill State Machine
     //---------------------------------------------------------------------------
@@ -3372,9 +3375,12 @@
     ($_DungeonWaitSkillCD) = 打开
 [if] (_DungeonBagCleanWay) == null
     ($_DungeonBagCleanWay) = 存仓及售卖
+[if] (_DungeonRecordGains) == null
+    ($_DungeonRecordGains) = 是
 #select ($_DungeonHpThreshold) = 副本内疗伤，当气血低于百分比,100|90|80|70|60|50|40|30|20|10,(_DungeonHpThreshold)
 #select ($_DungeonWaitSkillCD) = Boss战前等待技能冷却,打开|关闭,(_DungeonWaitSkillCD)
 #select ($_DungeonBagCleanWay) = 背包清理方案,不清理|售卖|存仓及售卖,(_DungeonBagCleanWay)
+#select ($_DungeonRecordGains) = 结束后显示收益统计,是|否,(_DungeonRecordGains)
 #input ($_repeat) = 重复次数,1
 #config
 [if] (arg0) != null
@@ -3394,7 +3400,8 @@ stopstate
 [if] (:hpPer) < (hpPer)
     @liaoshang
 --->
-<-recordGains
+[if] (_DungeonRecordGains) == 是
+    <-recordGains
 ($_i) = 0
 [if] (_repeat) == null
     ($_repeat) = 1
@@ -3412,7 +3419,8 @@ ${SourceCodeHelper.appendHeader("    ", source)}
 [else if] (_DungeonBagCleanWay) == 存仓及售卖
     @tidyBag
 $to 住房-练功房;dazuo
-recordGains->
+[if] (_DungeonRecordGains) == 是
+    recordGains->
 stopSSAuto->`
         return result;
     }
@@ -4297,7 +4305,7 @@ look men;open men
         Server
     \***********************************************************************************/
 
-   const Server = {
+    const Server = {
         uploadConfig: function () {
             let all = {};
             let keys = GM_listValues();
@@ -6239,9 +6247,6 @@ tiao bush
         if (WG == undefined || WG == null) {
             setTimeout(__init__, 300);
         }
-        // $("body").append(
-        //     $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
-        // );
     });
 
     function __init__() {
