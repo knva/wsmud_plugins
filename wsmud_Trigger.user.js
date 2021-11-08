@@ -236,6 +236,7 @@
 
         _activate() {
             if (this._observerIndex != null) return;
+            if (this.template == null) return;
             this._observerIndex = NotificationCenter.observe(this.template.event, this._action);
         }
         _deactivate() {
