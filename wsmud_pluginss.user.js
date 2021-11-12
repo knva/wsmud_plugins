@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.194
+// @version      0.0.32.195
 // @date         01/07/2018
-// @modified     27/10/2021
+// @modified     12/11/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6815,6 +6815,7 @@
             <span cmd = "$to 帮会-大院" > 帮派 </span>
             <span cmd = "$to 扬州城-赌场" > 赌场 </span>
             <span cmd = "$to 扬州城-有间客栈" > 客栈 </span>
+            <span cmd = "$to 扬州城-擂台" > 擂台 </span>
             <span cmd = "$to 扬州城-矿山" > 矿山 </span></div>`,
             `<div class='item-commands'><span cmd = "$to 武当派-后山小院" >掌门</span>
              <span cmd = "$to 武当派-石阶" >后勤</span>
