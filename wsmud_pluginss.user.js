@@ -1957,7 +1957,7 @@
                     }
 
                     if (item != undefined) {
-                        WG.sm_item = item;
+                        WG.sm_itemx = item;
                         if (WG.inArray(item, store_list) && sm_getstore == "开") {
                             if (item.indexOf("hiz") >= 0 || item.indexOf("hio") >= 0) {
                                 sm_any = GM_getValue(roleid + "_sm_any", sm_any);
@@ -2103,7 +2103,7 @@
                         }
                     }
                     else {
-                        messageAppend("无法提交" + WG.sm_item);
+                        messageAppend("无法提交" + WG.sm_itemx);
                         WG.smbuyNum = null;
                         if (mysm_loser == "关") {
                             WG.sm_state = -1;
