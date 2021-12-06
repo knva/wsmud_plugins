@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.198
+// @version      0.0.32.199
 // @date         01/07/2018
-// @modified     22/11/2021
+// @modified     06/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1957,7 +1957,7 @@
                     }
 
                     if (item != undefined) {
-                        WG.sm_itemx = item;
+                        WG.sm_item = item;
                         if (WG.inArray(item, store_list) && sm_getstore == "开") {
                             if (item.indexOf("hiz") >= 0 || item.indexOf("hio") >= 0) {
                                 sm_any = GM_getValue(roleid + "_sm_any", sm_any);
@@ -2103,7 +2103,7 @@
                         }
                     }
                     else {
-                        messageAppend("无法提交" + WG.sm_itemx);
+                        messageAppend("无法提交" + WG.sm_item);
                         WG.smbuyNum = null;
                         if (mysm_loser == "关") {
                             WG.sm_state = -1;
@@ -3109,6 +3109,7 @@
                 let m = $("#mt").val();
                 let s = $("#st").val();
                 let send = $("#zml_info").val();
+                questname = questname.replaceAll(" ","_");
                 let item = {
                     "name": questname,
                     "type": type,
