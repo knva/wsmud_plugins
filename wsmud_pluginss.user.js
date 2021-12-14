@@ -5722,11 +5722,12 @@
             if (data.type == 'cmds') {
                 if(unsafeWindow && unsafeWindow.ToRaid){
                     if (JSON.stringify(data.items).indexOf('进入副本') >= 0) {
+                        let cr_path = data.items[0].cmd
                         let cp = {}
                         cp.name = '扫荡指定次数';
                         cp.cmd = `@js ($sdnum) =prompt("请输入次数","10")
                                     [if] (sdnum)!=null
-                                      cr yz/lw/shangu 0 (sdnum)`;
+                                      ${cr_path} 0 (sdnum)`;
                         data.items.push(cp);
                         let toudu = {}
                         toudu.name = '偷渡指定次数';
@@ -5734,7 +5735,7 @@
                                     [if] (sdnum)!=null
                                       [while] (sdnum) !=0
                                         ($sdnum) = (sdnum)-1
-                                        cr yz/lw/shangu
+                                        ${cr_path}
                                         cr over`;
                         data.items.push(toudu);
                         let p = deepCopy(msg);
