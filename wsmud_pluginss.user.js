@@ -5723,16 +5723,17 @@
                 if(unsafeWindow && unsafeWindow.ToRaid){
                     if (JSON.stringify(data.items).indexOf('进入副本') >= 0) {
                         let cr_path = data.items[0].cmd
+                        let sd_path = ''
                         if(cr_path.indexOf("1 0")>=0){
-                            cr_path = cr_path.replaceAll('1 0','1')
+                            sd_path = cr_path.replaceAll('1 0','1')
                         }else{
-                            cr_path = cr_path + " 0"
+                            sd_path = cr_path + " 0"
                         }
                         let cp = {}
                         cp.name = '扫荡指定次数';
                         cp.cmd = `@js ($sdnum) =prompt("请输入次数","10")
                                     [if] (sdnum)!=null
-                                      ${cr_path} (sdnum)`;
+                                      ${sd_path} (sdnum)`;
                         data.items.push(cp);
                         let toudu = {}
                         toudu.name = '偷渡指定次数';
