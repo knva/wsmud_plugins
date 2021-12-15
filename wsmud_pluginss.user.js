@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.200
+// @version      0.0.32.201
 // @date         01/07/2018
-// @modified     14/12/2021
+// @modified     15/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5723,6 +5723,9 @@
                 if(unsafeWindow && unsafeWindow.ToRaid){
                     if (JSON.stringify(data.items).indexOf('进入副本') >= 0) {
                         let cr_path = data.items[0].cmd
+                        if(cr_path.indexOf("1 0")>=0){
+                            cr_path.replaceAll('1 0','1')
+                        }
                         let cp = {}
                         cp.name = '扫荡指定次数';
                         cp.cmd = `@js ($sdnum) =prompt("请输入次数","10")
