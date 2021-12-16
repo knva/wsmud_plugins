@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.201
+// @version      0.0.32.202
 // @date         01/07/2018
-// @modified     15/12/2021
+// @modified     16/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5731,7 +5731,7 @@
                         }
                         let cp = {}
                         cp.name = '扫荡指定次数';
-                        cp.cmd = `@js ($sdnum) =prompt("请输入次数","10")
+                        cp.cmd = `@js ($sdnum) =prompt("请输入次数,注意:若副本掉落物品过多,请不要输入超过50次,否则可能号没了","10")
                                     [if] (sdnum)!=null
                                       ${sd_path} (sdnum)`;
                         data.items.push(cp);
