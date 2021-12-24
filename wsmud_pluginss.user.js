@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.202
+// @version      0.0.32.203
 // @date         01/07/2018
-// @modified     16/12/2021
+// @modified     24/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7356,6 +7356,24 @@
                             }
                         }
                     }
+                    let item = G.items.get(data.id)
+                    if (item == null) {
+                         return;
+                    }
+                    if (data.action == 'add') {
+                        if (item.status == null) {
+                             item.status = [];
+                        }
+                        item.status.push({ sid: data.sid, name: data.name, duration: data.duration, overtime: 0 });
+                    } else if (data.action == 'remove') {
+                        for (let i = 0; i < item.status.length; i++) {
+                            let s = item.status[i];
+                            if (s.sid == data.sid) {
+                                item.status.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }
 
 
                 }
@@ -7422,7 +7440,7 @@
                     for (let i = 0; i < packData.length; i++) {
                         let bag_item = packData[i];
                         if (bag_item == null) { continue; }
-                        if (bag_item.id == data.id) {     // 道具存于背包时, 先判断数量  若数量为0 删除背包数据,若不为0 修改背包数据 
+                        if (bag_item.id == data.id) {     // 道具存于背包时, 先判断数量  若数量为0 删除背包数据,若不为0 修改背包数据
                             scan_store = false;
                             let over_num = bag_item.count - data.store;
                             if (over_num == 0) {
@@ -7743,7 +7761,7 @@
                         }
                     }
                 }
-               
+
             });
             WG.add_hook('dialog', function (data) {
                 if (data.dialog == 'jh') {
