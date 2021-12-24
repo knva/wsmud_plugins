@@ -7237,7 +7237,8 @@
                                 hp: item.hp,
                                 mp: item.mp,
                                 p: item.p,
-                                damage: 0
+                                damage: 0,
+                                status: item.status
                             });
                         }
 
