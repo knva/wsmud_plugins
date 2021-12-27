@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.205
+// @version      0.0.32.206
 // @date         01/07/2018
-// @modified     26/12/2021
+// @modified     27/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7465,7 +7465,8 @@
                             hp: data.hp,
                             mp: data.mp,
                             p: data.p,
-                            damage: 0
+                            damage: 0,
+                            status: data.status
                         });
                     }
                 } else if (data.type == "itemremove") {
@@ -7556,7 +7557,7 @@
                             }
                         }
                     }
-                    let item = G.items.get(data.id)
+                    let item = G.items.get(data.id);
                     if (item == null) {
                          return;
                     }
