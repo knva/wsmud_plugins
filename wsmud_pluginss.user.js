@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.206
+// @version      0.0.32.207
 // @date         01/07/2018
 // @modified     27/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5910,13 +5910,13 @@
                     return;
                 }
             }
-            if (data.type == 'room') {
+            if (data.type == 'room' && !(/桃花岛|慈航静斋/).test(data.name)) {
                 //精简房间描述、生成功能按钮 -- fork from Suqing funny
                 let room_desc = data.desc;
-                if (room_desc.length > 20) {
+                if (room_desc.length > 30) {
                     let desc0 = room_desc.replace(/<([^<]+)>/g, "");
-                    let desc1 = desc0.substr(0, 20);
-                    let desc2 = desc0.substr(20);
+                    let desc1 = desc0.substr(0, 30);
+                    let desc2 = desc0.substr(30);
                     data.desc = `${desc1}<span id="show"> <hic>»»»</hic></span><span id="more" style="display:none">${desc2}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`;
                 }
                 if (room_desc.includes("cmd")) {
