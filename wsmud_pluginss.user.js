@@ -70,21 +70,24 @@
         return fmt;
     }
 
-    //滚动 -- fork from Suqing funny
+    //滚动 -- fork from Suqing funny ---------------fixed
     function AutoScroll(name) {
         if (name) {
-            let scrollTop = $(name)[0].scrollTop;
-            let scrollHeight = $(name)[0].scrollHeight;
-            let height = Math.ceil($(name).height());
-            if (scrollTop < scrollHeight - height) {
-                let add = (scrollHeight - height < 120) ? 1 : Math.ceil((scrollHeight - height) / 120);
-                $(name)[0].scrollTop = scrollTop + add;
-                setTimeout(function () {
-                    AutoScroll(name);
-                }, 1000 / 120);
+            if($(name).length!=0){
+                let scrollTop = $(name)[0].scrollTop;
+                let scrollHeight = $(name)[0].scrollHeight;
+                let height = Math.ceil($(name).height());
+                if (scrollTop < scrollHeight - height) {
+                    let add = (scrollHeight - height < 120) ? 1 : Math.ceil((scrollHeight - height) / 120);
+                    $(name)[0].scrollTop = scrollTop + add;
+                    setTimeout(function () {
+                        AutoScroll(name);
+                    }, 1000 / 120);
+                }
             }
         }
     }
+
 
     /**
      * 为数字加上单位：万或亿
