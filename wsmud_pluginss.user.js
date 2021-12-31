@@ -3320,15 +3320,13 @@
                 if (!WG.inArray(pfmname, blackpfm))
                     blackpfm.push(pfmname);
             }
+            if (family.indexOf("逍遥") >= 0) {
+                blackpfm.push('force.duo');
+            }
+            blackpfm.push('force.tuoli');
             G.preform_timer = setInterval(() => {
-
-                if (G.in_fight == false) WG.auto_preform("stop");
+                if (G.in_fight == false) {WG.auto_preform("stop");break;}
                 for (var skill of G.skills) {
-                    if (family.indexOf("逍遥") >= 0) {
-                        if (skill.id == "force.duo") {
-                            continue;
-                        }
-                    }
                     if (WG.inArray(skill.id, blackpfm)) {
                         continue;
                     }
