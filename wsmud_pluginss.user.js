@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.210
+// @version      0.0.32.211
 // @date         01/07/2018
-// @modified     29/12/2021
+// @modified     31/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2207,6 +2207,7 @@
             npc != undefined ? WG.Send("ask" + i + " " + npc) : WG.update_npc_id();
         },
         yamen_lister: undefined,
+        yamen_err_no:0,
         go_yamen_task: async function () {
             if (!WG.yamen_lister) {
                 WG.yamen_lister = WG.add_hook('text', function (data) {
@@ -2215,6 +2216,7 @@
                         WG.check_yamen_task = 'over';
                         WG.remove_hook(WG.yamen_lister);
                         WG.yamen_lister = undefined;
+                        WG.yamen_err_no = 0;
                     } else if (data.msg.indexOf("没有这个人") >= 0) {
                         WG.update_npc_id();
                     }
@@ -2252,7 +2254,16 @@
                 window.setTimeout(WG.check_zb_npc, 1000);
             } catch (error) {
                 messageAppend("查找衙门追捕失败");
-                window.setTimeout(WG.check_yamen_task, 1000);
+                if (WG.yamen_err_no < 4) {
+                    window.setTimeout(WG.check_yamen_task, 1000);
+                    WG.yamen_err_no = WG.yamen_err_no + 1;
+                }else{
+                    clearInterval(WG.check_yamen_task);
+                    WG.remove_hook(WG.yamen_lister);
+                    WG.yamen_lister = undefined;
+                    WG.yamen_err_no = 0;
+                }
+
             }
         },
         zb_next: 0,
@@ -7962,7 +7973,7 @@
                         }
                     }
                 }
-               
+
             });
             WG.add_hook('dialog', function (data) {
                 if (data.dialog == 'jh') {
