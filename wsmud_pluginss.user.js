@@ -5,7 +5,7 @@
 // @date         01/07/2018
 // @modified     31/12/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
-// @description  武神传说 MUD 武神脚本 武神传说脚本 qq群367657589
+// @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
@@ -3325,7 +3325,7 @@
             }
             blackpfm.push('force.tuoli');
             G.preform_timer = setInterval(() => {
-                if (G.in_fight == false) {WG.auto_preform("stop");break;}
+                if (G.in_fight == false) {WG.auto_preform("stop");return;}
                 for (var skill of G.skills) {
                     if (WG.inArray(skill.id, blackpfm)) {
                         continue;
