@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.213
+// @version      0.0.32.214
 // @date         01/07/2018
 // @modified     1/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2447,10 +2447,12 @@
             }
         },
         packup_listener: null,
+        packup_ready:false,
         sell_all: function (store = 1, fenjie = 1, drop = 1) {
             if (WG.packup_listener) {
                 messageAppend("<hio>包裹整理</hio>运行中");
                 messageAppend("<hio>包裹整理</hio>手动结束");
+                WG.packup_ready=false;
                 WG.remove_hook(WG.packup_listener);
                 WG.packup_listener = undefined;
                 return;
@@ -2458,7 +2460,7 @@
             let stores = [];
             WG.packup_listener = WG.add_hook(["dialog", "text"], (data) => {
                 if (data.type == "dialog" && data.dialog == "list") {
-                    if (data.stores == undefined) {
+                    if (data.stores == undefined || WG.packup_ready) {
                         return;
                     }
                     stores = [];
@@ -2480,7 +2482,7 @@
                 } else if (data.type == "dialog" && data.dialog == "pack") {
                     let cmds = [];
                     let dropcmds = [];
-                    if (data.items == undefined) {
+                    if (data.items == undefined || WG.packup_ready) {
                         return;
                     }
                     for (var i = 0; i < data.items.length; i++) {
@@ -2546,11 +2548,13 @@
                     cmds.push("$wait 1000");
                     cmds = cmds.concat(dropcmds);
                     cmds.push("look3 1");
-                    if (cmds.length > 0) {
+                    if (cmds.length > 0 || WG.packup_ready) {
                         WG.SendCmd(cmds);
+                        WG.packup_ready=true;
                     }
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
                     messageAppend("<hio>包裹整理</hio>完成");
+                    WG.packup_ready=false;
                     WG.remove_hook(WG.packup_listener);
                     WG.packup_listener = undefined;
                 }
