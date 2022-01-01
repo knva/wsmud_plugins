@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.212
+// @version      0.0.32.213
 // @date         01/07/2018
-// @modified     31/12/2021
+// @modified     1/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5852,7 +5852,7 @@
                 if (boss) taskprog += `武神BOSS => ${boss}/5\n`;
                 $(".remove_taskprog").remove();
                 $(".content-message pre").append(`<span class="remove_taskprog">${taskprog}</span>`);
-                AutoScroll(".content-message pre");
+                AutoScroll(".content-message");
             }
             //按指定顺序排序背包 -- fork from Suqing funny
             let ITEMS = [
@@ -5889,7 +5889,7 @@
                         $(".content-message pre").append(
                             $(`<div class="item-commands"><span class="autouse">使用 ${item.name} ${count}次</span></div>`).click(() => WG.SendCmd(cmd)),
                         );
-                        AutoScroll(".content-message pre");
+                        AutoScroll(".content-message");
                     }
                 }
                 //获得物品后检测生成快速使用按钮 -- fork from Suqing funny
@@ -5929,7 +5929,8 @@
                     let desc0 = room_desc.replace(/<([^<]+)>/g, "");
                     let desc1 = desc0.substr(0, 30);
                     let desc2 = desc0.substr(30);
-                    data.desc = `${desc1}<span id="show"> <hic>»»»</hic></span><span id="more" style="display:none">${desc2}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`;
+                    data.desc = `<span id="show">${desc1} <hic>»»»</hic></span><span id="more" style="display:none">${desc0}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`
+                    //data.desc = `${desc1}<span id="show"> <hic>»»»</hic></span><span id="more" style="display:none">${desc2}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`;
                 }
                 if (room_desc.includes("cmd")) {
                     room_desc = room_desc.replace("<hig>椅子</hig>", "椅子");//新手教程的椅子
@@ -7740,7 +7741,7 @@
                         $(".content-message pre").append(
                             $(`<div class="item-commands"><span class="jinglian">精炼6星 => ${n}</span></div>`).click(() => WG.SendCmd(cmd)),
                         );
-                        AutoScroll(".content-message pre");
+                        AutoScroll(".content-message");
                     }
                 }
                 if (data.dialog == 'score') {
