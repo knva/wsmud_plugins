@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.214
+// @version      0.0.32.215
 // @date         01/07/2018
-// @modified     1/1/2022
+// @modified     7/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -73,7 +73,7 @@
     //滚动 -- fork from Suqing funny ---------------fixed
     function AutoScroll(name) {
         if (name) {
-            if($(name).length!=0){
+            if ($(name).length != 0) {
                 let scrollTop = $(name)[0].scrollTop;
                 let scrollHeight = $(name)[0].scrollHeight;
                 let height = Math.ceil($(name).height());
@@ -2207,7 +2207,7 @@
             npc != undefined ? WG.Send("ask" + i + " " + npc) : WG.update_npc_id();
         },
         yamen_lister: undefined,
-        yamen_err_no:0,
+        yamen_err_no: 0,
         go_yamen_task: async function () {
             if (!WG.yamen_lister) {
                 WG.yamen_lister = WG.add_hook('text', function (data) {
@@ -2241,7 +2241,7 @@
                 task = $(".task-desc:eq(-3)").text();
             }
             if (task.length == 0) {
-                KEY.do_command("tasks");
+                WG.send("tasks");
                 window.setTimeout(WG.check_yamen_task, 1000);
                 return;
             }
@@ -2255,9 +2255,10 @@
             } catch (error) {
                 messageAppend("查找衙门追捕失败");
                 if (WG.yamen_err_no < 4) {
+                    WG.send("tasks");
                     window.setTimeout(WG.check_yamen_task, 1000);
                     WG.yamen_err_no = WG.yamen_err_no + 1;
-                }else{
+                } else {
                     clearInterval(WG.check_yamen_task);
                     WG.remove_hook(WG.yamen_lister);
                     WG.yamen_lister = undefined;
@@ -2447,12 +2448,12 @@
             }
         },
         packup_listener: null,
-        packup_ready:false,
+        packup_ready: false,
         sell_all: function (store = 1, fenjie = 1, drop = 1) {
             if (WG.packup_listener) {
                 messageAppend("<hio>包裹整理</hio>运行中");
                 messageAppend("<hio>包裹整理</hio>手动结束");
-                WG.packup_ready=false;
+                WG.packup_ready = false;
                 WG.remove_hook(WG.packup_listener);
                 WG.packup_listener = undefined;
                 return;
@@ -2550,11 +2551,11 @@
                     cmds.push("look3 1");
                     if (cmds.length > 0 || WG.packup_ready) {
                         WG.SendCmd(cmds);
-                        WG.packup_ready=true;
+                        WG.packup_ready = true;
                     }
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
                     messageAppend("<hio>包裹整理</hio>完成");
-                    WG.packup_ready=false;
+                    WG.packup_ready = false;
                     WG.remove_hook(WG.packup_listener);
                     WG.packup_listener = undefined;
                 }
@@ -3142,7 +3143,7 @@
                 let m = $("#mt").val();
                 let s = $("#st").val();
                 let send = $("#zml_info").val();
-                questname = questname.replaceAll(" ","_");
+                questname = questname.replaceAll(" ", "_");
                 let item = {
                     "name": questname,
                     "type": type,
@@ -3329,7 +3330,7 @@
             }
             blackpfm.push('force.tuoli');
             G.preform_timer = setInterval(() => {
-                if (G.in_fight == false) {WG.auto_preform("stop");return;}
+                if (G.in_fight == false) { WG.auto_preform("stop"); return; }
                 for (var skill of G.skills) {
                     if (WG.inArray(skill.id, blackpfm)) {
                         continue;
@@ -3562,7 +3563,7 @@
             callback('');
         },
         eqx: null,
-
+        eqxp: null,
         eqhelper(type, enaskill = 0) {
             var deepCopy = function (source) {
                 var result = {};
@@ -3574,6 +3575,9 @@
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
+            if (enaskill==1){
+                return;
+            }
             if (eqlist == null || eqlist[type] == null || eqlist[type] == "") {
                 messageAppend("套装未保存,保存当前装备作为套装" + type + "!", 1);
                 WG.eqx = WG.add_hook("dialog", (data) => {
@@ -3582,7 +3586,10 @@
                         GM_setValue(roleid + "_eqlist", eqlist);
                         messageAppend("套装" + type + "保存成功!", 1);
                         WG.remove_hook(WG.eqx);
+                        WG.eqx = null;
                     }
+                });
+                WG.eqxp = WG.add_hook("dialog", (data) => {
                     if (data.dialog == 'skills' && data.items != null) {
                         var nowskill = { 'throwing': '', 'unarmed': '', 'force': '', 'dodge': '', 'sword': '', 'blade': '', 'club': '', 'staff': '', 'whip': '', 'parry': '' };
                         for (let item of data.items) {
@@ -3597,14 +3604,18 @@
                         skilllist[type] = nowskill;
                         GM_setValue(roleid + "_skilllist", skilllist);
                         messageAppend("技能" + type + "保存成功!", 1);
+                        WG.remove_hook(WG.eqxp);
+                        WG.eqxp = null;
                     }
                 });
                 WG.Send("cha");
                 WG.Send("pack");
             } else {
-                if (WG.eqx != null) {
+                if (WG.eqx != null || WG.eqxp != null ) {
                     WG.remove_hook(WG.eqx);
+                    WG.remove_hook(WG.eqxp);
                     WG.eqx = null;
+                    WG.eqxp = null;
                 }
                 eqlist = GM_getValue(roleid + "_eqlist", eqlist);
                 skilllist = GM_getValue(roleid + "_skilllist", skilllist);
@@ -4747,7 +4758,7 @@
             while (WG.sm_state >= 0) {
                 await WG.sleep(2000);
             }
-            if (fbnums <= 0 ) {
+            if (fbnums <= 0) {
                 WG.Send("taskover signin");
                 messageAppend("<hiy>任务完成</hiy>");
                 WG.remove_hook(WG.daily_hook);
@@ -5751,13 +5762,13 @@
                 }
             }
             if (data.type == 'cmds') {
-                if(unsafeWindow && unsafeWindow.ToRaid){
+                if (unsafeWindow && unsafeWindow.ToRaid) {
                     if (JSON.stringify(data.items).indexOf('进入副本') >= 0) {
                         let cr_path = data.items[0].cmd
                         let sd_path = ''
-                        if(cr_path.indexOf("1 0")>=0){
-                            sd_path = cr_path.replaceAll('1 0','1')
-                        }else{
+                        if (cr_path.indexOf("1 0") >= 0) {
+                            sd_path = cr_path.replaceAll('1 0', '1')
+                        } else {
                             sd_path = cr_path + " 0"
                         }
                         let cp = {}
@@ -5801,13 +5812,13 @@
                             wd2 = b[3];
                             if (wd1 < wd2) wd1 = `<hig>${wd1}</hig>`;
                             /可以重置/.test(b[1]) ? wd3 = "<hig>可以重置</hig>" : wd3 = "已经重置";
-                            wd = wd1+"/"+wd2+" "+wd3
-                        } else {wd = "只打塔主"}
+                            wd = wd1 + "/" + wd2 + " " + wd3
+                        } else { wd = "只打塔主" }
                         //首席请安
                         const c = task.desc.match(/<.+?>(.+)首席请安<.+?>/);
                         if (c) {
                             /已经/.test(c[1]) ? qa = "已经请安" : qa = "<hig>尚未请安</hig>";
-                        } else {qa = "无需请安"}
+                        } else { qa = "无需请安" }
                         //今日副本次数
                         const d = task.desc.match(/今日副本完成次数：(\d+)。/);
                         if (d) {
@@ -5824,7 +5835,7 @@
                         if (g) {
                             boss = 5 - parseInt(g[1]);
                             boss = `<hig>${boss}</hig>`;
-                        }else{
+                        } else {
                             if (G.level && /武神|剑神|刀皇|兵主|战神/.test(G.level)) boss = 5;
                         }
                         //武道塔主
@@ -5926,47 +5937,47 @@
                 //     return;
                 // }
             }
-            if (data.type == 'room' && !(/桃花岛|慈航静斋/).test(data.name)) {
-                //精简房间描述、生成功能按钮 -- fork from Suqing funny
-                let room_desc = data.desc;
-                if (room_desc.length > 30) {
-                    let desc0 = room_desc.replace(/<([^<]+)>/g, "");
-                    let desc1 = desc0.substr(0, 30);
-                    let desc2 = desc0.substr(30);
-                    data.desc = `<span id="show">${desc1} <hic>»»»</hic></span><span id="more" style="display:none">${desc0}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`
-                    //data.desc = `${desc1}<span id="show"> <hic>»»»</hic></span><span id="more" style="display:none">${desc2}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`;
+            if (data.type == 'room' ) {
+                if (!(/桃花岛|慈航静斋/).test(data.name)){
+                    //精简房间描述、生成功能按钮 -- fork from Suqing funny
+                    let room_desc = data.desc;
+                    if (room_desc.length > 30) {
+                        let desc0 = room_desc.replace(/<([^<]+)>/g, "");
+                        let desc1 = desc0.substr(0, 30);
+                        let desc2 = desc0.substr(30);
+                        data.desc = `<span id="show">${desc1} <hic>»»»</hic></span><span id="more" style="display:none">${desc0}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`
+                        //data.desc = `${desc1}<span id="show"> <hic>»»»</hic></span><span id="more" style="display:none">${desc2}</span><span id="hide" style="display:none"> <hiy>«««</hiy></span>`;
+                    }
+                    if (room_desc.includes("cmd")) {
+                        room_desc = room_desc.replace("<hig>椅子</hig>", "椅子");//新手教程的椅子
+                        room_desc = room_desc.replace("<CMD cmd='look men'>门(men)<CMD>", "<cmd cmd='look men'>门</cmd>");//兵营副本的门
+                        room_desc = room_desc.replace(/span/g, "cmd"); //古墓里的画和古琴是<span>标签
+                        room_desc = room_desc.replace(/"/g, "'"); // "" => ''
+                        room_desc = room_desc.replace(/\((.*?)\)/g, "");//去除括号和里面的英文单词
+                        //console.log(room_desc);
+                        let cmds = room_desc.match(/<cmd cmd='([^']+)'>([^<]+)<\/cmd>/g);
+                        //console.log(cmds);
+                        cmds.forEach(cmd => {
+                            let x = cmd.match(/<cmd cmd='(.*)'>(.*)<\/cmd>/);
+                            data.commands.unshift({ cmd: x[1], name: `<hic>${x[2]}</hic>` });
+                        });
+                        // room_desc = room_desc.replace(/<([^<]+)>/g, "");
+                        cmds.forEach(desc => data.desc = `<hic>${desc}</hic>　${data.desc}`);
+                    }
+                    let p = deepCopy(msg);
+                    p.data = JSON.stringify(data);
+                    WG.run_hook(data.type, data);
+                    ws_on_message.apply(this, [p]);
+                    $("#show").click(() => {$("#more").show();$("#show").hide();$("#hide").show();});
+                    $("#hide").click(() => {$("#more").hide();$("#show").show(); $("#hide").hide();});
+                    if (WG.animation) {stopp();}
+                    return;
+                }else{
+                    if (WG.animation == null && (/桃花岛/).test(data.name)){
+                        stopp();
+                        WG.animation=true;
+                    }
                 }
-                if (room_desc.includes("cmd")) {
-                    room_desc = room_desc.replace("<hig>椅子</hig>", "椅子");//新手教程的椅子
-                    room_desc = room_desc.replace("<CMD cmd='look men'>门(men)<CMD>", "<cmd cmd='look men'>门</cmd>");//兵营副本的门
-                    room_desc = room_desc.replace(/span/g, "cmd"); //古墓里的画和古琴是<span>标签
-                    room_desc = room_desc.replace(/"/g, "'"); // "" => ''
-                    room_desc = room_desc.replace(/\((.*?)\)/g, "");//去除括号和里面的英文单词
-                    //console.log(room_desc);
-                    let cmds = room_desc.match(/<cmd cmd='([^']+)'>([^<]+)<\/cmd>/g);
-                    //console.log(cmds);
-                    cmds.forEach(cmd => {
-                        let x = cmd.match(/<cmd cmd='(.*)'>(.*)<\/cmd>/);
-                        data.commands.unshift({ cmd: x[1], name: `<hic>${x[2]}</hic>` });
-                    });
-                    // room_desc = room_desc.replace(/<([^<]+)>/g, "");
-                    cmds.forEach(desc => data.desc = `<hic>${desc}</hic>　${data.desc}`);
-                }
-                let p = deepCopy(msg);
-                p.data = JSON.stringify(data);
-                WG.run_hook(data.type, data);
-                ws_on_message.apply(this, [p]);
-                $("#show").click(() => {
-                    $("#more").show();
-                    $("#show").hide();
-                    $("#hide").show();
-                  });
-                $("#hide").click(() => {
-                    $("#more").hide();
-                    $("#show").show();
-                    $("#hide").hide();
-                });
-                return;
             }
             WG.run_hook(data.type, data);
 
@@ -7070,6 +7081,7 @@
                 <option value="3">黄色</option>
                 <option value="4">紫色</option>
                 <option value="5">橙色</option>
+                <option value="6">红色</option>
             </select></span></div>
     <div class="setting-item"> 数量:<span><input id="mednum" v-model="num" style="width:80px;" type="number" name="mednum" value="1">
         </span></div>
@@ -7576,11 +7588,11 @@
                     }
                     let item = G.items.get(data.id);
                     if (item == null) {
-                         return;
+                        return;
                     }
                     if (data.action == 'add') {
                         if (item.status == null) {
-                             item.status = [];
+                            item.status = [];
                         }
                         item.status.push({ sid: data.sid, name: data.name, duration: data.duration, overtime: 0 });
                     } else if (data.action == 'remove') {
@@ -8008,12 +8020,12 @@
                         G.jy += parseInt(x[1]);
                         G.qn += parseInt(x[2]);
                         let mss = `<span class="remove_jy">共计获得了${G.jy}点经验和${G.qn}点潜能。\n</span>`;
-                        function refresh_jy(mss){
+                        function refresh_jy(mss) {
                             $(".remove_jy").remove();
                             $(".content-message pre").append(mss);
                             AutoScroll(".content-message");
                         }
-                        setTimeout(() => refresh_jy(mss),200);
+                        setTimeout(() => refresh_jy(mss), 200);
                     }
                 }
             });
@@ -8313,6 +8325,10 @@
             server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
+            var sakura = document.createElement('script');
+            server.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/sakura-js/sakura.js');
+            document.head.appendChild(sakura);
+            console.log("sakura 加载完毕!");
             setInterval(() => {
                 var h = '';
                 if (parseInt(Math.random() * 10) < 3) {
