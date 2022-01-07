@@ -3575,10 +3575,11 @@
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
-            if (enaskill==1){
-                return;
-            }
+    
             if (eqlist == null || eqlist[type] == null || eqlist[type] == "") {
+                if (enaskill == 1) {
+                    return;
+                }
                 messageAppend("套装未保存,保存当前装备作为套装" + type + "!", 1);
                 WG.eqx = WG.add_hook("dialog", (data) => {
                     if (data.dialog == "pack" && data.eqs != undefined) {
