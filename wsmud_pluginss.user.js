@@ -5970,7 +5970,7 @@
                     ws_on_message.apply(this, [p]);
                     $("#show").click(() => {$("#more").show();$("#show").hide();$("#hide").show();});
                     $("#hide").click(() => {$("#more").hide();$("#show").show(); $("#hide").hide();});
-                    if (WG.animation) {stopp();}
+                    if (WG.animation != null && WG.animation) { stopp(); WG.animation = null;}
                     return;
                 }else{
                     if (WG.animation == null && (/桃花岛/).test(data.name)){
