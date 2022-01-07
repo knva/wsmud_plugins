@@ -8326,7 +8326,7 @@
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             var sakura = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/sakura-js/sakura.js');
+            sakura.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/sakura-js/sakura.js');
             document.head.appendChild(sakura);
             console.log("sakura 加载完毕!");
             setInterval(() => {
