@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.216
+// @version      0.0.32.217
 // @date         01/07/2018
 // @modified     7/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2241,7 +2241,7 @@
                 task = $(".task-desc:eq(-3)").text();
             }
             if (task.length == 0) {
-                WG.send("tasks");
+                KEY.do_command("tasks");
                 window.setTimeout(WG.check_yamen_task, 1000);
                 return;
             }
@@ -2255,7 +2255,7 @@
             } catch (error) {
                 messageAppend("查找衙门追捕失败");
                 if (WG.yamen_err_no < 4) {
-                    WG.send("tasks");
+                    KEY.do_command("tasks");
                     window.setTimeout(WG.check_yamen_task, 1000);
                     WG.yamen_err_no = WG.yamen_err_no + 1;
                 } else {
