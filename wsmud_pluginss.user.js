@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.217
+// @version      0.0.32.218
 // @date         01/07/2018
-// @modified     7/1/2022
+// @modified     10/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5971,15 +5971,16 @@
                     ws_on_message.apply(this, [p]);
                     $("#show").click(() => {$("#more").show();$("#show").hide();$("#hide").show();});
                     $("#hide").click(() => {$("#more").hide();$("#show").show(); $("#hide").hide();});
-                    if (WG.animation != null && WG.animation) { stopp(); WG.animation = null;}
+                    if (WG.animation != null && WG.animation && stopp!=null) { stopp(); WG.animation = null;}
                     return;
                 }else{
-                    if (WG.animation == null && (/桃花岛/).test(data.name)){
+                    if (WG.animation == null && (/桃花岛/).test(data.name) && stopp != null){
                         stopp();
                         WG.animation=true;
                     }
                 }
             }
+         
             WG.run_hook(data.type, data);
 
             ws_on_message.apply(this, arguments);
@@ -8322,14 +8323,15 @@
         );
 
         setTimeout(() => {
-            var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
-            document.head.appendChild(server);
-            console.log("layer 加载完毕!");
             var sakura = document.createElement('script');
             sakura.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/sakura-js/sakura.js');
             document.head.appendChild(sakura);
             console.log("sakura 加载完毕!");
+            var server = document.createElement('script');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+            document.head.appendChild(server);
+            console.log("layer 加载完毕!");
+         
             setInterval(() => {
                 var h = '';
                 if (parseInt(Math.random() * 10) < 3) {
