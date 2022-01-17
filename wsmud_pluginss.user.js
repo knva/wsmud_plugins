@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.218
-// @date         01/07/2018
+// @version      0.0.32.219
+// @date         01/17/2018
 // @modified     10/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
@@ -1690,7 +1690,7 @@
             WG.SendCmd("$to 扬州城-广场;$to 扬州城-钱庄;look3 1");
         },
         clean_dps: function () {
-            if (dpslock) {
+            if (dpslock && battletime!=0) {
                 let allpfmnum = pfmnum + criticalnum;
                 let alldps = pfmdps + critical;
                 let battle_t = (new Date().getTime() - battletime.getTime()) / 1000;
@@ -3329,18 +3329,44 @@
                 blackpfm.push('force.duo');
             }
             blackpfm.push('force.tuoli');
+            var canpfm = function (skid, buffid) {
+                return WG.inArray(skid, G.skills.map(e => { return e.id })) && 
+                !G.gcd && !G.cds.get(skid) && !WG.inArray(buffid, G.selfStatus) && 
+                !WG.inArray(skid, blackpfm);
+            }
+
             G.preform_timer = setInterval(() => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                let alreay_pfm = ['sword.wu','balde.shi']
+                if (canpfm('sword.wu', 'weapon')) {
+                    WG.Send("perform sword.wu");
+                }
+                if (canpfm('blade.shi', 'weapon')) {
+                    WG.Send("perform balde.shi");
+                }
                 for (var skill of G.skills) {
                     if (WG.inArray(skill.id, blackpfm)) {
                         continue;
                     }
-                    if (!G.gcd && !G.cds.get(skill.id)) {
-                        WG.Send("perform " + skill.id);
-                        break;
+                    if (skill.id.indexOf("force")>=0){
+                        if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("force", G.selfStatus)) {
+                            WG.Send("perform " + skill.id) ;
+                            // break;
+                        }
+                        alreay_pfm.push(skill.id)
                     }
                 }
-            }, 350);
+                for (var skill of G.skills) {
+                    if (WG.inArray(skill.id, blackpfm)) {
+                        continue;
+                    }
+
+                    if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray(skill.id, alreay_pfm)) {
+                        WG.Send("perform " + skill.id);
+                        // break;
+                    }
+                }
+            }, 300);
         },
 
         formatCurrencyTenThou: function (num) {
@@ -3575,7 +3601,7 @@
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
-    
+
             if (eqlist == null || eqlist[type] == null || eqlist[type] == "") {
                 if (enaskill == 1) {
                     return;
@@ -3612,7 +3638,7 @@
                 WG.Send("cha");
                 WG.Send("pack");
             } else {
-                if (WG.eqx != null || WG.eqxp != null ) {
+                if (WG.eqx != null || WG.eqxp != null) {
                     WG.remove_hook(WG.eqx);
                     WG.remove_hook(WG.eqxp);
                     WG.eqx = null;
@@ -5938,8 +5964,8 @@
                 //     return;
                 // }
             }
-            if (data.type == 'room' ) {
-                if (!(/桃花岛|慈航静斋/).test(data.name)){
+            if (data.type == 'room') {
+                if (!(/桃花岛|慈航静斋/).test(data.name)) {
                     //精简房间描述、生成功能按钮 -- fork from Suqing funny
                     let room_desc = data.desc;
                     if (room_desc.length > 30) {
@@ -5969,18 +5995,12 @@
                     p.data = JSON.stringify(data);
                     WG.run_hook(data.type, data);
                     ws_on_message.apply(this, [p]);
-                    $("#show").click(() => {$("#more").show();$("#show").hide();$("#hide").show();});
-                    $("#hide").click(() => {$("#more").hide();$("#show").show(); $("#hide").hide();});
-                    if (WG.animation != null && WG.animation && stopp!=null) { stopp(); WG.animation = null;}
-                    return;
-                }else{
-                    if (WG.animation == null && (/桃花岛/).test(data.name) && stopp != null){
-                        stopp();
-                        WG.animation=true;
-                    }
+                    $("#show").click(() => { $("#more").show(); $("#show").hide(); $("#hide").show(); });
+                    $("#hide").click(() => { $("#more").hide(); $("#show").show(); $("#hide").hide(); });
+
                 }
             }
-         
+
             WG.run_hook(data.type, data);
 
             ws_on_message.apply(this, arguments);
@@ -7338,276 +7358,298 @@
 
             });
             WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat"], function (data) {
-                if (data.type == "login") {
-                    G.id = data.id;
-                } else if (data.type == "exits") {
-                    G.exits = new Map();
-                    if (data.items["north"]) {
-                        G.exits.set("north", {
-                            exits: data.items["north"]
-                        });
-                    }
-                    if (data.items["south"]) {
-                        G.exits.set("south", {
-                            exits: data.items["south"]
-                        });
-                    }
-                    if (data.items["east"]) {
-                        G.exits.set("east", {
-                            exits: data.items["east"]
-                        });
-                    }
-                    if (data.items["west"]) {
-                        G.exits.set("west", {
-                            exits: data.items["west"]
-                        });
-                    }
-                    if (data.items["northup"]) {
-                        G.exits.set("northup", {
-                            exits: data.items["northup"]
-                        });
-                    }
-                    if (data.items["southup"]) {
-                        G.exits.set("southup", {
-                            exits: data.items["southup"]
-                        });
-                    }
-                    if (data.items["eastup"]) {
-                        G.exits.set("eastup", {
-                            exits: data.items["eastup"]
-                        });
-                    }
-                    if (data.items["westup"]) {
-                        G.exits.set("westup", {
-                            exits: data.items["westup"]
-                        });
-                    }
-                    if (data.items["northdown"]) {
-                        G.exits.set("northdown", {
-                            exits: data.items["northdown"]
-                        });
-                    }
-                    if (data.items["southdown"]) {
-                        G.exits.set("southdown", {
-                            exits: data.items["southdown"]
-                        });
-                    }
-                    if (data.items["eastdown"]) {
-                        G.exits.set("eastdown", {
-                            exits: data.items["eastdown"]
-                        });
-                    }
-                    if (data.items["westdown"]) {
-                        G.exits.set("westdown", {
-                            exits: data.items["westdown"]
-                        });
-                    }
-                    if (data.items["up"]) {
-                        G.exits.set("up", {
-                            exits: data.items["up"]
-                        });
-                    }
-                    if (data.items["down"]) {
-                        G.exits.set("down", {
-                            exits: data.items["down"]
-                        });
-                    }
-                    if (data.items["enter"]) {
-                        G.exits.set("enter", {
-                            exits: data.items["enter"]
-                        });
-                    }
-                    if (data.items["out"]) {
-                        G.exits.set("out", {
-                            exits: data.items["out"]
-                        });
-                    }
+                switch (data.type) {
+                    case "login":
+                        G.id = data.id;
+                        break;
+                    case "exits":
+                        G.exits = new Map();
+                        if (data.items["north"]) {
+                            G.exits.set("north", {
+                                exits: data.items["north"]
+                            });
+                        }
+                        if (data.items["south"]) {
+                            G.exits.set("south", {
+                                exits: data.items["south"]
+                            });
+                        }
+                        if (data.items["east"]) {
+                            G.exits.set("east", {
+                                exits: data.items["east"]
+                            });
+                        }
+                        if (data.items["west"]) {
+                            G.exits.set("west", {
+                                exits: data.items["west"]
+                            });
+                        }
+                        if (data.items["northup"]) {
+                            G.exits.set("northup", {
+                                exits: data.items["northup"]
+                            });
+                        }
+                        if (data.items["southup"]) {
+                            G.exits.set("southup", {
+                                exits: data.items["southup"]
+                            });
+                        }
+                        if (data.items["eastup"]) {
+                            G.exits.set("eastup", {
+                                exits: data.items["eastup"]
+                            });
+                        }
+                        if (data.items["westup"]) {
+                            G.exits.set("westup", {
+                                exits: data.items["westup"]
+                            });
+                        }
+                        if (data.items["northdown"]) {
+                            G.exits.set("northdown", {
+                                exits: data.items["northdown"]
+                            });
+                        }
+                        if (data.items["southdown"]) {
+                            G.exits.set("southdown", {
+                                exits: data.items["southdown"]
+                            });
+                        }
+                        if (data.items["eastdown"]) {
+                            G.exits.set("eastdown", {
+                                exits: data.items["eastdown"]
+                            });
+                        }
+                        if (data.items["westdown"]) {
+                            G.exits.set("westdown", {
+                                exits: data.items["westdown"]
+                            });
+                        }
+                        if (data.items["up"]) {
+                            G.exits.set("up", {
+                                exits: data.items["up"]
+                            });
+                        }
+                        if (data.items["down"]) {
+                            G.exits.set("down", {
+                                exits: data.items["down"]
+                            });
+                        }
+                        if (data.items["enter"]) {
+                            G.exits.set("enter", {
+                                exits: data.items["enter"]
+                            });
+                        }
+                        if (data.items["out"]) {
+                            G.exits.set("out", {
+                                exits: data.items["out"]
+                            });
+                        }
+                        break;
+                    case "room":
+                        let tmp = data.path.split("/");
+                        G.map = tmp[0];
+                        G.room = tmp[1];
+                        if (G.map == 'home' || G.room == 'kuang')
+                            G.can_auto = true;
+                        else
+                            G.can_auto = false;
 
-                } else if (data.type == "room") {
-                    let tmp = data.path.split("/");
-                    G.map = tmp[0];
-                    G.room = tmp[1];
-                    if (G.map == 'home' || G.room == 'kuang')
-                        G.can_auto = true;
-                    else
-                        G.can_auto = false;
+                        G.room_name = data.name;
+                        //强制结束pfm
+                        if (G.in_fight) {
+                            G.in_fight = false;
+                            WG.auto_preform("stop");
+                            WG.clean_dps();
+                        }
+                        break;
+                    case "items":
+                        G.items = new Map();
+                        for (var i = 0; i < data.items.length; i++) {
+                            let item = data.items[i];
+                            if (item.id) {
+                                let n = $.trim($('<body>' + item.name + '</body>').text());
+                                let i = n.lastIndexOf(' ');
+                                let j = n.lastIndexOf('<');
+                                let t = "";
+                                let s = "";
+                                if (j >= 0) {
+                                    s = n.substr(j + 1, 2);
+                                }
+                                if (i >= 0) {
+                                    t = n.substr(0, i);
+                                    n = n.substr(i + 1).replace(/<.*>/g, '');
+                                }
 
-                    G.room_name = data.name;
-                    //强制结束pfm
-                    if (G.in_fight) {
-                        G.in_fight = false;
-                        WG.auto_preform("stop");
-                        WG.clean_dps();
-                    }
-
-                } else if (data.type == "items") {
-                    G.items = new Map();
-                    for (var i = 0; i < data.items.length; i++) {
-                        let item = data.items[i];
-                        if (item.id) {
-                            let n = $.trim($('<body>' + item.name + '</body>').text());
+                                G.items.set(item.id, {
+                                    name: n,
+                                    title: t,
+                                    state: s,
+                                    max_hp: item.max_hp,
+                                    max_mp: item.max_mp,
+                                    hp: item.hp,
+                                    mp: item.mp,
+                                    p: item.p,
+                                    damage: 0,
+                                    status: item.status
+                                });
+                            }
+                        }
+                        break;
+                    case "itemadd":
+                        if (data.id) {
+                            let n = $.trim($('<body>' + data.name + '</body>').text());
                             let i = n.lastIndexOf(' ');
                             let j = n.lastIndexOf('<');
                             let t = "";
                             let s = "";
-                            if (j >= 0) {
-                                s = n.substr(j + 1, 2);
-                            }
                             if (i >= 0) {
                                 t = n.substr(0, i);
+                                if (j >= 0) {
+                                    s = n.substr(j + 1, 2);
+                                }
                                 n = n.substr(i + 1).replace(/<.*>/g, '');
                             }
-
-                            G.items.set(item.id, {
+                            G.items.set(data.id, {
                                 name: n,
                                 title: t,
                                 state: s,
-                                max_hp: item.max_hp,
-                                max_mp: item.max_mp,
-                                hp: item.hp,
-                                mp: item.mp,
-                                p: item.p,
+                                max_hp: data.max_hp,
+                                max_mp: data.max_mp,
+                                hp: data.hp,
+                                mp: data.mp,
+                                p: data.p,
                                 damage: 0,
-                                status: item.status
+                                status: data.status
                             });
                         }
-
-                    }
-                } else if (data.type == "itemadd") {
-                    if (data.id) {
-                        let n = $.trim($('<body>' + data.name + '</body>').text());
-                        let i = n.lastIndexOf(' ');
-                        let j = n.lastIndexOf('<');
-                        let t = "";
-                        let s = "";
-                        if (i >= 0) {
-                            t = n.substr(0, i);
-                            if (j >= 0) {
-                                s = n.substr(j + 1, 2);
+                        break;
+                    case "itemremove":
+                        G.items.delete(data.id);
+                        break
+                    case "sc":
+                        let xitem = G.items.get(data.id);
+                        if (data.hp !== undefined) {
+                            xitem.hp = data.hp;
+                            if (data.id != G.id) {
+                                G.scid = data.id; //伤害统计需要
                             }
-                            n = n.substr(i + 1).replace(/<.*>/g, '');
+                            // WG.showallhp();
                         }
-                        G.items.set(data.id, {
-                            name: n,
-                            title: t,
-                            state: s,
-                            max_hp: data.max_hp,
-                            max_mp: data.max_mp,
-                            hp: data.hp,
-                            mp: data.mp,
-                            p: data.p,
-                            damage: 0,
-                            status: data.status
-                        });
-                    }
-                } else if (data.type == "itemremove") {
-                    G.items.delete(data.id);
-                } else if (data.type == "sc") {
-                    let item = G.items.get(data.id);
-                    if (data.hp !== undefined) {
-                        item.hp = data.hp;
-                        if (data.id != G.id) {
-                            G.scid = data.id; //伤害统计需要
+                        if (data.mp !== undefined) {
+                            xitem.mp = data.mp;
                         }
-                        // WG.showallhp();
-                    }
-                    if (data.mp !== undefined) {
-                        item.mp = data.mp;
-                    }
-                } else if (data.type == "perform") {
-                    G.skills = data.skills;
-                    if (zdyskilllist == "") {
-                        zdyskilllist = JSON.stringify(data.skills);
-                        GM_setValue(roleid + "_zdyskilllist", zdyskilllist);
-                    }
-                } else if (data.type == 'dispfm') {
-                    if (data.id) {
-                        if (data.distime) { }
-                        G.cds.set(data.id, true);
-                        var _id = data.id;
-                        setTimeout(function () {
-                            G.cds.set(_id, false);
-                            //技能cd时间到
-                            let pfmtimeTips = {
-                                data: JSON.stringify({
-                                    type: "enapfm",
-                                    id: _id
-                                })
-                            };
-                            WG.receive_message(pfmtimeTips);
-                        }, data.distime);
-                    }
-                    if (data.rtime) {
-                        G.gcd = true;
-                        setTimeout(function () {
-                            G.gcd = false;
-                        }, data.rtime);
-                    } else {
-                        G.gcd = false;
-                    }
-                } else if (data.type == "combat") {
-                    if (data.start) {
-                        G.in_fight = true;
-                        battletime = new Date();
-                        WG.auto_preform();
-                    }
-                    if (data.end) {
-                        G.in_fight = false;
-                        WG.auto_preform("stop");
-                        WG.clean_dps();
-                    }
-                } else if (data.type == "status") {
-                    if (data.count != undefined) {
-                        G.status.set(data.id, {
-                            "sid": data.sid,
-                            "count": data.count
-                        });
-                    }
-                    if (data.id == G.id) {
-                        if (data.action == 'add') {
-                            G.selfStatus.push(data.sid)
+                        if (data.id != G.id) break;
+                        if (data.hp != null) G.hp = data.hp;
+                        if (data.max_hp != null) G.maxHp = data.max_hp;
+                        if (data.mp != null) G.mp = data.mp;
+                        if (data.max_mp != null) G.maxMp = data.max_mp;
+                        break
+                    case "perform":
+                        G.skills = data.skills;
+                        if (zdyskilllist == "") {
+                            zdyskilllist = JSON.stringify(data.skills);
+                            GM_setValue(roleid + "_zdyskilllist", zdyskilllist);
+                        }
+                        break
+                    case 'dispfm':
+                        if (data.id) {
+                            if (data.distime) { }
+                            G.cds.set(data.id, true);
+                            var _id = data.id;
+                            setTimeout(function () {
+                                G.cds.set(_id, false);
+                                //技能cd时间到
+                                let pfmtimeTips = {
+                                    data: JSON.stringify({
+                                        type: "enapfm",
+                                        id: _id
+                                    })
+                                };
+                                WG.receive_message(pfmtimeTips);
+                            }, data.distime);
+                        }
+                        if (data.rtime) {
+                            G.gcd = true;
+                            setTimeout(function () {
+                                G.gcd = false;
+                            }, data.rtime);
                         } else {
-                            G.selfStatus.remove(data.sid)
+                            G.gcd = false;
                         }
-                    }
-                    if (busy_info === '开') {
+                        break
+                    case "combat":
+                        if (data.start) {
+                            G.in_fight = true;
+                            battletime = new Date();
+                            WG.auto_preform();
+                        }
+                        if (data.end) {
+                            G.in_fight = false;
+                            WG.auto_preform("stop");
+                            WG.clean_dps();
+                        }
+                        break
+                    case "status":
+                        if (data.count != undefined) {
+                            G.status.set(data.id, {
+                                "sid": data.sid,
+                                "count": data.count
+                            });
+                        }
                         if (data.id == G.id) {
                             if (data.action == 'add') {
-                                if (data.sid == 'busy' || data.sid == 'faint') {
-                                    var _id = data.id;
-                                    messageAppend(`你被${data.name}了${data.duration / 1000}秒`, 2, 0);
-                                    if (data.name == '绊字诀') return;
+                                G.selfStatus.push(data.sid)
+                            } else {
+                                G.selfStatus.remove(data.sid)
+                            }
+                        }
+                        if (busy_info === '开') {
+                            if (data.id == G.id) {
+                                if (data.action == 'add') {
+                                    if (data.sid == 'busy' || data.sid == 'faint') {
+                                        var _id = data.id;
+                                        messageAppend(`你被${data.name}了${data.duration / 1000}秒`, 2, 0);
+                                        if (data.name == '绊字诀') return;
+                                    }
+                                }
+                            } else {
+                                if (data.action == 'add') {
+                                    if (data.sid == 'busy' || data.sid == 'faint' || data.sid == 'chidun' || data.sid == 'unarmed') {
+                                        let npc = G.items.get(data.id)
+                                        messageAppend(`${npc.name}被${data.name}了${data.duration / 1000}秒`, 2, 0);
+                                    }
                                 }
                             }
-                        } else {
-                            if (data.action == 'add') {
-                                if (data.sid == 'busy' || data.sid == 'faint' || data.sid == 'chidun' || data.sid == 'unarmed') {
-                                    let npc = G.items.get(data.id)
-                                    messageAppend(`${npc.name}被${data.name}了${data.duration / 1000}秒`, 2, 0);
+                        }
+                        let item = G.items.get(data.id);
+                        if (item == null) {
+                            break;
+                        }
+                        if (data.action == 'add') {
+                            if (item.status == null) {
+                                item.status = [];
+                            }
+                            item.status.push({ sid: data.sid, name: data.name, duration: data.duration, overtime: 0 });
+                        } else if (data.action == 'remove') {
+                            for (let i = 0; i < item.status.length; i++) {
+                                let s = item.status[i];
+                                if (s.sid == data.sid) {
+                                    item.status.splice(i, 1);
+                                    break;
                                 }
                             }
                         }
-                    }
-                    let item = G.items.get(data.id);
-                    if (item == null) {
-                        return;
-                    }
-                    if (data.action == 'add') {
-                        if (item.status == null) {
-                            item.status = [];
-                        }
-                        item.status.push({ sid: data.sid, name: data.name, duration: data.duration, overtime: 0 });
-                    } else if (data.action == 'remove') {
-                        for (let i = 0; i < item.status.length; i++) {
-                            let s = item.status[i];
-                            if (s.sid == data.sid) {
-                                item.status.splice(i, 1);
-                                break;
+                        break
+                    case "text":
+                        if (data.msg.indexOf("还没准备好，你还不能使用。")>=0){
+                            let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
+                            let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
+                            if (skillid!=''){
+                                G.cds.set(skillid,true)
                             }
                         }
-                    }
-
-
+                    default:
+                        break;
                 }
             });
             WG.add_hook("state", function (data) {
@@ -7620,6 +7662,7 @@
                     statehml = GM_getValue(roleid + '_statehml', statehml);
                     WG.SendCmd(statehml);
                 }
+
             });
             WG.add_hook("dialog", function (data) {
                 //console.dir(data);
@@ -7918,6 +7961,15 @@
                     if (G.in_fight == false) {
                         G.in_fight = true;
                         WG.auto_preform();
+                    }
+                }
+                if (data.msg.indexOf("你的内力不够，无法使用") >= 0) {
+                    // if (G.in_fight == false) {
+                    //     G.in_fight = true;
+                    // }
+                    if (G.preform_timer != null) {
+                        WG.auto_preform("stop");
+                        messageAppend("内力不足,停止自动出招", 1, 0)
                     }
                 }
                 if (data.type == 'text') {
@@ -8323,15 +8375,11 @@
         );
 
         setTimeout(() => {
-            var sakura = document.createElement('script');
-            sakura.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/sakura-js/sakura.js');
-            document.head.appendChild(sakura);
-            console.log("sakura 加载完毕!");
             var server = document.createElement('script');
             server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
-         
+
             setInterval(() => {
                 var h = '';
                 if (parseInt(Math.random() * 10) < 3) {
@@ -8704,7 +8752,7 @@
         $.contextMenu({
             selector: '.container',
             build: function ($trigger, e) {
-                //从 trigger 中获取动态创建的菜单项及回掉
+                //从 trigger 中获取动态创建的菜单项及回调
                 return createSomeMenu();
             }
 
