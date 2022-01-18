@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.219
-// @date         01/17/2018
+// @version      0.0.32.220
+// @date         01/18/2018
 // @modified     10/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
@@ -3363,7 +3363,9 @@
 
                     if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray(skill.id, alreay_pfm)) {
                         WG.Send("perform " + skill.id);
-                        // break;
+                        if (WG.inArray("faint", G.selfStatus) && WG.inArray("busy", G.selfStatus) && WG.inArray("rash", G.selfStatus)){
+                            break
+                        }
                     }
                 }
             }, 300);
@@ -7648,6 +7650,11 @@
                                 G.cds.set(skillid,true)
                             }
                         }
+                        if (data.msg.indexOf("你大叫一声倒在地上，挣扎了几下，<HIR>死了</HIR>")>=0){
+                            self.selfStatus = []
+                        }
+                    case 'die':
+                        self.selfStatus = []
                     default:
                         break;
                 }
