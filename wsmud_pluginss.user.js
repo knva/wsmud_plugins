@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.220
-// @date         01/18/2018
-// @modified     10/1/2022
+// @version      0.0.32.221
+// @date         01/07/2018
+// @modified     19/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3334,10 +3334,12 @@
                 !G.gcd && !G.cds.get(skid) && !WG.inArray(buffid, G.selfStatus) && 
                 !WG.inArray(skid, blackpfm);
             }
-
+            let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
+                'force.xin', 'force.chu', 'force.ztd', 'force.zhen','force.busi','force.wang'];
+          
             G.preform_timer = setInterval(() => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                let alreay_pfm = ['sword.wu','balde.shi']
+                let alreay_pfm = ['sword.wu', 'balde.shi']
                 if (canpfm('sword.wu', 'weapon')) {
                     WG.Send("perform sword.wu");
                 }
@@ -3348,11 +3350,22 @@
                     if (WG.inArray(skill.id, blackpfm)) {
                         continue;
                     }
-                    if (skill.id.indexOf("force")>=0){
-                        if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("force", G.selfStatus)) {
+                    if (WG.inArray(skill.id,force_buff_skill)){
+                        if (skill.id == 'force.ztd') {
+                            if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("ztd", G.selfStatus)) {
+                                WG.Send("perform " + skill.id);
+                                // break;
+                            }
+                        }else if (skill.id == 'force.wang') {
+                            if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("mingyu", G.selfStatus)) {
+                                WG.Send("perform " + skill.id);
+                                // break;
+                            }
+                        }else if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("force", G.selfStatus)) {
                             WG.Send("perform " + skill.id) ;
                             // break;
                         }
+                        
                         alreay_pfm.push(skill.id)
                     }
                 }
