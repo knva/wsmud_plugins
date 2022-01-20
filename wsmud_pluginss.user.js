@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.222
+// @version      0.0.32.223
 // @date         01/07/2018
 // @modified     20/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6020,7 +6020,7 @@
                     ws_on_message.apply(this, [p]);
                     $("#show").click(() => { $("#more").show(); $("#show").hide(); $("#hide").show(); });
                     $("#hide").click(() => { $("#more").hide(); $("#show").show(); $("#hide").hide(); });
-
+                    return;
                 }
             }
 
