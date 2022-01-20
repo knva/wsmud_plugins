@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.221
+// @version      0.0.32.222
 // @date         01/07/2018
-// @modified     19/1/2022
+// @modified     20/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1372,6 +1372,14 @@
                         if (val.indexOf(item) >= 0) return true;
                     }
                 }
+            }
+            return false;
+        },
+        hasStr: function (val, arr) {
+            for (let i = 0; i < arr.length; i++) {
+                let item = arr[i];
+                if (item == val) return true;
+
             }
             return false;
         },
@@ -3322,7 +3330,7 @@
             unauto_pfm = GM_getValue(roleid + "_unauto_pfm", unauto_pfm);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
-                if (!WG.inArray(pfmname, blackpfm))
+                if (!WG.hasStr(pfmname, blackpfm))
                     blackpfm.push(pfmname);
             }
             if (family.indexOf("逍遥") >= 0) {
@@ -3330,9 +3338,9 @@
             }
             blackpfm.push('force.tuoli');
             var canpfm = function (skid, buffid) {
-                return WG.inArray(skid, G.skills.map(e => { return e.id })) && 
-                !G.gcd && !G.cds.get(skid) && !WG.inArray(buffid, G.selfStatus) && 
-                !WG.inArray(skid, blackpfm);
+                return WG.hasStr(skid, G.skills.map(e => { return e.id })) && 
+                    !G.gcd && !G.cds.get(skid) && !WG.hasStr(buffid, G.selfStatus) && 
+                    !WG.hasStr(skid, blackpfm);
             }
             let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
                 'force.xin', 'force.chu', 'force.ztd', 'force.zhen','force.busi','force.wang'];
@@ -3347,21 +3355,21 @@
                     WG.Send("perform balde.shi");
                 }
                 for (var skill of G.skills) {
-                    if (WG.inArray(skill.id, blackpfm)) {
+                    if (WG.hasStr(skill.id, blackpfm)) {
                         continue;
                     }
-                    if (WG.inArray(skill.id,force_buff_skill)){
+                    if (WG.hasStr(skill.id,force_buff_skill)){
                         if (skill.id == 'force.ztd') {
-                            if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("ztd", G.selfStatus)) {
+                            if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("ztd", G.selfStatus)) {
                                 WG.Send("perform " + skill.id);
                                 // break;
                             }
                         }else if (skill.id == 'force.wang') {
-                            if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("mingyu", G.selfStatus)) {
+                            if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("mingyu", G.selfStatus)) {
                                 WG.Send("perform " + skill.id);
                                 // break;
                             }
-                        }else if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray("force", G.selfStatus)) {
+                        } else if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                             WG.Send("perform " + skill.id) ;
                             // break;
                         }
@@ -3370,13 +3378,13 @@
                     }
                 }
                 for (var skill of G.skills) {
-                    if (WG.inArray(skill.id, blackpfm)) {
+                    if (WG.hasStr(skill.id, blackpfm)) {
                         continue;
                     }
-
-                    if (!G.gcd && !G.cds.get(skill.id) && !WG.inArray(skill.id, alreay_pfm)) {
+                    // console.log(skill);
+                    if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(skill.id, alreay_pfm)) {
                         WG.Send("perform " + skill.id);
-                        if (WG.inArray("faint", G.selfStatus) && WG.inArray("busy", G.selfStatus) && WG.inArray("rash", G.selfStatus)){
+                        if (WG.hasStr("faint", G.selfStatus) && WG.hasStr("busy", G.selfStatus) && WG.hasStr("rash", G.selfStatus)){
                             break
                         }
                     }
