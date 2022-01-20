@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.223
+// @version      0.0.32.224
 // @date         01/07/2018
 // @modified     20/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -720,16 +720,10 @@
         "逍遥派": "jh fam 5 start;go west;go east;go down",
         "丐帮": "jh fam 6 start;go down;go east;go east;go east;go east;go east",
     };
-    var td_path = {
-        "缥缈峰": "cr lingjiu/shanjiao 1 0;cr over;",
-        "光明顶": "",
-        "天龙寺": "",
-        "血刀门": "",
-        "古墓派": "",
-        "华山论剑": "",
-        "侠客岛": "",
-        "净念禅宗": "",
-
+    var diff_colors = {
+       'normal':'',
+        'flat':'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
+        'access':'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
     };
     var fb_path = [];
     var drop_list = [];
@@ -851,6 +845,8 @@
     var zdy_btnlist = [];
     //自动购买
     var auto_buylist = "";
+    //配色
+    var color_select="normal";
     //快捷键功能
     var exit1 = undefined;
     var exit2 = undefined;
@@ -1461,8 +1457,13 @@
                 background-size:100% 100%;
                 -moz-background-size:100% 100%;} `);
             }
-
-
+            color_select = GM_getValue("color_select", color_select);
+            let link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.type = "text/css";
+            link.href = diff_colors[color_select];
+            let head = document.getElementsByTagName("head")[0];
+            head.appendChild(link);
             setTimeout(() => {
                 try {
                     if (GM_registerMenuCommand) {
@@ -5189,6 +5190,10 @@
             //     pushUrl = $('#pushUrl').val();
             //     GM_setValue("_pushUrl", pushUrl);
             // });
+            $("#color_select").change(function () {
+                color_select = $('#color_select').val();
+                GM_setValue("color_select", color_select);
+            });
             $('#getitemShow').click(function () {
                 getitemShow = WG.switchReversal($(this));
                 GM_setValue(roleid + "_getitemShow", getitemShow);
@@ -5405,6 +5410,8 @@
             $("#pushType").val(pushType);
             $("#pushToken").val(pushToken);
             // $("#pushUrl").val(pushUrl);
+
+            $("#color_select").val(color_select);
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
             $('#store_info').val(zdy_item_store);
@@ -6781,7 +6788,14 @@
                     <div class="setting-item zdy_dialog" >
                 有空的话请点个star,您的支持是我最大的动力<a href="https://github.com/knva/wsmud_plugins" target="_blank">https://github.com/knva/wsmud_plugins</a>
                 </div> `+
-                UI.html_lninput("welcome", "欢迎语： ") + `
+                UI.html_lninput("welcome", "欢迎语句： ") + `
+                <div class="setting-item">
+                <span> <label for="color_select"> 界面配色： </label><select id="color_select" style="width:80px">
+                    <option value="normal"> 原版 </option>
+                    <option value="flat"> flat模式 </option>
+                    <option value="access"> 色若模式</option>
+                </select> *此功能刷新后生效
+                </span></div>  
                 <div class="setting-item" >
                 <span><label for="family">门派选择：</label><select id="family" style="width:80px">
                         <option value="武当">武当</option>
@@ -6794,36 +6808,49 @@
                         <option value="杀手楼">杀手楼</option>
                     </select>
                 </span>
-                    </div>`
+                </div>`
 
                 + UI.html_switch('autorelogin', '自动重连: ', 'auto_relogin')
                 + UI.html_switch('shieldswitch', '聊天频道屏蔽开关: ', 'shieldswitch')
                 + UI.html_switch('silence', '安静模式:', 'silence')
                 + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada')
                 + UI.html_switch('funnycalc', 'funny计算:', 'funnycalc')
+                +`<h3>屏蔽选项</h3>`
                 + UI.html_lninput("shield", "屏蔽人物名(用半角逗号分隔)：")
                 + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
+
+                + `<h3>师门任务配置</h3>`
                 + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
                 + UI.html_switch('sm_any', '师门任务提交稀有：', "sm_any")
                 + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price')
-                + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") + `
+                + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") 
+
+                + `<h3>自命令配置</h3>
                 <div class="setting-item" >
                 <span> <label for="zmlshowsetting"> 自命令显示位置： </label><select id="zmlshowsetting" style="width:80px">
                     <option value="0"> 物品栏 </option>
                     <option value="1"> 技能栏下方 </option>
                 </select>
                 </span></div> `
-                + UI.html_lninput("wudao_pfm", "武道自动攻击(用半角逗号分隔)：")
+                + `<h3>武道塔配置</h3>`
+                + UI.html_lninput("wudao_pfm", "武道释放技能(用半角逗号分隔)：")
+                + `<h3>杂项配置</h3>`
+                + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
+                + UI.html_switch('busyinfo', '显示昏迷信息：', 'busy_info')
+                + UI.html_switch('saveAddr', '使用豪宅仓库：', "saveAddr")
                 + UI.html_switch('getitemShow', '显示获得物品：', 'getitemShow')
-                + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
-                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") + `
+
+                + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
+                + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
+                + UI.html_input("loginhml", "登录后执行命令：") +`
                 <div class="setting-item">
                 <span> <label for="bagFull"> 背包已满提示： </label><select id="bagFull" style="width:80px">
                     <option value="0"> 文字提醒 </option>
                     <option value="1"> 提示音 </option>
                     <option value="2"> 语音提醒 </option>
                 </select>
-                </span></div> `
+                </span></div>`
+                + `<h3>推送配置</h3>`
                 + UI.html_switch('pushSwitch', '远程通知推送开关(使用@push推送通知，语法参考@print)：', 'pushSwitch') + `
                 <div class="setting-item">
                 <span> <label for="pushType"> 通知推送方式(使用方法自行百度)： </label><select id="pushType" style="width:80px">
@@ -6837,28 +6864,33 @@
                 </span></div> `
                 + UI.html_lninput("pushToken", "推送方式对应的Token或Key(只要Key不要填整个网址)：")
                 //+ UI.html_lninput("pushUrl", "推演方式对应的推送网址(末尾不要加斜杠/)：")
+              
+                + `<h3>自动BOSS配置</h3>`
+                + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
+                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") 
                 + UI.html_lninput("auto_eq", "BOSS击杀时自动换装：")
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
-                + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
-                + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
-                + UI.html_switch('busyinfo', '显示昏迷信息：', 'busy_info')
-                + UI.html_switch('saveAddr', '使用豪宅仓库：', "saveAddr")
-                + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
+                + UI.html_input("auto_command", "输入喜宴及boss后命令(留空为自动挖矿或修炼)：")
+                + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
+    
 
+                + `<h3>自动施法配置</h3>`
+                + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
+                + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
+
+
+                + `<h3>仓库存储配置</h3>`
                 + UI.html_switch('autoupdateStore', '自动更新仓库数据：', 'auto_updateStore')
                 + UI.html_input("store_info", "自动存储的物品名称（自动获得的物品信息,随仓库内容更新）：")
                 + UI.html_input("store_info2", "手动添加的自动存仓物品信息（不会随仓库内容更新，使用半角逗号分隔）：")
                 + UI.html_input("lock_info", "已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔)：")
                 + UI.html_input("store_drop_info", "输入自动丢弃的物品名称(使用半角逗号分隔)：")
                 + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
-                + UI.html_input("auto_command", "输入喜宴及boss后命令(留空为自动挖矿或修炼)：")
-                + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
-                + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
-                + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
-                + UI.html_input("loginhml", "登录后执行命令：")
+     
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
 
+                + `<h3>技能自定义</h3>`
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
 
                 + UI.html_input("zdyskilllist", "自定义技能顺序json数组：")
@@ -6878,8 +6910,7 @@
 
             <h3>自定义按钮</h3>`
                 + UI.zdyBtnsetui() +
-                ` <h3>系统</h3>
-            `
+                ` <h3>系统</h3> `
         },
 
         skillsPanel: `<div class="item-commands" style="text-align:center" id='skillsPanelUI'>
@@ -8211,7 +8242,7 @@
             pushType = GM_getValue("_pushType", pushType);
             pushToken = GM_getValue("_pushToken", pushToken);
             //pushUrl = GM_getValue("_pushUrl", pushUrl);
-
+            color_select = GM_getValue("color_select", color_select);
             WG.zdy_btnListInit();
 
         }
