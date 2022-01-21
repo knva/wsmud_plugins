@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.226
+// @version      0.0.32.227
 // @date         01/07/2018
 // @modified     21/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7702,11 +7702,15 @@
                         break
                     case "text":
                         if (data.msg.indexOf("还没准备好，你还不能使用。")>=0){
-                            let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
-                            let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
-                            if (skillid!=''){
-                                G.cds.set(skillid,true)
-                            }
+                            //let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
+                            //let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
+                            //if (skillid!=''){
+                            //    G.cds.set(skillid,true)
+                            //}
+                            G.gcd=true;
+                            setTimeout(() => {
+                                G.gcd=false
+                            }, 20);
                         }
                         if (data.msg.indexOf("你大叫一声倒在地上，挣扎了几下，<HIR>死了</HIR>")>=0){
                             self.selfStatus = []
