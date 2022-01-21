@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.224
+// @version      0.0.32.225
 // @date         01/07/2018
-// @modified     20/1/2022
+// @modified     21/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3385,7 +3385,7 @@
                     // console.log(skill);
                     if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(skill.id, alreay_pfm)) {
                         WG.Send("perform " + skill.id);
-                        if (WG.hasStr("faint", G.selfStatus) && WG.hasStr("busy", G.selfStatus) && WG.hasStr("rash", G.selfStatus)){
+                        if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)){
                             break
                         }
                     }
@@ -7704,6 +7704,12 @@
                         }
                         if (data.msg.indexOf("你大叫一声倒在地上，挣扎了几下，<HIR>死了</HIR>")>=0){
                             self.selfStatus = []
+                        }
+                        if (data.msg.indexOf("不要急")>=0 && G.auto_preform){
+                            G.gcd=true;
+                            setTimeout(() => {
+                                G.gcd=false
+                            }, 500);
                         }
                     case 'die':
                         self.selfStatus = []
