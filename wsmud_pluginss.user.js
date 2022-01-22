@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.227
+// @version      0.0.32.228
 // @date         01/07/2018
-// @modified     21/1/2022
+// @modified     22/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1372,10 +1372,17 @@
             return false;
         },
         hasStr: function (val, arr) {
-            for (let i = 0; i < arr.length; i++) {
-                let item = arr[i];
-                if (item == val) return true;
-
+            if(arr.length==null){
+                for(let item in arr){
+                    for (let i of arr[item]){
+                        if (i==val)return true;
+                    }
+                }
+            }else{
+                for (let i = 0; i < arr.length; i++) {
+                    let item = arr[i];
+                    if (item == val) return true;
+                }
             }
             return false;
         },
@@ -3335,9 +3342,14 @@
                     blackpfm.push(pfmname);
             }
             if (family.indexOf("逍遥") >= 0) {
-                blackpfm.push('force.duo');
+                if (!WG.hasStr("force.duo",blackpfm)) {
+                    blackpfm.push('force.duo');
+                }
             }
-            blackpfm.push('force.tuoli');
+            if (!WG.hasStr("force.tuoli", blackpfm)){
+                blackpfm.push('force.tuoli');
+            }
+            
             var canpfm = function (skid, buffid) {
                 return WG.hasStr(skid, G.skills.map(e => { return e.id })) && 
                     !G.gcd && !G.cds.get(skid) && !WG.hasStr(buffid, G.selfStatus) && 
@@ -3351,51 +3363,67 @@
                 "mingyu": ["force.wang"],
                 "force":["*"]
             }
-            G.preform_timer = setInterval(() => {
+            var xubuf = null;
+            G.preform_timer = setInterval( () => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                // let alreay_pfm = ['sword.wu', 'blade.shi', 'sword.yu']
-                // for(let si of alreay_pfm){
-                //     if (canpfm(si, 'weapon')) {
-                //         WG.Send("perform "+si);
-                //     }
-                // }
-                let alreay_pfm = []
-                for (var skill of G.skills) {
-                    if (WG.hasStr(skill.id, blackpfm)) {
-                        continue;
-                    }
-                    for (let buf in buff_skill_dict){
-                        for (let ski of buff_skill_dict[buf]){
-                            if (ski == skill.id){
-                                if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(buf, G.selfStatus)) {
+                if (xubuf==null){
+                    xubuf = setTimeout(async () => {
+                        // let alreay_pfm = []
+                        for (var skill of G.skills) {
+                            if (WG.hasStr(skill.id, blackpfm)) {
+                                continue;
+                            }
+                            for (let buf in buff_skill_dict) {
+                                for (let ski of buff_skill_dict[buf]) {
+                                    if (ski == skill.id) {
+                                        if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(buf, G.selfStatus)) {
+                                            WG.Send("perform " + skill.id);
+                                            // break;
+                                            await WG.sleep(200);
+                                            while (!G.cds.get(skill.id)) {
+                                                if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                                WG.Send("perform " + skill.id);
+                                                await WG.sleep(200);
+                                            }
+                                        }
+                                        // alreay_pfm.push(skill.id)
+                                        break;
+                                    }
+                                }
+                            }
+                            if (WG.hasStr(skill.id, force_buff_skill)) {
+                                if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                     WG.Send("perform " + skill.id);
                                     // break;
+                                    await WG.sleep(200);
+                                    while (!G.cds.get(skill.id)) {
+                                        if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                        WG.Send("perform " + skill.id);
+                                        await WG.sleep(200);
+                                    }
                                 }
-                                alreay_pfm.push(skill.id)
-                                break;
+                                // alreay_pfm.push(skill.id)
+                            }
+                            xubuf = null
+                        }
+                    }, 10);
+                }
+                setTimeout(() => {
+                    for (var skill of G.skills) {
+                        if (WG.hasStr(skill.id, blackpfm)) {
+                            continue;
+                        }
+                        // console.log(skill);
+                        if (!G.gcd && !G.cds.get(skill.id) && !(
+                            WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
+                            WG.Send("perform " + skill.id);
+                            if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                break
                             }
                         }
                     }
-                    if (WG.hasStr(skill.id,force_buff_skill)){
-                       if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
-                            WG.Send("perform " + skill.id) ;
-                            // break;
-                        }
-                        alreay_pfm.push(skill.id)
-                    }
-                }
-                for (var skill of G.skills) {
-                    if (WG.hasStr(skill.id, blackpfm)) {
-                        continue;
-                    }
-                    // console.log(skill);
-                    if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(skill.id, alreay_pfm)) {
-                        WG.Send("perform " + skill.id);
-                        if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)){
-                            break
-                        }
-                    }
-                }
+                }, 10);
+              
             }, 300);
         },
 
@@ -7711,9 +7739,6 @@
                             setTimeout(() => {
                                 G.gcd=false
                             }, 20);
-                        }
-                        if (data.msg.indexOf("你大叫一声倒在地上，挣扎了几下，<HIR>死了</HIR>")>=0){
-                            self.selfStatus = []
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
                             data.msg.indexOf("你正在昏迷") >= 0) && G.auto_preform){
