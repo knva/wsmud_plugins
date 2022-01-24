@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.228
+// @version      0.0.32.229
 // @date         01/07/2018
-// @modified     22/1/2022
+// @modified     24/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7730,11 +7730,14 @@
                         break
                     case "text":
                         if (data.msg.indexOf("还没准备好，你还不能使用。")>=0){
-                            //let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
-                            //let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
-                            //if (skillid!=''){
-                            //    G.cds.set(skillid,true)
-                            //}
+                            let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
+                            let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
+                            if (skillid!=''){
+                               G.cds.set(skillid,true)
+                               setTimeout(() => {
+                                G.cds.set(skillid,false)
+                            }, 200);
+                            }
                             G.gcd=true;
                             setTimeout(() => {
                                 G.gcd=false
@@ -7748,7 +7751,8 @@
                             }, 500);
                         }
                     case 'die':
-                        self.selfStatus = []
+                        console.log('死亡，清除bf')
+                        G.selfStatus = []
                     default:
                         break;
                 }
