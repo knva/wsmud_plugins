@@ -7445,7 +7445,7 @@
 
 
             });
-            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat"], function (data) {
+            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat","die"], function (data) {
                 switch (data.type) {
                     case "login":
                         G.id = data.id;
@@ -7750,6 +7750,7 @@
                                 G.gcd=false
                             }, 500);
                         }
+                        break
                     case 'die':
                         console.log('死亡，清除bf')
                         G.selfStatus = []
