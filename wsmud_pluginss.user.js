@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.229
+// @version      0.0.32.230
 // @date         01/07/2018
-// @modified     24/1/2022
+// @modified     25/1/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3323,6 +3323,7 @@
                 WG.auto_preform();
             }
         },
+        forcebufskil:'',
         auto_preform: function (v) {
             if (v == "stop") {
                 if (G.preform_timer) {
@@ -3366,9 +3367,9 @@
             var xubuf = null;
             G.preform_timer = setInterval( () => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                var alreay_pfm = [];
                 if (xubuf==null){
                     xubuf = setTimeout(async () => {
-                        // let alreay_pfm = []
                         for (var skill of G.skills) {
                             if (WG.hasStr(skill.id, blackpfm)) {
                                 continue;
@@ -3382,9 +3383,13 @@
                                             await WG.sleep(200);
                                             while (!G.cds.get(skill.id)) {
                                                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                                if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                                    continue;
+                                                }
                                                 WG.Send("perform " + skill.id);
                                                 await WG.sleep(200);
                                             }
+                                            // alreay_pfm.push(skill.id)
                                         }
                                         // alreay_pfm.push(skill.id)
                                         break;
@@ -3396,11 +3401,20 @@
                                     WG.Send("perform " + skill.id);
                                     // break;
                                     await WG.sleep(200);
-                                    while (!G.cds.get(skill.id)) {
+                                    while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                        if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                            continue;
+                                        }
                                         WG.Send("perform " + skill.id);
                                         await WG.sleep(200);
+                                       
                                     }
+                                    if (WG.hasStr("force", G.selfStatus)){
+                                        console.log('内功buf技能'+skill.id)
+                                        WG.forcebufskil = skill.id;
+                                    }
+                                    alreay_pfm.push(skill.id)
                                 }
                                 // alreay_pfm.push(skill.id)
                             }
@@ -3418,7 +3432,16 @@
                             WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                             WG.Send("perform " + skill.id);
                             if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
-                                break
+                                break;
+                            }
+                        }
+                        if (WG.forcebufskil!=''){
+                            if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id!=WG.forcebufskil ) {
+                                console.log('使用无buf的内功技能'+skill.id)
+                                WG.Send("perform " + skill.id);
+                                if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -7730,18 +7753,18 @@
                         break
                     case "text":
                         if (data.msg.indexOf("还没准备好，你还不能使用。")>=0){
-                            let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
-                            let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
-                            if (skillid!=''){
-                               G.cds.set(skillid,true)
-                               setTimeout(() => {
-                                G.cds.set(skillid,false)
-                            }, 200);
-                            }
+                            // let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
+                            // let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
+                            // if (skillid!=''){
+                            //    G.cds.set(skillid,true)
+                            //    setTimeout(() => {
+                            //     G.cds.set(skillid,false)
+                            // }, 200);
+                            // }
                             G.gcd=true;
                             setTimeout(() => {
                                 G.gcd=false
-                            }, 20);
+                            }, 500);
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
                             data.msg.indexOf("你正在昏迷") >= 0) && G.auto_preform){
