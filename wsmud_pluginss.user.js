@@ -3384,7 +3384,7 @@
                                             while (!G.cds.get(skill.id)) {
                                                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
                                                 if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
-                                                    continue;
+                                                    break;
                                                 }
                                                 WG.Send("perform " + skill.id);
                                                 await WG.sleep(200);
@@ -3404,7 +3404,7 @@
                                     while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         if (G.in_fight == false) { WG.auto_preform("stop"); return; }
                                         if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
-                                            continue;
+                                            break;
                                         }
                                         WG.Send("perform " + skill.id);
                                         await WG.sleep(200);
