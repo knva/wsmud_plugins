@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.231
+// @version      0.0.32.232
 // @date         01/07/2018
-// @modified     25/1/2022
+// @modified     1/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3436,7 +3436,8 @@
                             }
                         }
                         if (WG.forcebufskil!=''){
-                            if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id!=WG.forcebufskil ) {
+                            if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id!=WG.forcebufskil &&
+                                 !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
                                 console.log('使用无buf的内功技能'+skill.id)
                                 WG.Send("perform " + skill.id);
                                 if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
@@ -6740,6 +6741,23 @@
                 $("#testmain").focusout(function () {
                     GM_setValue("_lastrun", $('#testmain').val());
                 })
+            }else{
+                layer.prompt({ title: '请输入...', formType: 2 }, function (text, index) {
+                    layer.close(index);
+                    if (text != null) {
+                        if (text.split("\n")[0].indexOf("//") >= 0) {
+                            if (unsafeWindow && unsafeWindow.ToRaid) {
+                                ToRaid.perform(text);
+                            }
+                        } else if (text.split("\n")[0].indexOf("#js") >= 0) {
+                            var jscode = text.split("\n");
+                            jscode.baoremove(0)
+                            eval(jscode.join(""));
+                        } else {
+                            WG.SendCmd(text);
+                        }
+                    }
+                });
             }
 
         },
@@ -7749,6 +7767,11 @@
                                     break;
                                 }
                             }
+                        }else if (data.action == 'clear') {
+                            for (let i = 0; i < item.status.length; i++) {
+                                item.status.splice(i, 1);
+                            }
+                            G.selfStatus = []
                         }
                         break
                     case "text":
