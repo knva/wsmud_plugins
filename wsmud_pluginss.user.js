@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.232
+// @version      0.0.32.233
 // @date         01/07/2018
 // @modified     1/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -847,6 +847,8 @@
     var auto_buylist = "";
     //配色
     var color_select="normal";
+    //死亡提示
+    var die_str= "菜";
     //快捷键功能
     var exit1 = undefined;
     var exit2 = undefined;
@@ -1255,11 +1257,46 @@
         },
     }
 
+    function textBecomeImg(text, fontsize, fontcolor) {
+        var canvas = document.createElement('canvas');
+        //小于32字加1  小于60字加2  小于80字加4    小于100字加6
+        var $buHeight = 0;
+        if (fontsize <= 32) { $buHeight = 1; }
+        else if (fontsize > 32 && fontsize <= 60) { $buHeight = 2; }
+        else if (fontsize > 60 && fontsize <= 80) { $buHeight = 4; }
+        else if (fontsize > 80 && fontsize <= 100) { $buHeight = 6; }
+        else if (fontsize > 100) { $buHeight = 10; }
+        
+        //对于g j 等有时会有遮挡，这里增加一些高度
+        canvas.height = fontsize + $buHeight;
+        var context = canvas.getContext('2d');
+        
+        // 擦除(0,0)位置大小为200x200的矩形，擦除的意思是把该区域变为透明
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = fontcolor;
+        context.font = fontsize + "px KaiTi";
+        
+        //top（顶部对齐） hanging（悬挂） middle（中间对齐） bottom（底部对齐） alphabetic是默认值
+        context.textBaseline = 'middle';
+        context.fillText(text, 0, fontsize / 2)
+
+        canvas.width = context.measureText(text).width;
+        context.fillStyle = fontcolor;
+        context.font = fontsize + "px KaiTi";
+        context.textBaseline = 'middle';
+        context.fillText(text, 0, fontsize / 2)
+   
+        var dataUrl = canvas.toDataURL('image/png');//注意这里背景透明的话，需要使用png
+        return dataUrl;
+      }
     function messageClear() {
         $(".WG_log pre").html("");
     }
     var log_line = 0;
 
+    function textShow(text){
+        imgShow(textBecomeImg(text,90,'red'))
+    }
     function imgShow(url, t = 2000) {
 
         $('.container > .content-message').css('background', 'url(' + url + ') no-repeat center center')
@@ -2253,9 +2290,14 @@
             }
             messageAppend("查找任务中");
             var task = $(".task-desc:eq(-2)").text();
-            if (task.indexOf("扬州知府") == -1) {
-                task = $(".task-desc:eq(-3)").text();
+            for(let idx = 3; idx<10;idx++){
+                if (task.indexOf("扬州知府") == -1) {
+                    task = $(".task-desc:eq(-"+idx+")").text();
+                }else{
+                    break;
+                }
             }
+            
             if (task.length == 0) {
                 KEY.do_command("tasks");
                 window.setTimeout(WG.check_yamen_task, 1000);
@@ -5113,6 +5155,7 @@
             $('#zdyskillsswitch').off('click')
             $('#shieldswitch').off('click')
             $('#welcome').off('focusout');
+            $('#die_str').off('focusout');
             $('#blacklist').off('change')
             $('#auto_command').off('change')
             $('#store_fenjie_info').off('change')
@@ -5311,6 +5354,10 @@
                 welcome = $('#welcome').val();
                 GM_setValue(roleid + "_welcome", welcome);
             });
+            $('#die_str').focusout(function () {
+                die_str = $('#die_str').val();
+                GM_setValue(roleid + "_die_str", die_str);
+            });
 
             $('#shieldswitch').click(function () {
 
@@ -5481,6 +5528,7 @@
             $('#auto_command').val(auto_command);
             $("#blacklist").val(blacklist);
             $('#welcome').val(welcome);
+            $('#die_str').val(die_str);
             $('#shieldswitch').val(shieldswitch);
             $('#silence').val(silence);
             $('#dpssakada').val(dpssakada);
@@ -6863,7 +6911,8 @@
                     <div class="setting-item zdy_dialog" >
                 有空的话请点个star,您的支持是我最大的动力<a href="https://github.com/knva/wsmud_plugins" target="_blank">https://github.com/knva/wsmud_plugins</a>
                 </div> `+
-                UI.html_lninput("welcome", "欢迎语句： ") + `
+                UI.html_lninput("welcome", "欢迎语句： ") + 
+                UI.html_lninput("die_str", "死亡提示： ") + `
                 <div class="setting-item">
                 <span> <label for="color_select"> 界面配色： </label><select id="color_select" style="width:80px">
                     <option value="normal"> 原版 </option>
@@ -7798,8 +7847,12 @@
                         }
                         break
                     case 'die':
-                        console.log('死亡，清除bf')
+                        // console.log('死亡，清除bf')
                         G.selfStatus = []
+                        
+                        if(die_str!='' && data.relive==null){
+                            textShow(die_str)
+                        }
                     default:
                         break;
                 }
@@ -8314,6 +8367,7 @@
                 if (pfmname) blackpfm.push(pfmname)
             }
             welcome = GM_getValue(roleid + "_welcome", welcome);
+            die_str = GM_getValue(roleid + "_die_str", die_str);
             shieldswitch = GM_getValue("_shieldswitch", shieldswitch);
             shield = GM_getValue("_shield", shield);
             shieldkey = GM_getValue("_shieldkey", shieldkey);
