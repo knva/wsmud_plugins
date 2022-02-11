@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.233
+// @version      0.0.32.234
 // @date         01/07/2018
-// @modified     1/2/2022
+// @modified     11/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -721,9 +721,9 @@
         "丐帮": "jh fam 6 start;go down;go east;go east;go east;go east;go east",
     };
     var diff_colors = {
-       'normal':'',
-        'flat':'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
-        'access':'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
+        'normal': '',
+        'flat': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
+        'access': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
     };
     var fb_path = [];
     var drop_list = [];
@@ -746,7 +746,7 @@
     //师门无视稀有程度
     var sm_any = "开";
     //
-    var wudao_pfm = "1";
+    var wudao_pfm = "";
     //boss战斗前等待(ms)
     var ks_pfm = "2000";
     //boss等待时间(s)
@@ -846,9 +846,9 @@
     //自动购买
     var auto_buylist = "";
     //配色
-    var color_select="normal";
+    var color_select = "normal";
     //死亡提示
-    var die_str= "菜";
+    var die_str = "菜";
     //快捷键功能
     var exit1 = undefined;
     var exit2 = undefined;
@@ -1266,16 +1266,16 @@
         else if (fontsize > 60 && fontsize <= 80) { $buHeight = 4; }
         else if (fontsize > 80 && fontsize <= 100) { $buHeight = 6; }
         else if (fontsize > 100) { $buHeight = 10; }
-        
+
         //对于g j 等有时会有遮挡，这里增加一些高度
         canvas.height = fontsize + $buHeight;
         var context = canvas.getContext('2d');
-        
+
         // 擦除(0,0)位置大小为200x200的矩形，擦除的意思是把该区域变为透明
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = fontcolor;
         context.font = fontsize + "px KaiTi";
-        
+
         //top（顶部对齐） hanging（悬挂） middle（中间对齐） bottom（底部对齐） alphabetic是默认值
         context.textBaseline = 'middle';
         context.fillText(text, 0, fontsize / 2)
@@ -1285,17 +1285,17 @@
         context.font = fontsize + "px KaiTi";
         context.textBaseline = 'middle';
         context.fillText(text, 0, fontsize / 2)
-   
+
         var dataUrl = canvas.toDataURL('image/png');//注意这里背景透明的话，需要使用png
         return dataUrl;
-      }
+    }
     function messageClear() {
         $(".WG_log pre").html("");
     }
     var log_line = 0;
 
-    function textShow(text){
-        imgShow(textBecomeImg(text,90,'red'))
+    function textShow(text) {
+        imgShow(textBecomeImg(text, 90, 'red'))
     }
     function imgShow(url, t = 2000) {
 
@@ -1409,13 +1409,13 @@
             return false;
         },
         hasStr: function (val, arr) {
-            if(arr.length==null){
-                for(let item in arr){
-                    for (let i of arr[item]){
-                        if (i==val)return true;
+            if (arr.length == null) {
+                for (let item in arr) {
+                    for (let i of arr[item]) {
+                        if (i == val) return true;
                     }
                 }
-            }else{
+            } else {
                 for (let i = 0; i < arr.length; i++) {
                     let item = arr[i];
                     if (item == val) return true;
@@ -1743,7 +1743,7 @@
             WG.SendCmd("$to 扬州城-广场;$to 扬州城-钱庄;look3 1");
         },
         clean_dps: function () {
-            if (dpslock && battletime!=0) {
+            if (dpslock && battletime != 0) {
                 let allpfmnum = pfmnum + criticalnum;
                 let alldps = pfmdps + critical;
                 let battle_t = (new Date().getTime() - battletime.getTime()) / 1000;
@@ -2290,14 +2290,14 @@
             }
             messageAppend("查找任务中");
             var task = $(".task-desc:eq(-2)").text();
-            for(let idx = 3; idx<10;idx++){
+            for (let idx = 3; idx < 10; idx++) {
                 if (task.indexOf("扬州知府") == -1) {
-                    task = $(".task-desc:eq(-"+idx+")").text();
-                }else{
+                    task = $(".task-desc:eq(-" + idx + ")").text();
+                } else {
                     break;
                 }
             }
-            
+
             if (task.length == 0) {
                 KEY.do_command("tasks");
                 window.setTimeout(WG.check_yamen_task, 1000);
@@ -2877,7 +2877,7 @@
         wudao_auto: function () {
             //创建定时器
             if (timer == 0) {
-                timer = setInterval(WG.wudao_auto, 2000);
+                timer = setInterval(WG.wudao_auto, 1000);
             }
             if (!WG.at("武道塔")) {
                 //进入武道塔 对于武神塔不知道咋操作
@@ -3365,7 +3365,7 @@
                 WG.auto_preform();
             }
         },
-        forcebufskil:'',
+        forcebufskil: '',
         auto_preform: function (v) {
             if (v == "stop") {
                 if (G.preform_timer) {
@@ -3384,33 +3384,33 @@
                 if (!WG.hasStr(pfmname, blackpfm))
                     blackpfm.push(pfmname);
             }
-            if (family.indexOf("逍遥") >= 0) {
-                if (!WG.hasStr("force.duo",blackpfm)) {
-                    blackpfm.push('force.duo');
-                }
-            }
-            if (!WG.hasStr("force.tuoli", blackpfm)){
+            // if (family.indexOf("逍遥") >= 0) {
+            //     if (!WG.hasStr("force.duo", blackpfm)) {
+            //         blackpfm.push('force.duo');
+            //     }
+            // }
+            if (!WG.hasStr("force.tuoli", blackpfm)) {
                 blackpfm.push('force.tuoli');
             }
-            
+
             var canpfm = function (skid, buffid) {
-                return WG.hasStr(skid, G.skills.map(e => { return e.id })) && 
-                    !G.gcd && !G.cds.get(skid) && !WG.hasStr(buffid, G.selfStatus) && 
+                return WG.hasStr(skid, G.skills.map(e => { return e.id })) &&
+                    !G.gcd && !G.cds.get(skid) && !WG.hasStr(buffid, G.selfStatus) &&
                     !WG.hasStr(skid, blackpfm);
             }
             let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
-                'force.xin', 'force.chu', 'force.ztd', 'force.zhen','force.busi','force.wang'];
+                'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
             let buff_skill_dict = {
                 "weapon": ['sword.wu', 'blade.shi', 'sword.yu'],
                 "ztd": ["force.ztd"],
                 "mingyu": ["force.wang"],
-                "force":["*"]
+                "force": ["*"]
             }
             var xubuf = null;
-            G.preform_timer = setInterval( () => {
+            G.preform_timer = setInterval(() => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
                 var alreay_pfm = [];
-                if (xubuf==null){
+                if (xubuf == null) {
                     xubuf = setTimeout(async () => {
                         for (var skill of G.skills) {
                             if (WG.hasStr(skill.id, blackpfm)) {
@@ -3450,10 +3450,10 @@
                                         }
                                         WG.Send("perform " + skill.id);
                                         await WG.sleep(200);
-                                       
+
                                     }
-                                    if (WG.hasStr("force", G.selfStatus)){
-                                        console.log('内功buf技能'+skill.id)
+                                    if (WG.hasStr("force", G.selfStatus)) {
+                                        console.log('内功buf技能' + skill.id)
                                         WG.forcebufskil = skill.id;
                                     }
                                     alreay_pfm.push(skill.id)
@@ -3477,10 +3477,10 @@
                                 break;
                             }
                         }
-                        if (WG.forcebufskil!=''){
-                            if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id!=WG.forcebufskil &&
-                                 !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
-                                console.log('使用无buf的内功技能'+skill.id)
+                        if (WG.forcebufskil != '') {
+                            if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
+                                !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
+                                console.log('使用无buf的内功技能' + skill.id)
                                 WG.Send("perform " + skill.id);
                                 if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
                                     break;
@@ -3489,7 +3489,7 @@
                         }
                     }
                 }, 10);
-              
+
             }, 300);
         },
 
@@ -6789,7 +6789,7 @@
                 $("#testmain").focusout(function () {
                     GM_setValue("_lastrun", $('#testmain').val());
                 })
-            }else{
+            } else {
                 layer.prompt({ title: '请输入...', formType: 2 }, function (text, index) {
                     layer.close(index);
                     if (text != null) {
@@ -6911,7 +6911,7 @@
                     <div class="setting-item zdy_dialog" >
                 有空的话请点个star,您的支持是我最大的动力<a href="https://github.com/knva/wsmud_plugins" target="_blank">https://github.com/knva/wsmud_plugins</a>
                 </div> `+
-                UI.html_lninput("welcome", "欢迎语句： ") + 
+                UI.html_lninput("welcome", "欢迎语句： ") +
                 UI.html_lninput("die_str", "死亡提示： ") + `
                 <div class="setting-item">
                 <span> <label for="color_select"> 界面配色： </label><select id="color_select" style="width:80px">
@@ -6939,7 +6939,7 @@
                 + UI.html_switch('silence', '安静模式:', 'silence')
                 + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada')
                 + UI.html_switch('funnycalc', 'funny计算:', 'funnycalc')
-                +`<h3>屏蔽选项</h3>`
+                + `<h3>屏蔽选项</h3>`
                 + UI.html_lninput("shield", "屏蔽人物名(用半角逗号分隔)：")
                 + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
 
@@ -6947,7 +6947,7 @@
                 + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
                 + UI.html_switch('sm_any', '师门任务提交稀有：', "sm_any")
                 + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price')
-                + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") 
+                + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore")
 
                 + `<h3>自命令配置</h3>
                 <div class="setting-item" >
@@ -6966,7 +6966,7 @@
 
                 + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
                 + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
-                + UI.html_input("loginhml", "登录后执行命令：") +`
+                + UI.html_input("loginhml", "登录后执行命令：") + `
                 <div class="setting-item">
                 <span> <label for="bagFull"> 背包已满提示： </label><select id="bagFull" style="width:80px">
                     <option value="0"> 文字提醒 </option>
@@ -6988,16 +6988,16 @@
                 </span></div> `
                 + UI.html_lninput("pushToken", "推送方式对应的Token或Key(只要Key不要填整个网址)：")
                 //+ UI.html_lninput("pushUrl", "推演方式对应的推送网址(末尾不要加斜杠/)：")
-              
+
                 + `<h3>自动BOSS配置</h3>`
                 + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
-                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") 
+                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss")
                 + UI.html_lninput("auto_eq", "BOSS击杀时自动换装：")
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_input("auto_command", "输入喜宴及boss后命令(留空为自动挖矿或修炼)：")
                 + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
-    
+
 
                 + `<h3>自动施法配置</h3>`
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
@@ -7011,7 +7011,7 @@
                 + UI.html_input("lock_info", "已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔)：")
                 + UI.html_input("store_drop_info", "输入自动丢弃的物品名称(使用半角逗号分隔)：")
                 + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
-     
+
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
 
                 + `<h3>技能自定义</h3>`
@@ -7535,7 +7535,7 @@
 
 
             });
-            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat","die"], function (data) {
+            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat", "die"], function (data) {
                 switch (data.type) {
                     case "login":
                         G.id = data.id;
@@ -7816,7 +7816,7 @@
                                     break;
                                 }
                             }
-                        }else if (data.action == 'clear') {
+                        } else if (data.action == 'clear') {
                             for (let i = 0; i < item.status.length; i++) {
                                 item.status.splice(i, 1);
                             }
@@ -7824,7 +7824,7 @@
                         }
                         break
                     case "text":
-                        if (data.msg.indexOf("还没准备好，你还不能使用。")>=0){
+                        if (data.msg.indexOf("还没准备好，你还不能使用。") >= 0) {
                             // let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
                             // let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
                             // if (skillid!=''){
@@ -7833,24 +7833,24 @@
                             //     G.cds.set(skillid,false)
                             // }, 200);
                             // }
-                            G.gcd=true;
+                            G.gcd = true;
                             setTimeout(() => {
-                                G.gcd=false
+                                G.gcd = false
                             }, 500);
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
-                            data.msg.indexOf("你正在昏迷") >= 0) && G.auto_preform){
-                            G.gcd=true;
+                            data.msg.indexOf("你正在昏迷") >= 0) && G.auto_preform) {
+                            G.gcd = true;
                             setTimeout(() => {
-                                G.gcd=false
+                                G.gcd = false
                             }, 500);
                         }
                         break
                     case 'die':
                         // console.log('死亡，清除bf')
                         G.selfStatus = []
-                        
-                        if(die_str!='' && data.relive==null){
+
+                        if (die_str != '' && data.relive == null) {
                             textShow(die_str)
                         }
                     default:
