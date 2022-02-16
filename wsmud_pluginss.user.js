@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.234
+// @version      0.0.32.235
 // @date         01/07/2018
-// @modified     11/2/2022
+// @modified     16/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1485,7 +1485,21 @@
                     33% {background:red; left:0px; top:-30px;}
                     100% {background:red; left:0px; top:0px;}
                 }
-            `;
+                .rainbow-text{
+                    color:red;
+                    background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red, violet);
+                    background-size:800% 800%;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    animation: rainbow 8s ease infinite;
+                    -webkit-animation: rainbow 8s ease infinite;
+                }
+                @keyframes rainbow
+                {
+                    0%{background-position:0% 50%}
+                    50%{background-position:100% 25%}
+                    100%{background-position:0% 50%}
+                }`;
             GM_addStyle(css);
             npcs = GM_getValue("npcs", npcs);
             pgoods = GM_getValue("goods", goods);
@@ -3358,6 +3372,7 @@
             if (G.auto_preform) {
                 G.auto_preform = false;
                 messageAppend("<hio>自动施法</hio>关闭");
+                G.selfStatus = []
                 WG.auto_preform("stop");
             } else {
                 G.auto_preform = true;
@@ -3393,11 +3408,6 @@
                 blackpfm.push('force.tuoli');
             }
 
-            var canpfm = function (skid, buffid) {
-                return WG.hasStr(skid, G.skills.map(e => { return e.id })) &&
-                    !G.gcd && !G.cds.get(skid) && !WG.hasStr(buffid, G.selfStatus) &&
-                    !WG.hasStr(skid, blackpfm);
-            }
             let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
                 'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
             let buff_skill_dict = {
@@ -3470,8 +3480,7 @@
                             continue;
                         }
                         // console.log(skill);
-                        if (!G.gcd && !G.cds.get(skill.id) && !(
-                            WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
+                        if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                             WG.Send("perform " + skill.id);
                             if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
                                 break;
