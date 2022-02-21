@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.236
+// @version      0.0.32.237
 // @date         01/07/2018
-// @modified     20/2/2022
+// @modified     21/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3381,8 +3381,15 @@
             }
         },
         forcebufskil: '',
-        xubuf :null,
-        pfmskill :null,
+        xubuf: null,
+        pfmskill: null,
+        is_free:function(){
+            if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus) || WG.hasStr("bss", G.selfStatus)){
+                return false;
+            }else{
+                return true;
+            }
+        },
         auto_preform: function (v) {
             if (v == "stop") {
                 if (G.preform_timer) {
@@ -3436,7 +3443,7 @@
                                             await WG.sleep(200);
                                             while (!G.cds.get(skill.id)) {
                                                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                                if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                                if (!WG.is_free()) {
                                                     break;
                                                 }
                                                 WG.Send("perform " + skill.id);
@@ -3456,7 +3463,7 @@
                                     await WG.sleep(200);
                                     while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                        if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                        if (!WG.is_free()) {
                                             break;
                                         }
                                         WG.Send("perform " + skill.id);
@@ -3475,7 +3482,7 @@
                         }
                     }, 10);
                 }
-                if (WG.pfmskill==null){
+                if (WG.pfmskill == null) {
                     WG.pfmskill = setTimeout(() => {
                         for (var skill of G.skills) {
                             if (WG.hasStr(skill.id, blackpfm)) {
@@ -3484,7 +3491,7 @@
                             // console.log(skill);
                             if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                                 WG.Send("perform " + skill.id);
-                                if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                if (!WG.is_free()) {
                                     break;
                                 }
                             }
@@ -3493,16 +3500,16 @@
                                     !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
                                     console.log('使用无buf的内功技能' + skill.id)
                                     WG.Send("perform " + skill.id);
-                                    if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus)) {
+                                    if (!WG.is_free()) {
                                         break;
                                     }
                                 }
                             }
                         }
-                        
+
                         WG.pfmskill = null
                     }, 10);
-            }
+                }
             }, 300);
         },
 
@@ -4529,7 +4536,7 @@
                     $('.channel pre').append("<hig>【插件】" + "第 " + G.yaotaCount + " 次妖塔共获得 " + G.yaoyuan + " 点妖元，结束时间: " + dateFormat("YYYY-mm-dd HH:MM", new Date()) + "。<br><hig>")
                     $('.tm').append("<hig>【插件】" + "第 " + G.yaotaCount + " 次妖塔共获得 " + G.yaoyuan + " 点妖元，结束时间: " + dateFormat("YYYY-mm-dd HH:MM", new Date()) + "。<br><hig>")
                     setTimeout(async function () {
-                        while (G.selfStatus.indexOf("faint") >= 0 || G.selfStatus.indexOf("busy") >= 0 || G.selfStatus.indexOf("rash") >= 0) {
+                        while (!WG.is_free()) {
                             await WG.sleep(1000)
                         }
                         if (G.yaoyuan == 261) {
@@ -7852,7 +7859,7 @@
                             }, 500);
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
-                            data.msg.indexOf("你正在昏迷") >= 0 ||data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
+                            data.msg.indexOf("你正在昏迷") >= 0 || data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
                             G.gcd = true;
                             setTimeout(() => {
                                 G.gcd = false
