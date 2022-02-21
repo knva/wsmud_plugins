@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.238
+// @version      0.0.32.239
 // @date         01/07/2018
 // @modified     21/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3373,6 +3373,9 @@
                 G.auto_preform = false;
                 messageAppend("<hio>自动施法</hio>关闭");
                 G.selfStatus = []
+                
+        WG.xubuf = null;
+        WG.pfmskil= null;
                 WG.auto_preform("stop");
             } else {
                 G.auto_preform = true;
@@ -3478,8 +3481,9 @@
                                 }
                                 // alreay_pfm.push(skill.id)
                             }
-                            WG.xubuf = null
+                           
                         }
+                        WG.xubuf = null;
                     }, 10);
                 }
                 if (WG.pfmskill == null) {
