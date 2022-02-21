@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.239
+// @version      0.0.32.240
 // @date         01/07/2018
 // @modified     21/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3372,10 +3372,9 @@
             if (G.auto_preform) {
                 G.auto_preform = false;
                 messageAppend("<hio>自动施法</hio>关闭");
-                G.selfStatus = []
-                
-        WG.xubuf = null;
-        WG.pfmskil= null;
+                G.selfStatus = [];
+                WG.xubuf = null;
+                WG.pfmskil= null;
                 WG.auto_preform("stop");
             } else {
                 G.auto_preform = true;
@@ -3481,7 +3480,6 @@
                                 }
                                 // alreay_pfm.push(skill.id)
                             }
-                           
                         }
                         WG.xubuf = null;
                     }, 10);
@@ -3498,6 +3496,7 @@
                                 if (!WG.is_free()) {
                                     break;
                                 }
+                                break;
                             }
                             if (WG.forcebufskil != '') {
                                 if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
