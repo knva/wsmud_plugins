@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.237
+// @version      0.0.32.238
 // @date         01/07/2018
 // @modified     21/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7797,8 +7797,19 @@
                         if (data.id == G.id) {
                             if (data.action == 'add') {
                                 G.selfStatus.push(data.sid)
-                            } else {
-                                G.selfStatus.remove(data.sid)
+                                setTimeout(() => {
+                                    G.selfStatus.remove(data.sid);
+                                }, data.duration - (data.overtime || 0));
+                            } else if (data.action == 'remove') {
+                                let tmpbufflist = []
+                                for (let i = 0; i < G.selfStatus.length;i++){
+                                    if (G.selfStatus[i] != data.sid){
+                                        tmpbufflist.push(G.selfStatus[i])
+                                    }
+                                }
+                                G.selfStatus = tmpbufflist;
+                            } else if (data.action=='clear'){
+                                G.selfStatus = []
                             }
                         }
                         if (busy_info === '开') {
@@ -7840,7 +7851,6 @@
                             for (let i = 0; i < item.status.length; i++) {
                                 item.status.splice(i, 1);
                             }
-                            G.selfStatus = []
                         }
                         break
                     case "text":
