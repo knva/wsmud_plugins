@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.241
+// @version      0.0.32.242
 // @date         01/07/2018
 // @modified     22/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3372,9 +3372,7 @@
             if (G.auto_preform) {
                 G.auto_preform = false;
                 messageAppend("<hio>自动施法</hio>关闭");
-                G.selfStatus = [];
-                WG.xubuf = null;
-                WG.pfmskil= null;
+   
                 WG.auto_preform("stop");
             } else {
                 G.auto_preform = true;
@@ -3397,6 +3395,9 @@
         },
         auto_preform: function (v) {
             if (v == "stop") {
+                G.selfStatus = [];
+                WG.xubuf = null;
+                WG.pfmskil = null;
                 if (G.preform_timer) {
                     clearInterval(G.preform_timer);
                     G.preform_timer = undefined;
@@ -3430,6 +3431,8 @@
                 "mingyu": ["force.wang"],
                 "force": ["*"]
             }
+            WG.xubuf = null;
+            WG.pfmskill = null
             G.preform_timer = setInterval(() => {
                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
                 var alreay_pfm = [];
@@ -3448,9 +3451,7 @@
                                             await WG.sleep(200);
                                             while (!G.cds.get(skill.id)) {
                                                 if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                                if (!WG.is_free()) {
-                                                    break;
-                                                }
+                                                if (!WG.is_free()) break;
                                                 WG.Send("perform " + skill.id);
                                                 await WG.sleep(200);
                                             }
@@ -3468,9 +3469,7 @@
                                     await WG.sleep(200);
                                     while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                        if (!WG.is_free()) {
-                                            break;
-                                        }
+                                        if (!WG.is_free())break;
                                         WG.Send("perform " + skill.id);
                                         await WG.sleep(200);
 
