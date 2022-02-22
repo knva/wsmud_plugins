@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.240
+// @version      0.0.32.241
 // @date         01/07/2018
-// @modified     21/2/2022
+// @modified     22/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3392,6 +3392,9 @@
                 return true;
             }
         },
+        is_zero_releasetime:function(){
+            return G.score2.releasetime.indexOf('0秒')>=0;
+        },
         auto_preform: function (v) {
             if (v == "stop") {
                 if (G.preform_timer) {
@@ -3485,27 +3488,26 @@
                     }, 10);
                 }
                 if (WG.pfmskill == null) {
-                    WG.pfmskill = setTimeout(() => {
+                    WG.pfmskill = setTimeout(async () => {
                         for (var skill of G.skills) {
                             if (WG.hasStr(skill.id, blackpfm)) {
                                 continue;
                             }
+                            if (G.gcd)break;
                             // console.log(skill);
                             if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                                 WG.Send("perform " + skill.id);
-                                if (!WG.is_free()) {
-                                    break;
-                                }
-                                break;
+                                if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
+                                await WG.sleep(20);
+                                if (!WG.is_free()) break;
+                                
                             }
                             if (WG.forcebufskil != '') {
                                 if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
                                     !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
                                     console.log('使用无buf的内功技能' + skill.id)
                                     WG.Send("perform " + skill.id);
-                                    if (!WG.is_free()) {
-                                        break;
-                                    }
+                                    if (!WG.is_free()) break;
                                 }
                             }
                         }
@@ -7469,6 +7471,7 @@
 
     //GlobalInit
     var GI = {
+        gcdThread:null,
         init: function () {
             WG.add_hook("items", function (data) {
                 WG.saveRoomstate(data);
@@ -7770,13 +7773,14 @@
                             }, data.distime);
                         }
                         if (data.rtime) {
+                            if (G.gcd){
+                                clearTimeout(GI.gcdThread);
+                            }
                             G.gcd = true;
-                            setTimeout(function () {
+                            GI.gcdThread = setTimeout(function () {
                                 G.gcd = false;
                             }, data.rtime);
-                        } else {
-                            G.gcd = false;
-                        }
+                        } 
                         break
                     case "combat":
                         if (data.start) {
@@ -7866,17 +7870,21 @@
                             //     G.cds.set(skillid,false)
                             // }, 200);
                             // }
-                            G.gcd = true;
-                            setTimeout(() => {
-                                G.gcd = false
-                            }, 500);
+                            if (!G.gcd){
+                                G.gcd = true;
+                                setTimeout(() => {
+                                    G.gcd = false
+                                }, 500);
+                            }
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
                             data.msg.indexOf("你正在昏迷") >= 0 || data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
-                            G.gcd = true;
-                            setTimeout(() => {
-                                G.gcd = false
-                            }, 500);
+                            if (!G.gcd) {
+                                G.gcd = true;
+                                setTimeout(() => {
+                                    G.gcd = false
+                                }, 500);
+                            }
                         }
                         break
                     case 'die':
