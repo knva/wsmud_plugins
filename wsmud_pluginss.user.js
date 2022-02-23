@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.243
+// @version      0.0.32.244
 // @date         01/07/2018
 // @modified     23/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -11,7 +11,7 @@
 // @run-at       document-start
 // @require      https://cdn.staticfile.org/vue/2.2.2/vue.min.js
 // @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js
-// @require      https://cdn.staticfile.org/store.js/2.0.12/store.everything.min.js
+// @require      https://cdn.staticfile.org/store.js/2.0.12/store.modern.min.js
 // @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
