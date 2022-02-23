@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.242
+// @version      0.0.32.243
 // @date         01/07/2018
-// @modified     22/2/2022
+// @modified     23/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7861,20 +7861,20 @@
                         break
                     case "text":
                         if (data.msg.indexOf("还没准备好，你还不能使用。") >= 0) {
-                            // let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
-                            // let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
-                            // if (skillid!=''){
-                            //    G.cds.set(skillid,true)
-                            //    setTimeout(() => {
-                            //     G.cds.set(skillid,false)
-                            // }, 200);
-                            // }
-                            if (!G.gcd){
-                                G.gcd = true;
+                            let skillname = data.msg.replaceAll("还没准备好，你还不能使用。","");
+                            let skillid = G.skills.map(e => { return e['name'] == skillname ? e['id'] : '' }).join("")
+                            if (skillid!=''){
+                                G.cds.set(skillid,true)
                                 setTimeout(() => {
-                                    G.gcd = false
-                                }, 500);
+                                    G.cds.set(skillid,false)
+                                }, 1000);
                             }
+                            // if (!G.gcd){
+                            //     G.gcd = true;
+                            //     setTimeout(() => {
+                            //         G.gcd = false
+                            //     }, 500);
+                            // }
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
                             data.msg.indexOf("你正在昏迷") >= 0 || data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
@@ -8188,12 +8188,12 @@
                         messageAppend(data.msg);
                     }
                 }
-                if (data.msg.indexOf("还没准备好") >= 0) {
-                    WG.auto_preform('stop');
-                    setTimeout(() => {
-                        WG.auto_preform();
-                    }, 200);
-                }
+                // if (data.msg.indexOf("还没准备好") >= 0) {
+                //     WG.auto_preform('stop');
+                //     setTimeout(() => {
+                //         WG.auto_preform();
+                //     }, 200);
+                // }
                 if (data.msg.indexOf("只能在战斗中使用。") >= 0 || data.msg.indexOf('这里不允许战斗') != -1 || data.msg.indexOf('没时间这么做') != -1) {
                     if (G.in_fight) {
                         G.in_fight = false;
