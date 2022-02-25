@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.244
+// @version      0.0.32.245
 // @date         01/07/2018
-// @modified     23/2/2022
+// @modified     25/2/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7670,6 +7670,12 @@
                         for (var i = 0; i < data.items.length; i++) {
                             let item = data.items[i];
                             if (item.id) {
+                                if (item.id==G.id){
+                                    G.selfStatus=[]
+                                    for (var x =0; x<item.status.length;x++){
+                                        G.selfStatus.push(item.status[x].sid)
+                                    }
+                                }
                                 let n = $.trim($('<body>' + item.name + '</body>').text());
                                 let i = n.lastIndexOf(' ');
                                 let j = n.lastIndexOf('<');
@@ -7803,9 +7809,11 @@
                         if (data.id == G.id) {
                             if (data.action == 'add') {
                                 G.selfStatus.push(data.sid)
-                                setTimeout(() => {
-                                    G.selfStatus.remove(data.sid);
-                                }, data.duration - (data.overtime || 0));
+                                if (data.duration){
+                                    setTimeout(() => {
+                                        G.selfStatus.remove(data.sid);
+                                    }, data.duration - (data.overtime || 0));
+                                }
                             } else if (data.action == 'remove') {
                                 let tmpbufflist = []
                                 for (let i = 0; i < G.selfStatus.length;i++){
