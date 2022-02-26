@@ -7670,7 +7670,7 @@
                         for (var i = 0; i < data.items.length; i++) {
                             let item = data.items[i];
                             if (item.id) {
-                                if (item.id==G.id){
+                                if (item.id==G.id && item.status!=null){
                                     G.selfStatus=[]
                                     for (var x =0; x<item.status.length;x++){
                                         G.selfStatus.push(item.status[x].sid)
