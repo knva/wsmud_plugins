@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.247
+// @version      0.0.32.248
 // @date         01/07/2018
 // @modified     3/3/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -722,8 +722,8 @@
     };
     var diff_colors = {
         'normal': '',
-        'flat': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
-        'access': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
+        'access': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
+        'flat': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
     };
     var fb_path = [];
     var drop_list = [];
