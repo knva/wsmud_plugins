@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.248
+// @version      0.0.32.249
 // @date         01/07/2018
-// @modified     3/3/2022
+// @modified     4/3/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3426,7 +3426,7 @@
             let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
                 'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
             let buff_skill_dict = {
-                "weapon": ['sword.wu', 'blade.shi', 'sword.yu'],
+                "weapon": ['sword.wu', 'blade.shi', 'sword.yu', 'sword.yi'],
                 "ztd": ["force.ztd"],
                 "mingyu": ["force.wang"],
                 "force": ["*"]
