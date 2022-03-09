@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.249
+// @version      0.0.32.250
 // @date         01/07/2018
-// @modified     4/3/2022
+// @modified     09/03/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -219,6 +219,10 @@
             set onmessage(fn) {
                 ws_on_message = fn;
                 ws.onmessage = WG.receive_message;
+                if(unsafeWindow.funny){
+                    unsafeWindow.funny.API.ws_on_message = fn
+                    unsafeWindow.funny.API.websocket = ws
+                 }
             },
             get onclose() {
                 return ws.onclose;
@@ -6163,7 +6167,11 @@
 
             WG.run_hook(data.type, data);
 
+            if (unsafeWindow.funny){
+                unsafeWindow.funny.API.onmessage(msg);
+            }
             ws_on_message.apply(this, arguments);
+            
         },
 
     };
