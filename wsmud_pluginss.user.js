@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.250
+// @version      0.0.32.251
 // @date         01/07/2018
 // @modified     09/03/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -220,6 +220,7 @@
                 ws_on_message = fn;
                 ws.onmessage = WG.receive_message;
                 if(unsafeWindow.funny){
+                    if(unsafeWindow.funny.API==null)return;
                     unsafeWindow.funny.API.ws_on_message = fn
                     unsafeWindow.funny.API.websocket = ws
                  }
@@ -6168,6 +6169,7 @@
             WG.run_hook(data.type, data);
 
             if (unsafeWindow.funny){
+                if(unsafeWindow.funny.API==null)return;
                 unsafeWindow.funny.API.onmessage(msg);
             }
             ws_on_message.apply(this, arguments);
