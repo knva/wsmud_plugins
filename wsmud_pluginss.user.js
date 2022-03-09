@@ -219,11 +219,12 @@
             set onmessage(fn) {
                 ws_on_message = fn;
                 ws.onmessage = WG.receive_message;
-                if(unsafeWindow.funny){
-                    if(unsafeWindow.funny.API==null)return;
-                    unsafeWindow.funny.API.ws_on_message = fn
-                    unsafeWindow.funny.API.websocket = ws
-                 }
+                if (unsafeWindow.funny) {
+                    if (unsafeWindow.funny.API != null) {
+                        unsafeWindow.funny.API.ws_on_message = fn
+                        unsafeWindow.funny.API.websocket = ws
+                    }
+                }
             },
             get onclose() {
                 return ws.onclose;
@@ -3377,7 +3378,7 @@
             if (G.auto_preform) {
                 G.auto_preform = false;
                 messageAppend("<hio>自动施法</hio>关闭");
-   
+
                 WG.auto_preform("stop");
             } else {
                 G.auto_preform = true;
@@ -3388,15 +3389,15 @@
         forcebufskil: '',
         xubuf: null,
         pfmskill: null,
-        is_free:function(){
-            if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus) || WG.hasStr("bss", G.selfStatus)){
+        is_free: function () {
+            if (WG.hasStr("faint", G.selfStatus) || WG.hasStr("busy", G.selfStatus) || WG.hasStr("rash", G.selfStatus) || WG.hasStr("bss", G.selfStatus)) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         },
-        is_zero_releasetime:function(){
-            return G.score2.releasetime.indexOf('0秒')>=0;
+        is_zero_releasetime: function () {
+            return G.score2.releasetime.indexOf('0秒') >= 0;
         },
         auto_preform: function (v) {
             if (v == "stop") {
@@ -3474,7 +3475,7 @@
                                     await WG.sleep(200);
                                     while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                        if (!WG.is_free())break;
+                                        if (!WG.is_free()) break;
                                         WG.Send("perform " + skill.id);
                                         await WG.sleep(200);
 
@@ -3497,14 +3498,14 @@
                             if (WG.hasStr(skill.id, blackpfm)) {
                                 continue;
                             }
-                            if (G.gcd)break;
+                            if (G.gcd) break;
                             // console.log(skill);
                             if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                                 WG.Send("perform " + skill.id);
                                 if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
                                 await WG.sleep(20);
                                 if (!WG.is_free()) break;
-                                
+
                             }
                             if (WG.forcebufskil != '') {
                                 if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
@@ -6168,12 +6169,10 @@
 
             WG.run_hook(data.type, data);
 
-            if (unsafeWindow.funny){
-                if(unsafeWindow.funny.API==null)return;
-                unsafeWindow.funny.API.onmessage(msg);
+            if (unsafeWindow.funny) {
+                if (unsafeWindow.funny.API != null) { unsafeWindow.funny.API.onmessage(msg); }
             }
             ws_on_message.apply(this, arguments);
-            
         },
 
     };
@@ -7480,7 +7479,7 @@
 
     //GlobalInit
     var GI = {
-        gcdThread:null,
+        gcdThread: null,
         init: function () {
             WG.add_hook("items", function (data) {
                 WG.saveRoomstate(data);
@@ -7680,9 +7679,9 @@
                         for (var i = 0; i < data.items.length; i++) {
                             let item = data.items[i];
                             if (item.id) {
-                                if (item.id==G.id && item.status!=null){
-                                    G.selfStatus=[]
-                                    for (var x =0; x<item.status.length;x++){
+                                if (item.id == G.id && item.status != null) {
+                                    G.selfStatus = []
+                                    for (var x = 0; x < item.status.length; x++) {
                                         G.selfStatus.push(item.status[x].sid)
                                     }
                                 }
@@ -7788,14 +7787,14 @@
                             }, data.distime);
                         }
                         if (data.rtime) {
-                            if (G.gcd){
+                            if (G.gcd) {
                                 clearTimeout(GI.gcdThread);
                             }
                             G.gcd = true;
                             GI.gcdThread = setTimeout(function () {
                                 G.gcd = false;
                             }, data.rtime);
-                        } 
+                        }
                         break
                     case "combat":
                         if (data.start) {
@@ -7819,20 +7818,20 @@
                         if (data.id == G.id) {
                             if (data.action == 'add') {
                                 G.selfStatus.push(data.sid)
-                                if (data.duration){
+                                if (data.duration) {
                                     setTimeout(() => {
                                         G.selfStatus.remove(data.sid);
                                     }, data.duration - (data.overtime || 0));
                                 }
                             } else if (data.action == 'remove') {
                                 let tmpbufflist = []
-                                for (let i = 0; i < G.selfStatus.length;i++){
-                                    if (G.selfStatus[i] != data.sid){
+                                for (let i = 0; i < G.selfStatus.length; i++) {
+                                    if (G.selfStatus[i] != data.sid) {
                                         tmpbufflist.push(G.selfStatus[i])
                                     }
                                 }
                                 G.selfStatus = tmpbufflist;
-                            } else if (data.action=='clear'){
+                            } else if (data.action == 'clear') {
                                 G.selfStatus = []
                             }
                         }
@@ -7887,7 +7886,7 @@
                             //         G.cds.set(skillid,false)
                             //     }, 1000);
                             // }
-                            if (!G.gcd){
+                            if (!G.gcd) {
                                 G.gcd = true;
                                 setTimeout(() => {
                                     G.gcd = false
