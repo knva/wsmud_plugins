@@ -2739,7 +2739,7 @@
             $('#store_drop_info').val(zdy_item_drop);
         },
 
-        zdwk: function (v, x = true) {
+        zdwk: async function (v, x = true) {
             if (x) {
                 if (G.level) {
                     if (G.isGod()) {
@@ -2760,14 +2760,14 @@
                 if (G.wk_listener) return;
                 let tiejiang_id;
                 let wk_busy = false;
-                G.wk_listener = WG.add_hook(["dialog", "text"], function (data) {
+                G.wk_listener = WG.add_hook(["dialog", "text"], async function (data) {
                     if (data.type == "dialog" && data.dialog == "pack") {
                         //检查是否装备铁镐
                         let tiegao_id;
                         if (data.name) {
                             if (data.name == "<wht>铁镐</wht>") {
                                 WG.Send("eq " + data.id);
-                                WG.sleep(2000);
+                                await WG.sleep(2000);
                                 WG.go("扬州城-矿山");
                                 WG.Send("wa");
                                 WG.zdwk("remove", false);
@@ -2789,6 +2789,7 @@
                                 }
                                 if (tiegao_id) {
                                     WG.Send("eq " + tiegao_id);
+                                    await WG.sleep(2000);
                                     WG.go("扬州城-矿山");
                                     WG.Send("wa");
                                     WG.zdwk("remove", false);
@@ -2831,7 +2832,8 @@
                         }
                         if (item_id) {
                             WG.Send('buy 1 ' + item_id + ' from ' + tiejiang_id);
-                            WG.sleep(2000);
+                            
+                                await WG.sleep(2000);
                         } else {
                             messageAppend("<hio>自动挖矿</hio>无法购买<wht>铁镐</wht>");
                             WG.zdwk("remove", false);
