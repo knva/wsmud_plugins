@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.253
+// @version      0.0.32.254
 // @date         01/07/2018
-// @modified     11/03/2022
+// @modified     29/03/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2767,6 +2767,7 @@
                         if (data.name) {
                             if (data.name == "<wht>铁镐</wht>") {
                                 WG.Send("eq " + data.id);
+                                WG.sleep(2000);
                                 WG.go("扬州城-矿山");
                                 WG.Send("wa");
                                 WG.zdwk("remove", false);
@@ -2830,6 +2831,7 @@
                         }
                         if (item_id) {
                             WG.Send('buy 1 ' + item_id + ' from ' + tiejiang_id);
+                            WG.sleep(2000);
                         } else {
                             messageAppend("<hio>自动挖矿</hio>无法购买<wht>铁镐</wht>");
                             WG.zdwk("remove", false);
