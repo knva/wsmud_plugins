@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.254
+// @version      0.0.32.255
 // @date         01/07/2018
-// @modified     29/03/2022
+// @modified     15/04/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2817,7 +2817,7 @@
                             messageAppend('卡顿,五秒后再次尝试操作', 0, 1);
                             setTimeout(() => {
                                 wk_busy = false;
-                                WG.Send("stopstate;pack");
+                                WG.zdwk();
                             }, 5000);
                         }
                     }
