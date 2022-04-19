@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.256
+// @version      0.0.32.257
 // @date         01/07/2018
-// @modified     15/04/2022
+// @modified     19/04/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3820,7 +3820,7 @@
                         //使用for in遍历skilllist 获取其中的id
                         for (let i in skilllist[type]) {
                             if (skilllist[type][i] != null && skilllist[type][i] != "") {
-                                eqdata += "enable " + skilllist[type][i] + ";";
+                                eqdata += "enable " +i+" " +skilllist[type][i] + ";";
                             }
                         }
                     }
