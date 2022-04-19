@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.255
+// @version      0.0.32.256
 // @date         01/07/2018
 // @modified     15/04/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3748,7 +3748,7 @@
         },
         eqx: null,
         eqxp: null,
-        eqhelper(type, enaskill = 0) {
+        eqhelper(type, enaskill = 0,realy = false) {
             var deepCopy = function (source) {
                 var result = {};
                 for (var key in source) {
@@ -3804,6 +3804,31 @@
                 }
                 eqlist = GM_getValue(roleid + "_eqlist", eqlist);
                 skilllist = GM_getValue(roleid + "_skilllist", skilllist);
+                if (realy) {
+                    var eqdata = ""
+                    if(enaskill == 0){
+                        //从eqlist第一项开始遍历
+                        for (let i = 1; i < 11; i++) {
+                            if (eqlist[type][i] != null && eqlist[type][i] != "") {
+                                eqdata += "eq " + eqlist[type][i].id + ";";
+                            }
+                        }
+                        // 将eqlist第一项的id添加到eqdata
+                        eqdata += "eq " + eqlist[type][0].id + ";";
+
+                    }else{
+                        //使用for in遍历skilllist 获取其中的id
+                        for (let i in skilllist[type]) {
+                            if (skilllist[type][i] != null && skilllist[type][i] != "") {
+                                eqdata += "enable " + skilllist[type][i] + ";";
+                            }
+                        }
+                    }
+                    copyToClipboard(eqdata);
+                    messageAppend( type + "已复制到剪贴板!", 1);
+                    return
+                } 
+
                 var p_cmds = "";
                 //  console.log(G.enable_skills)
                 let mySkills = [];
@@ -3837,6 +3862,7 @@
                     tsMsg = "技能"
                     $("span[command=skills]").click();
                 }
+             
 
                 p_cmds = p_cmds + '$wait 40;cha;look3 1';
 
@@ -3854,6 +3880,7 @@
                 });
 
                 WG.SendCmd(p_cmds);
+                
             }
         },
         eqhelperdel: function (type) {
@@ -3912,6 +3939,7 @@
                     role: role,
                     roleid: roleid,
                     eqlist: {},
+                    cpeqlist:{},
                     eqlistdel: {},
                     eqskills_id: "none"
                 },
@@ -3927,6 +3955,12 @@
                     },
                     eqs: function (name) {
                         WG.eqhelper(name, 1)
+                    },
+                    copyeq: function (name) {
+                        WG.eqhelper(name, 0,true)
+                    },
+                    copyeqs: function (name) {
+                        WG.eqhelper(name, 1,true)
                     },
                     save: function (name) {
                         WG.eqhelper(name)
@@ -3959,6 +3993,11 @@
                             case "save":
                                 this.saveUI();
                                 break;
+                            case "copyeq":
+                                this.eqlist = {};
+                                this.cpeqlist = GM_getValue(this.roleid + "_eqlist", {});
+                                this.role = "<< 返回";
+                                break
                             case "delete":
                                 this.eqlist = {};
                                 this.eqlistdel = GM_getValue(this.roleid + "_eqlist", {});
@@ -7083,6 +7122,7 @@
                     <select style="width:80px" id="eqskills-opts" @change="eqskills_opts_change(eqskills_id)" v-model="eqskills_id">
                         <option value="none">选择操作</option>
                         <option value="save">新建套装</option>
+                        <option value="copyeq">复制命令</option>
                         <option value="delete">删除套装</option>
                         <option value="uneqall">脱光装备</option>
                     </select></div>
@@ -7106,6 +7146,20 @@
                     <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eqs(index)'
                         style="width: 120px;">
                         <div class="eqsname" style="width: 100%;">装备技能:{{index}}</div>
+                </span>
+				</div>
+                <div class="item-commands">
+                <span class="zdy-item"  v-for="(item, index) in cpeqlist" @click='copyeq(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width:100%;">复制装备套装:{{index}}</div>
+                </span>
+
+				</div>
+                <br>
+				<div class="item-commands">
+                    <span class="zdy-item"  v-for="(item, index) in cpeqlist" @click='copyeqs(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width: 100%;">复制装备技能:{{index}}</div>
                 </span>
 				</div>
                  <br>
