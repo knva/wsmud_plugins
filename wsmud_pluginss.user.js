@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.257
+// @version      0.0.32.258
 // @date         01/07/2018
 // @modified     19/04/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -784,6 +784,8 @@
     var unauto_pfm = '';
     //自动施法开关
     var auto_pfmswitch = "开";
+    // 自动施法模式 开：智能施法，关：顺序施法
+    var auto_pfm_mode = "开";
     //自动转发路径
     var auto_rewardgoto = "关";
     //显示昏迷信息
@@ -3432,99 +3434,117 @@
             if (!WG.hasStr("force.tuoli", blackpfm)) {
                 blackpfm.push('force.tuoli');
             }
-
-            let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
-                'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
-            let buff_skill_dict = {
-                "weapon": ['sword.wu', 'blade.shi', 'sword.yu', 'sword.yi'],
-                "ztd": ["force.ztd"],
-                "mingyu": ["force.wang"],
-                "force": ["*"]
-            }
-            WG.xubuf = null;
-            WG.pfmskill = null
-            G.preform_timer = setInterval(() => {
-                if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                var alreay_pfm = [];
-                if (WG.xubuf == null) {
-                    WG.xubuf = setTimeout(async () => {
-                        for (var skill of G.skills) {
-                            if (WG.hasStr(skill.id, blackpfm)) {
-                                continue;
-                            }
-                            for (let buf in buff_skill_dict) {
-                                for (let ski of buff_skill_dict[buf]) {
-                                    if (ski == skill.id) {
-                                        if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(buf, G.selfStatus)) {
-                                            WG.Send("perform " + skill.id);
-                                            // break;
-                                            await WG.sleep(200);
-                                            while (!G.cds.get(skill.id)) {
-                                                if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                                if (!WG.is_free()) break;
+            // 如果 auto_pfm_mode 等于 true 则使用智能施法
+            if (G.auto_pfm_mode) {
+                let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
+                    'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
+                let buff_skill_dict = {
+                    "weapon": ['sword.wu', 'blade.shi', 'sword.yu', 'sword.yi'],
+                    "ztd": ["force.ztd"],
+                    "mingyu": ["force.wang"],
+                    "force": ["*"]
+                }
+                WG.xubuf = null;
+                WG.pfmskill = null
+                G.preform_timer = setInterval(() => {
+                    if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                    var alreay_pfm = [];
+                    if (WG.xubuf == null) {
+                        WG.xubuf = setTimeout(async () => {
+                            for (var skill of G.skills) {
+                                if (WG.hasStr(skill.id, blackpfm)) {
+                                    continue;
+                                }
+                                for (let buf in buff_skill_dict) {
+                                    for (let ski of buff_skill_dict[buf]) {
+                                        if (ski == skill.id) {
+                                            if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr(buf, G.selfStatus)) {
                                                 WG.Send("perform " + skill.id);
+                                                // break;
                                                 await WG.sleep(200);
+                                                while (!G.cds.get(skill.id)) {
+                                                    if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                                    if (!WG.is_free()) break;
+                                                    WG.Send("perform " + skill.id);
+                                                    await WG.sleep(200);
+                                                }
+                                                // alreay_pfm.push(skill.id)
                                             }
                                             // alreay_pfm.push(skill.id)
+                                            break;
                                         }
-                                        // alreay_pfm.push(skill.id)
-                                        break;
                                     }
                                 }
-                            }
-                            if (WG.hasStr(skill.id, force_buff_skill)) {
-                                if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
-                                    WG.Send("perform " + skill.id);
-                                    // break;
-                                    await WG.sleep(200);
-                                    while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
-                                        if (G.in_fight == false) { WG.auto_preform("stop"); return; }
-                                        if (!WG.is_free()) break;
+                                if (WG.hasStr(skill.id, force_buff_skill)) {
+                                    if (!G.gcd && !G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
                                         WG.Send("perform " + skill.id);
+                                        // break;
                                         await WG.sleep(200);
+                                        while (!G.cds.get(skill.id) && !WG.hasStr("force", G.selfStatus)) {
+                                            if (G.in_fight == false) { WG.auto_preform("stop"); return; }
+                                            if (!WG.is_free()) break;
+                                            WG.Send("perform " + skill.id);
+                                            await WG.sleep(200);
 
+                                        }
+                                        if (WG.hasStr("force", G.selfStatus)) {
+                                            console.log('内功buf技能' + skill.id)
+                                            WG.forcebufskil = skill.id;
+                                        }
+                                        alreay_pfm.push(skill.id)
                                     }
-                                    if (WG.hasStr("force", G.selfStatus)) {
-                                        console.log('内功buf技能' + skill.id)
-                                        WG.forcebufskil = skill.id;
-                                    }
-                                    alreay_pfm.push(skill.id)
+                                    // alreay_pfm.push(skill.id)
                                 }
-                                // alreay_pfm.push(skill.id)
                             }
-                        }
-                        WG.xubuf = null;
-                    }, 10);
-                }
-                if (WG.pfmskill == null) {
-                    WG.pfmskill = setTimeout(async () => {
-                        for (var skill of G.skills) {
-                            if (WG.hasStr(skill.id, blackpfm)) {
-                                continue;
-                            }
-                            if (G.gcd) break;
-                            // console.log(skill);
-                            if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
-                                WG.Send("perform " + skill.id);
-                                if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
-                                await WG.sleep(20);
-                                if (!WG.is_free()) break;
-
-                            }
-                            if (WG.forcebufskil != '') {
-                                if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
-                                    !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
-                                    console.log('使用无buf的内功技能' + skill.id)
+                            WG.xubuf = null;
+                        }, 10);
+                    }
+                    if (WG.pfmskill == null) {
+                        WG.pfmskill = setTimeout(async () => {
+                            for (var skill of G.skills) {
+                                if (WG.hasStr(skill.id, blackpfm)) {
+                                    continue;
+                                }
+                                if (G.gcd) break;
+                                // console.log(skill);
+                                if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                                     WG.Send("perform " + skill.id);
+                                    if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
+                                    await WG.sleep(20);
                                     if (!WG.is_free()) break;
+
+                                }
+                                if (WG.forcebufskil != '') {
+                                    if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
+                                        !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
+                                        console.log('使用无buf的内功技能' + skill.id)
+                                        WG.Send("perform " + skill.id);
+                                        if (!WG.is_free()) break;
+                                    }
                                 }
                             }
-                        }
 
-                        WG.pfmskill = null
-                    }, 10);
-                }
-            }, 300);
+                            WG.pfmskill = null
+                        }, 10);
+                    }
+                }, 300);
+            }
+            else{
+                G.preform_timer = setInterval(() => {
+
+                    if (G.in_fight == false) WG.auto_preform("stop");
+                    for (var skill of G.skills) {
+                   
+                        if (WG.inArray(skill.id, blackpfm)) {
+                            continue;
+                        }
+                        if (!G.gcd && !G.cds.get(skill.id)) {
+                            WG.Send("perform " + skill.id);
+                            break;
+                        }
+                    }
+                }, 350);
+            }
         },
 
         formatCurrencyTenThou: function (num) {
@@ -5317,6 +5337,15 @@
                     G.auto_preform = false;
                 }
             });
+            $('#autopfmmode').click(function () {
+                auto_pfm_mode = WG.switchReversal($(this));
+                GM_setValue(roleid + "_auto_pfm_mode", auto_pfm_mode);
+                if (auto_pfm_mode == "开") {
+                    G.auto_pfm_mode = true;
+                } else {
+                    G.auto_pfm_mode = false;
+                }
+            });
             $('#autorewardgoto').click(function () {
                 auto_rewardgoto = WG.switchReversal($(this));
                 GM_setValue(roleid + "_auto_rewardgoto", auto_rewardgoto);
@@ -5577,6 +5606,7 @@
             $('#ks_Boss').val(autoKsBoss);
             $('#auto_eq').val(autoeq);
             $('#autopfmswitch').val(auto_pfmswitch);
+            $('#autopfmmode').val(auto_pfm_mode);
             $('#autorewardgoto').val(auto_rewardgoto);
             $('#busyinfo').val(busy_info);
             $('#saveAddr').val(saveAddr);
@@ -7079,6 +7109,7 @@
                 + `<h3>自动施法配置</h3>`
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
+                + UI.html_switch('autopfmmode', 'AI施法模式：', 'auto_pfm_mode')
 
 
                 + `<h3>仓库存储配置</h3>`
@@ -7491,6 +7522,7 @@
         cds: new Map(),
         in_fight: false,
         auto_preform: false,
+        auto_pfm_mode: false,
         can_auto: false,
         level: undefined,
         getitemShow: undefined,
@@ -8437,6 +8469,7 @@
             sm_getstore = GM_getValue(roleid + "_sm_getstore", sm_getstore);
             unauto_pfm = GM_getValue(roleid + "_unauto_pfm", unauto_pfm);
             auto_pfmswitch = GM_getValue(roleid + "_auto_pfmswitch", auto_pfmswitch);
+            auto_pfm_mode = GM_getValue(roleid + "_auto_pfm_mode", auto_pfm_mode);
             auto_rewardgoto = GM_getValue(roleid + "_auto_rewardgoto", auto_rewardgoto);
             busy_info = GM_getValue(roleid + "_busy_info", busy_info);
             saveAddr = GM_getValue(roleid + "_saveAddr", saveAddr);
@@ -8477,6 +8510,10 @@
             if (auto_pfmswitch == "开") {
                 G.auto_preform = true
             }
+            if (auto_pfm_mode == "开") {
+                G.auto_pfm_mode = true
+            }
+            
             auto_command = GM_getValue(roleid + "_auto_command", auto_command);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
