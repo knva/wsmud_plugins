@@ -3442,7 +3442,8 @@
                     "weapon": ['sword.wu', 'blade.shi', 'sword.yu', 'sword.yi'],
                     "ztd": ["force.ztd"],
                     "mingyu": ["force.wang"],
-                    "force": ["*"]
+                    "force": ["*"],
+                    "dodge":["dodge.power","dodge.fo","dodge.gui","dodge.lingbo","dodge.zhui"]
                 }
                 WG.xubuf = null;
                 WG.pfmskill = null
