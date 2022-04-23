@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.259
+// @version      0.0.32.260
 // @date         01/07/2018
-// @modified     22/04/2022
+// @modified     23/04/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2777,7 +2777,10 @@
                             }
                         } else if (data.items) {
                             if (data.eqs[0] && data.eqs[0].name.indexOf("铁镐") > -1) {
+
+                                await WG.sleep(1000);
                                 WG.go("扬州城-矿山");
+                                await WG.sleep(1000);
                                 WG.Send("wa");
                                 WG.zdwk("remove", false);
                                 return;
@@ -2819,6 +2822,7 @@
                             messageAppend('卡顿,五秒后再次尝试操作', 0, 1);
                             setTimeout(() => {
                                 wk_busy = false;
+                                WG.zdwk("remove", false);
                                 WG.zdwk();
                             }, 5000);
                         }
