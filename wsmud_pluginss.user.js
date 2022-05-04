@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.260
+// @version      0.0.32.261
 // @date         01/07/2018
-// @modified     23/04/2022
+// @modified     04/05/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3397,6 +3397,7 @@
             }
         },
         forcebufskil: '',
+        bufskill: {},
         xubuf: null,
         pfmskill: null,
         is_free: function () {
@@ -3418,6 +3419,8 @@
                     clearInterval(G.preform_timer);
                     G.preform_timer = undefined;
                     $(".auto_perform").css("background", "");
+                    WG.forcebufskil = ''
+                    WG.bufskill = {}
                 }
                 return;
             }
@@ -3473,6 +3476,10 @@
                                                     WG.Send("perform " + skill.id);
                                                     await WG.sleep(200);
                                                 }
+                                                if (WG.hasStr(buf, G.selfStatus)) {
+                                                    console.log('buf技能' + skill.id)
+                                                    WG.bufskill[buf] = skill.id;
+                                                }
                                                 // alreay_pfm.push(skill.id)
                                             }
                                             // alreay_pfm.push(skill.id)
@@ -3512,7 +3519,7 @@
                                 }
                                 if (G.gcd) break;
                                 // console.log(skill);
-                                if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
+                                if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill)|| WG.hasStr(skill.id, buff_skill_dict))) {
                                     WG.Send("perform " + skill.id);
                                     if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
                                     await WG.sleep(20);
@@ -3523,6 +3530,14 @@
                                     if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, force_buff_skill) && skill.id != WG.forcebufskil &&
                                         !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
                                         console.log('使用无buf的内功技能' + skill.id)
+                                        WG.Send("perform " + skill.id);
+                                        if (!WG.is_free()) break;
+                                    }
+                                }
+                                if (WG.bufskill.hasOwnProperty('weapon') && WG.bufskill['weapon'] != '') {
+                                    if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, buff_skill_dict) && skill.id != WG.bufskill['weapon'] &&
+                                        !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
+                                        console.log('使用无buf的武器技能' + skill.id)
                                         WG.Send("perform " + skill.id);
                                         if (!WG.is_free()) break;
                                     }
