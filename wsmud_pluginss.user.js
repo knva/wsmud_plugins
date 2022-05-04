@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.261
+// @version      0.0.32.262
 // @date         01/07/2018
 // @modified     04/05/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3446,7 +3446,7 @@
                 let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
                     'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
                 let buff_skill_dict = {
-                    "weapon": ['sword.wu', 'blade.shi', 'sword.yu', 'sword.yi'],
+                    "weapon": ['sword.wu', 'blade.shi', 'sword.yu'],
                     "ztd": ["force.ztd"],
                     "mingyu": ["force.wang"],
                     "force": ["*"],
@@ -3534,14 +3534,14 @@
                                         if (!WG.is_free()) break;
                                     }
                                 }
-                                if (WG.bufskill.hasOwnProperty('weapon') && WG.bufskill['weapon'] != '') {
-                                    if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, buff_skill_dict) && skill.id != WG.bufskill['weapon'] &&
-                                        !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
-                                        console.log('使用无buf的武器技能' + skill.id)
-                                        WG.Send("perform " + skill.id);
-                                        if (!WG.is_free()) break;
-                                    }
-                                }
+                                // if (WG.bufskill.hasOwnProperty('weapon') && WG.bufskill['weapon'] != '') {
+                                //     if (!G.gcd && !G.cds.get(skill.id) && WG.hasStr(skill.id, buff_skill_dict) && skill.id != WG.bufskill['weapon'] &&
+                                //         !WG.hasStr(skill.id, buff_skill_dict['mingyu']) && !WG.hasStr(skill.id, buff_skill_dict['ztd'])) {
+                                //         console.log('使用无buf的武器技能' + skill.id)
+                                //         WG.Send("perform " + skill.id);
+                                //         if (!WG.is_free()) break;
+                                //     }
+                                // }
                             }
 
                             WG.pfmskill = null
