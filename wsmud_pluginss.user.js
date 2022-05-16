@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.262
+// @version      0.0.32.263
 // @date         01/07/2018
-// @modified     04/05/2022
+// @modified     16/05/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -231,6 +231,7 @@
             },
             set onclose(fn) {
                 ws.onclose = (e) => {
+                    WG.online = false;
                     auto_relogin = GM_getValue(roleid + "_auto_relogin", auto_relogin);
                     fn(e);
                     if (auto_relogin == "开") {
@@ -1394,6 +1395,7 @@
         },
     };
     var WG = {
+        online: false,
         sm_state: -1,
         sm_item: null,
         sm_store: null,
@@ -7684,6 +7686,7 @@
                 switch (data.type) {
                     case "login":
                         G.id = data.id;
+                        WG.online = true;
                         break;
                     case "exits":
                         G.exits = new Map();
