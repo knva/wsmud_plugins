@@ -8,6 +8,7 @@
 // @description     武神传说 MUD
 // @author          Bob.cn, 初心, 白三三
 // @match           http://*.wsmud.com/*
+// @match           http://*.wamud.com/*
 // @run-at          document-end
 // @require         https://cdn.staticfile.org/vue/2.2.2/vue.min.js
 // @grant           unsafeWindow
