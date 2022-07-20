@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.265
+// @version      0.0.32.266
 // @date         01/07/2018
 // @modified     20/07/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5841,7 +5841,7 @@
                     var __skillMinNameList = [];
                     
                     var maxSkill = n;
-                    if (n==0){
+                    if (n==0 || n==NaN){
                         maxSkill = data.limit;
                     }
                     var nowCount = 0;
