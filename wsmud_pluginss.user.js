@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.264
+// @version      0.0.32.265
 // @date         01/07/2018
-// @modified     16/05/2022
+// @modified     20/07/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3085,7 +3085,17 @@
                         WG.getPlayerSkill();
                     },
                     autoAddLianxi: function () {
-                        WG.selectLowKongfu();
+                        // 询问修炼到多少级
+                        var level = prompt("请输入修炼到多少级", "1");
+                        if (level == null) {
+                            return;
+                        }
+                        if (parseFloat(level).toString() == "NaN") {
+                            messageAppend("请输入数字");
+                            return;
+                        }
+
+                        WG.selectLowKongfu(level);
                     },
                     onekeydaily: function () {
                         WG.SendCmd("$daily");
@@ -5815,7 +5825,7 @@
 
         },
 
-        selectLowKongfu: function () {
+        selectLowKongfu: function (n=0) {
 
             WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
                 if ((data.dialog && data.dialog == 'skills') && data.items && data.items != null) {
@@ -5829,7 +5839,11 @@
                     }
                     var __skillNameList = [];
                     var __skillMinNameList = [];
-                    var maxSkill = data.limit;
+                    
+                    var maxSkill = n;
+                    if (n==0){
+                        maxSkill = data.limit;
+                    }
                     var nowCount = 0;
                     var __enaSkill = [];
                     for (let item of data.items) {
@@ -5897,10 +5911,15 @@
                 // if (this.hooks[i] !== undefined && this.hooks[i].type == type) {
                 //     this.hooks[i].fn(data);
                 // }
-                var listener = this.hooks[i];
-                if (listener.types == data.type || (listener.types instanceof Array && $
-                    .inArray(data.type, listener.types) >= 0)) {
-                    listener.fn(data);
+                try{
+                    var listener = this.hooks[i];
+                    if (listener.types == data.type || (listener.types instanceof Array && $
+                        .inArray(data.type, listener.types) >= 0)) {
+                        listener.fn(data);
+                    }
+                }
+                catch(e){
+                    console.error('hook error',e);
                 }
             }
         },
@@ -6821,7 +6840,8 @@
             WG.SendCmd(cmds);
         }, atlx: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            WG.selectLowKongfu();
+
+            WG.selectLowKongfu(parseInt(n));
             WG.SendCmd(cmds);
         },
         addfenjieid: function (idx, n, cmds) {
