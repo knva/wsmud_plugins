@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.267
+// @version      0.0.32.268
 // @date         01/07/2018
-// @modified     20/07/2022
+// @modified     26/07/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1733,10 +1733,12 @@
                 }
             }, 1000);
         },
-        clean_id_all: function () {
+        clean_id_all: function (jm = true) {
             GM_setValue("goods", goods);
             pgoods = goods
-            alert("清空完毕,请刷新一下页面")
+            if (jm) {
+                alert("清空完毕,请刷新一下页面")
+            }
         },
         update_store_hook: undefined,
         wsdelaytest: async function () {
@@ -1952,6 +1954,7 @@
         smhook: undefined,
         ythook: undefined,
         ungetStore: false,
+        kala_count: 0,
         sm: function () {
             if (!WG.smhook) {
                 WG.smhook = WG.add_hook('text', function (data) {
@@ -1972,6 +1975,17 @@
                     //前往师门接收任务
                     WG.go(sm_array[family].place);
                     WG.sm_state = 1;
+
+                    // 如果kala_count大于5，则重置id
+                    if (WG.kala_count > 2) {
+                        WG.clean_id_all();
+                        if (WG.kala_count > 5) {
+                            WG.kala_count = 0;
+                            WG.sm_state = -1;
+                            $(".sm_button").text("师门(Q)");
+                            messageAppend('错误:师门任务错误,请刷新后再试')
+                        }
+                    }
                     setTimeout(WG.sm, 500);
                     break;
                 case 1:
@@ -2001,7 +2015,9 @@
                         WG.sm_state = 2;
                     } else {
                         WG.update_npc_id();
+                        WG.clean_id_all(false);
                         WG.sm_state = 0;
+                        WG.kala_count = WG.kala_count + 1;
                     }
                     setTimeout(WG.sm, 500);
                     break;
@@ -2011,6 +2027,8 @@
                     var item = $("span[cmd$='giveup']:last").parent().prev();
                     if (item.length == 0) {
                         WG.sm_state = 0;
+
+                        WG.kala_count = WG.kala_count + 1
                         setTimeout(WG.sm, 500);
                         return;
                     };
@@ -2024,10 +2042,14 @@
                             messageAppend("放弃任务");
                             WG.ungetStore = false;
                             WG.sm_state = 0;
+
+                            WG.kala_count = 0;
                             setTimeout(WG.sm, 150);
                             return;
                         } else if (mysm_loser == "关") {
                             WG.sm_state = -1;
+
+                            WG.kala_count = 0;
                             $(".sm_button").text("师门(Q)");
                         }
                     }
@@ -2039,6 +2061,8 @@
                                 tmpObj.click();
                                 messageAppend("自动上交" + item);
                                 WG.sm_state = 0;
+
+                                WG.kala_count = 0;
                                 setTimeout(WG.sm, 500);
                                 return;
                             }
@@ -2086,6 +2110,8 @@
 
                         if (WG.smbuyNum == null) {
                             WG.smbuyNum = 0;
+
+                            WG.kala_count = WG.kala_count + 1;
                         } else if (WG.smbuyNum > 3) {
                             WG.sm_state = 5;
                             setTimeout(WG.sm, 500);
@@ -2178,6 +2204,8 @@
                                 p.click();
                                 messageAppend("自动上交牌子");
                                 WG.sm_state = 0;
+
+                                WG.kala_count = 0;
                                 _p = true;
                                 setTimeout(WG.sm, 500);
                                 return;
@@ -2190,6 +2218,8 @@
                                 $("span[cmd$='giveup']:last").click();
                                 messageAppend("放弃任务");
                                 WG.sm_state = 0;
+
+                                WG.kala_count = 0;
                                 setTimeout(WG.sm, 500);
                                 return;
                             } else {
@@ -2208,6 +2238,8 @@
                             $("span[cmd$='giveup']:last").click();
                             messageAppend("放弃任务");
                             WG.sm_state = 0;
+
+                            WG.kala_count = 0;
                             setTimeout(WG.sm, 500);
                             return;
                         }
@@ -2841,8 +2873,8 @@
                         }
                         if (item_id) {
                             WG.Send('buy 1 ' + item_id + ' from ' + tiejiang_id);
-                            
-                                await WG.sleep(2000);
+
+                            await WG.sleep(2000);
                         } else {
                             messageAppend("<hio>自动挖矿</hio>无法购买<wht>铁镐</wht>");
                             WG.zdwk("remove", false);
@@ -3463,7 +3495,7 @@
                     "ztd": ["force.ztd"],
                     "mingyu": ["force.wang"],
                     "force": ["*"],
-                    "dodge":["dodge.power","dodge.fo","dodge.gui","dodge.lingbo","dodge.zhui"]
+                    "dodge": ["dodge.power", "dodge.fo", "dodge.gui", "dodge.lingbo", "dodge.zhui"]
                 }
                 WG.xubuf = null;
                 WG.pfmskill = null
@@ -3532,7 +3564,7 @@
                                 }
                                 if (G.gcd) break;
                                 // console.log(skill);
-                                if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill)|| WG.hasStr(skill.id, buff_skill_dict))) {
+                                if (!G.gcd && !G.cds.get(skill.id) && !(WG.hasStr(skill.id, force_buff_skill) || WG.hasStr(skill.id, buff_skill_dict))) {
                                     WG.Send("perform " + skill.id);
                                     if (WG.is_zero_releasetime()) break; // 非0出招者只放一个技能
                                     await WG.sleep(20);
@@ -3562,12 +3594,12 @@
                     }
                 }, 300);
             }
-            else{
+            else {
                 G.preform_timer = setInterval(() => {
 
                     if (G.in_fight == false) WG.auto_preform("stop");
                     for (var skill of G.skills) {
-                   
+
                         if (WG.inArray(skill.id, blackpfm)) {
                             continue;
                         }
@@ -3801,7 +3833,7 @@
         },
         eqx: null,
         eqxp: null,
-        eqhelper(type, enaskill = 0,realy = false) {
+        eqhelper(type, enaskill = 0, realy = false) {
             var deepCopy = function (source) {
                 var result = {};
                 for (var key in source) {
@@ -3859,7 +3891,7 @@
                 skilllist = GM_getValue(roleid + "_skilllist", skilllist);
                 if (realy) {
                     var eqdata = ""
-                    if(enaskill == 0){
+                    if (enaskill == 0) {
                         //从eqlist第一项开始遍历
                         for (let i = 1; i < 11; i++) {
                             if (eqlist[type][i] != null && eqlist[type][i] != "") {
@@ -3869,18 +3901,18 @@
                         // 将eqlist第一项的id添加到eqdata
                         eqdata += "eq " + eqlist[type][0].id + ";";
 
-                    }else{
+                    } else {
                         //使用for in遍历skilllist 获取其中的id
                         for (let i in skilllist[type]) {
                             if (skilllist[type][i] != null && skilllist[type][i] != "") {
-                                eqdata += "enable " +i+" " +skilllist[type][i] + ";";
+                                eqdata += "enable " + i + " " + skilllist[type][i] + ";";
                             }
                         }
                     }
                     copyToClipboard(eqdata);
-                    messageAppend( type + "已复制到剪贴板!", 1);
+                    messageAppend(type + "已复制到剪贴板!", 1);
                     return
-                } 
+                }
 
                 var p_cmds = "";
                 //  console.log(G.enable_skills)
@@ -3915,7 +3947,7 @@
                     tsMsg = "技能"
                     $("span[command=skills]").click();
                 }
-             
+
 
                 p_cmds = p_cmds + '$wait 40;cha;look3 1';
 
@@ -3933,7 +3965,7 @@
                 });
 
                 WG.SendCmd(p_cmds);
-                
+
             }
         },
         eqhelperdel: function (type) {
@@ -3992,7 +4024,7 @@
                     role: role,
                     roleid: roleid,
                     eqlist: {},
-                    cpeqlist:{},
+                    cpeqlist: {},
                     eqlistdel: {},
                     eqskills_id: "none"
                 },
@@ -4010,10 +4042,10 @@
                         WG.eqhelper(name, 1)
                     },
                     copyeq: function (name) {
-                        WG.eqhelper(name, 0,true)
+                        WG.eqhelper(name, 0, true)
                     },
                     copyeqs: function (name) {
-                        WG.eqhelper(name, 1,true)
+                        WG.eqhelper(name, 1, true)
                     },
                     save: function (name) {
                         WG.eqhelper(name)
@@ -5825,7 +5857,7 @@
 
         },
 
-        selectLowKongfu: function (n=0) {
+        selectLowKongfu: function (n = 0) {
 
             WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
                 if ((data.dialog && data.dialog == 'skills') && data.items && data.items != null) {
@@ -5839,9 +5871,9 @@
                     }
                     var __skillNameList = [];
                     var __skillMinNameList = [];
-                    
+
                     var maxSkill = n;
-                    if (n==0 || isNaN(n)) {
+                    if (n == 0 || isNaN(n)) {
                         maxSkill = data.limit;
                     }
                     var nowCount = 0;
@@ -5911,15 +5943,15 @@
                 // if (this.hooks[i] !== undefined && this.hooks[i].type == type) {
                 //     this.hooks[i].fn(data);
                 // }
-                try{
+                try {
                     var listener = this.hooks[i];
                     if (listener.types == data.type || (listener.types instanceof Array && $
                         .inArray(data.type, listener.types) >= 0)) {
                         listener.fn(data);
                     }
                 }
-                catch(e){
-                    console.error('hook error',e);
+                catch (e) {
+                    console.error('hook error', e);
                 }
             }
         },
@@ -8378,6 +8410,11 @@
                         } else if (bagFull == 2) {
                             FakerTTS.playtts(`${role}，请检查是否背包已满！`);
                         }
+                        if (WG.sm_state >= 0) {
+                            WG.sm_state = -1;
+                            $(".sm_button").text("师门(Q)");
+                        }
+
                     }
                     if (data.msg.indexOf("长得") >= 0 && data.msg.indexOf("看起来") >= 0) {
                         let s = data.msg.split("\n")[0].split(" ");
@@ -8557,7 +8594,7 @@
             if (auto_pfm_mode == "开") {
                 G.auto_pfm_mode = true
             }
-            
+
             auto_command = GM_getValue(roleid + "_auto_command", auto_command);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
