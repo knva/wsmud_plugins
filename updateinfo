@@ -33,11 +33,15 @@ Raid.js 自动副本插件 https://greasyfork.org/zh-CN/scripts/375851-wsmud-rai
 
 wsmud_Trigger 触发器插件 https://greasyfork.org/zh-CN/scripts/378984
 
-wsmud_funny 趣味界面插件 https://greasyfork.org/zh-CN/scripts/380709-wsmud-funny
+wsmud_funny 趣味界面插件 https://greasyfork.org/zh-CN/scripts/441262-wsmud-funny2
+
+wsmud_login 登录插件  https://greasyfork.org/zh-CN/scripts/443214-wsmud-login1
 
 wsmud 插件分享码查询 https://wsmud.ii74.com
 
 wsmud 多开 http://wsmud.aize.org/
+
+wsmud 单开 http://mush.fun    http://mush.aize.org
 
 有问题请发帖,会修复
 
@@ -436,7 +440,7 @@ yandex 浏览器如何使用插件 https://greasyfork.org/zh-CN/forum/discussion
 建议使用github 发送pull request
 
 ### 传送地点列表:
-
+```
 住房
 住房-卧室
 住房-小花园
@@ -556,6 +560,8 @@ yandex 浏览器如何使用插件 https://greasyfork.org/zh-CN/forum/discussion
 杀手楼-平台
 襄阳城-广场
 武道塔
+```
+
 
 ###自定义插件开发方法
 按照如下规则编写你的JS文件 ,即可使用WG.send功能,及T类中的函数
