@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.268
+// @version      0.0.32.269
 // @date         01/07/2018
-// @modified     26/07/2022
+// @modified     29/07/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1978,7 +1978,7 @@
 
                     // 如果kala_count大于5，则重置id
                     if (WG.kala_count > 2) {
-                        WG.clean_id_all();
+                        WG.clean_id_all(false);
                         if (WG.kala_count > 5) {
                             WG.kala_count = 0;
                             WG.sm_state = -1;
