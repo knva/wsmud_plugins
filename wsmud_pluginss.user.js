@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.269
+// @version      0.0.32.270
 // @date         01/07/2018
-// @modified     29/07/2022
+// @modified     08/08/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7735,7 +7735,7 @@
 
 
             });
-            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat", "die"], function (data) {
+            WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "clearDistime","dispfm", "combat", "die"], function (data) {
                 switch (data.type) {
                     case "login":
                         G.id = data.id;
@@ -7936,6 +7936,10 @@
                             GM_setValue(roleid + "_zdyskilllist", zdyskilllist);
                         }
                         break
+                    case 'clearDistime':
+                        G.cds.forEach(function (v, k) {
+                            G.cds.set(k, false);
+                        });
                     case 'dispfm':
                         if (data.id) {
                             if (data.distime) { }
