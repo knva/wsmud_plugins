@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.272
+// @version      0.0.32.273
 // @date         01/07/2018
 // @modified     11/08/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -8565,6 +8565,22 @@
                 }
                 sendRoles();
 
+                setTimeout(() => {
+                    let loginnum = getQueryVariable("login")
+                    if (loginnum) {
+                        let userList = $('#role_panel > ul > li.content > ul >li');
+                        for (let uidx = 0; uidx < userList.length; uidx++) {
+                            if (loginnum == uidx + 1) {
+                                $(userList[uidx]).addClass("select");
+                            } else {
+                                $(userList[uidx]).removeClass("select");
+                            }
+                        }
+                        $("li[command=SelectRole]").click()
+                        return;
+                    }
+                }, 2000);
+
             });
         },
         configInit: function () {
@@ -8867,21 +8883,7 @@
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
         }, 2000);
-        setTimeout(() => {
-            let loginnum = getQueryVariable("login")
-            if (loginnum) {
-                let userList = $('#role_panel > ul > li.content > ul >li');
-                for (let uidx = 0; uidx < userList.length; uidx++) {
-                    if (loginnum == uidx + 1) {
-                        $(userList[uidx]).addClass("select");
-                    } else {
-                        $(userList[uidx]).removeClass("select");
-                    }
-                }
-                $("li[command=SelectRole]").click()
-                return;
-            }
-        }, 5000);
+      
 
         KEY.init();
         WG.init();
