@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.270
+// @version      0.0.32.271
 // @date         01/07/2018
-// @modified     08/08/2022
+// @modified     11/08/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -718,6 +718,10 @@
         "杀手楼-书房": "jh fam 7 start;go north;go up;go up;go up;go up;go up;go up;go west",
         "杀手楼-平台": "jh fam 7 start;go north;go up;go up;go up;go up;go up;go up;go up",
         "襄阳城-广场": "jh fam 8 start",
+        "襄阳城-南城门": "jh fam 8 start;go south;go south;go south;go south",
+        "襄阳城-北城门": "jh fam 8 start;go north;go north;go north;go north;",
+        "襄阳城-西城门": "jh fam 8 start;go west;go west;go west;go west",
+        "襄阳城-东城门": "jh fam 8 start;go east;go eastgo east;go east",
         "武道塔": "jh fam 9 start"
     };
     var mpz_path = {
@@ -1596,10 +1600,11 @@
                     } else {
                         logintext = `
                             <hiy>欢迎${role},插件未正常加载！
-                            当前浏览器不支持自动喜宴自动boss,请使用火狐浏览器
+                            当前浏览器不支持自动喜宴自动boss,请使用centbrowser浏览器
                             谷歌系浏览器,请在network中勾选disable cache,多刷新几次,直至提示已加载!
                             多次刷新无法仍然出现本提示，请打开tampermonkey 插件设置
                             开启高级设置，在最下方实验 设置 “注入模式：即时”“严格模式：禁用”
+                            实在不会用加群交流
                             插件版本: ${GM_info.script.version}
                             </hiy>`;
                     }
@@ -1986,7 +1991,7 @@
                             messageAppend('错误:师门任务错误,请刷新后再试')
                         }
                     }
-                    setTimeout(WG.sm, 500);
+                    setTimeout(WG.sm, 1000);
                     break;
                 case 1:
                     //接受任务
@@ -2019,7 +2024,7 @@
                         WG.sm_state = 0;
                         WG.kala_count = WG.kala_count + 1;
                     }
-                    setTimeout(WG.sm, 500);
+                    setTimeout(WG.sm, 1000);
                     break;
                 case 2:
                     var mysm_loser = GM_getValue(roleid + "_sm_loser", sm_loser);
@@ -2029,7 +2034,7 @@
                         WG.sm_state = 0;
 
                         WG.kala_count = WG.kala_count + 1
-                        setTimeout(WG.sm, 500);
+                        setTimeout(WG.sm, 1000);
                         return;
                     };
                     var itemName = item.html();
@@ -2063,7 +2068,7 @@
                                 WG.sm_state = 0;
 
                                 WG.kala_count = 0;
-                                setTimeout(WG.sm, 500);
+                                setTimeout(WG.sm, 1000);
                                 return;
                             }
                             tmpObj = tmpObj.prev();
@@ -2085,7 +2090,7 @@
                                     messageAppend("自动仓库取" + item);
                                     WG.sm_store = item;
                                     WG.sm_state = 4;
-                                    setTimeout(WG.sm, 500);
+                                    setTimeout(WG.sm, 1000);
                                     return;
                                 } else {
                                     var a = window.confirm("您确定要交稀有物品吗");
@@ -2093,7 +2098,7 @@
                                         messageAppend("自动仓库取" + item);
                                         WG.sm_store = item;
                                         WG.sm_state = 4;
-                                        setTimeout(WG.sm, 500);
+                                        setTimeout(WG.sm, 1000);
                                         return;
                                     }
                                 }
@@ -2101,7 +2106,7 @@
                                 messageAppend("自动仓库取" + item);
                                 WG.sm_store = item;
                                 WG.sm_state = 4;
-                                setTimeout(WG.sm, 500);
+                                setTimeout(WG.sm, 1000);
                                 return;
                             }
                         }
@@ -2114,18 +2119,18 @@
                             WG.kala_count = WG.kala_count + 1;
                         } else if (WG.smbuyNum > 3) {
                             WG.sm_state = 5;
-                            setTimeout(WG.sm, 500);
+                            setTimeout(WG.sm, 1000);
                             return;
                         }
 
                         WG.go(WG.sm_item.place);
                         messageAppend("自动购买" + item);
                         WG.sm_state = 3;
-                        setTimeout(WG.sm, 500);
+                        setTimeout(WG.sm, 1000);
                     } else {
 
                         WG.sm_state = 5;
-                        setTimeout(WG.sm, 500);
+                        setTimeout(WG.sm, 1000);
                         return;
                     }
                     break;
@@ -2148,20 +2153,20 @@
                     WG.qu(WG.sm_store, (res) => {
                         if (res) {
                             WG.sm_state = 0;
-                            setTimeout(WG.sm, 500);
+                            setTimeout(WG.sm, 1000);
                         } else {
                             messageAppend("无法取" + WG.sm_store);
                             if (WG.sm_item != undefined && WG.sm_store.indexOf(WG.sm_item.type) >= 0) {
                                 WG.go(WG.sm_item.place);
                                 messageAppend("自动购买" + WG.sm_store);
                                 WG.sm_state = 3;
-                                setTimeout(WG.sm, 500);
+                                setTimeout(WG.sm, 1000);
                                 return;
                             } else {
                                 if (mysm_loser == "开") {
                                     WG.ungetStore = true;
                                     WG.sm_state = 0;
-                                    setTimeout(WG.sm, 500);
+                                    setTimeout(WG.sm, 1000);
                                 } else {
                                     WG.sm_state = 5;
                                     // $(".sm_button").text("师门(Q)");
@@ -2207,7 +2212,7 @@
 
                                 WG.kala_count = 0;
                                 _p = true;
-                                setTimeout(WG.sm, 500);
+                                setTimeout(WG.sm, 1000);
                                 return;
                             }
                         }
@@ -2220,7 +2225,7 @@
                                 WG.sm_state = 0;
 
                                 WG.kala_count = 0;
-                                setTimeout(WG.sm, 500);
+                                setTimeout(WG.sm, 1000);
                                 return;
                             } else {
                                 WG.sm_state = -1;
@@ -2240,7 +2245,7 @@
                             WG.sm_state = 0;
 
                             WG.kala_count = 0;
-                            setTimeout(WG.sm, 500);
+                            setTimeout(WG.sm, 1000);
                             return;
                         }
                     }
@@ -4026,6 +4031,7 @@
                     eqlist: {},
                     cpeqlist: {},
                     eqlistdel: {},
+                    covereqlist: {},
                     eqskills_id: "none"
                 },
                 created() {
@@ -4054,6 +4060,11 @@
                             WG.eqhelperui()
                         }, 300);
                     },
+                    covereq: function(name){
+                        // var that = this;
+                        this.deleq(name)
+                        this.save(name)
+                    },
                     deleq: function (name) {
                         WG.eqhelperdel(name)
                         setTimeout(() => {
@@ -4079,13 +4090,24 @@
                                 this.saveUI();
                                 break;
                             case "copyeq":
+                                this.covereqlist = {}
                                 this.eqlist = {};
+                                this.eqlistdel = {};
                                 this.cpeqlist = GM_getValue(this.roleid + "_eqlist", {});
                                 this.role = "<< 返回";
                                 break
                             case "delete":
+                                this.cpeqlist = {}
                                 this.eqlist = {};
+                                this.covereqlist = {};
                                 this.eqlistdel = GM_getValue(this.roleid + "_eqlist", {});
+                                this.role = "<< 返回";
+                                break;
+                            case "covereq":
+                                this.cpeqlist = {}
+                                this.eqlist = {};
+                                this.eqlistdel = {};
+                                this.covereqlist = GM_getValue(this.roleid + "_eqlist", {});
                                 this.role = "<< 返回";
                                 break;
                             case "uneqall":
@@ -7159,7 +7181,7 @@
                 + `<h3>推送配置</h3>`
                 + UI.html_switch('pushSwitch', '远程通知推送开关(使用@push推送通知，语法参考@print)：', 'pushSwitch') + `
                 <div class="setting-item">
-                <span> <label for="pushType"> 通知推送方式(使用方法自行百度)： </label><select id="pushType" style="width:80px">
+                <span> <label for="pushType"> 通知推送方式(使用方法加群看)： </label><select id="pushType" style="width:80px">
                     <option value="0"> Server酱(限32字符) </option>
                     <option value="1"> Bark iOS </option>
                     <option value="2"> PushPlus.plus(支持html标签) </option>
@@ -7228,6 +7250,7 @@
                     <select style="width:80px" id="eqskills-opts" @change="eqskills_opts_change(eqskills_id)" v-model="eqskills_id">
                         <option value="none">选择操作</option>
                         <option value="save">新建套装</option>
+                        <option value="covereq">覆盖套装</option>
                         <option value="copyeq">复制命令</option>
                         <option value="delete">删除套装</option>
                         <option value="uneqall">脱光装备</option>
@@ -7244,6 +7267,13 @@
                 <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eq(index)'
                         style="width: 120px;">
                         <div class="eqsname" style="width:100%;">装备套装:{{index}}</div>
+                </span>
+
+				</div>
+                <div class="item-commands">
+                <span class="zdy-item"  v-for="(item, index) in covereqlist" @click='covereq(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width:100%;">覆盖套装:{{index}}</div>
                 </span>
 
 				</div>
@@ -7514,14 +7544,16 @@
              <span cmd = "$to 少林派-天王殿" >天王殿</span></div>`,
             `<div class='item-commands'><span cmd = "$to 华山派-客厅" >掌门</span>
              <span cmd = "$to 华山派-练武场" >后勤</span>
-             <span cmd = "$to 华山派-落雁峰" >落雁峰</span></div>`,
+             <span cmd = "$to 华山派-落雁峰" >落雁峰</span></div>
+             <span cmd = "$to 华山派-林间小屋" >封不平</span></div>`,
             `<div class='item-commands'><span cmd = "$to 峨眉派-清修洞" >掌门</span>
             <span cmd = "$to 峨眉派-走廊" >后勤</span>
             <span cmd = "$to 峨眉派-小屋" >周芷若</span>
             <span cmd = "$to 峨眉派-大殿" >静心</span></div>`,
             `<div class='item-commands'><span cmd = "$to 逍遥派-地下石室" >掌门</span>
              <span cmd = "$to 逍遥派-林间小道" >后勤</span>
-             <span cmd = "$to 逍遥派-木屋" >薛慕华</span></div>`,
+             <span cmd = "$to 逍遥派-木屋" >薛慕华</span>
+             <span cmd = "$to 逍遥派-练功房" >木桩</span></div>`,
             `<div class='item-commands'><span cmd = "$to 丐帮-林间小屋" >掌门</span>
              <span cmd = "$to 丐帮-暗道;go east;" >后勤</span>
              <span cmd = "$to 丐帮-土地庙" >土地庙</span></div>`,
@@ -8828,9 +8860,7 @@
                 var h = '';
                 if (parseInt(Math.random() * 10) < 3) {
                     h = "<hir>【插件】有任何问题欢迎加入 武神传说-仙界 367657589 进行技术交流，脚本讨论。\n<hir>"
-                } else if (parseInt(Math.random() * 10) < 6) {
-                    h = "<hir>【插件】欢迎登录 http://wsmud.bobcn.me 进行流程及触发器技术交流，脚本讨论。\n<hir>";
-                } else if (parseInt(Math.random() * 10) < 10) {
+                }  else if (parseInt(Math.random() * 10) < 10) {
                     h = "<hir>【插件】欢迎访问 https://emeisuqing.github.io/wsmud.old/ 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
                 }
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
