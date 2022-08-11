@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.273
+// @version      0.0.32.274
 // @date         01/07/2018
 // @modified     11/08/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -8579,7 +8579,7 @@
                         $("li[command=SelectRole]").click()
                         return;
                     }
-                }, 2000);
+                }, 5000);
 
             });
         },
