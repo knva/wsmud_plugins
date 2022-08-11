@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.271
+// @version      0.0.32.272
 // @date         01/07/2018
 // @modified     11/08/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7544,7 +7544,7 @@
              <span cmd = "$to 少林派-天王殿" >天王殿</span></div>`,
             `<div class='item-commands'><span cmd = "$to 华山派-客厅" >掌门</span>
              <span cmd = "$to 华山派-练武场" >后勤</span>
-             <span cmd = "$to 华山派-落雁峰" >落雁峰</span></div>
+             <span cmd = "$to 华山派-落雁峰" >落雁峰</span>
              <span cmd = "$to 华山派-林间小屋" >封不平</span></div>`,
             `<div class='item-commands'><span cmd = "$to 峨眉派-清修洞" >掌门</span>
             <span cmd = "$to 峨眉派-走廊" >后勤</span>
