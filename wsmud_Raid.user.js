@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            wsmud_Raid
 // @namespace       cqv
-// @version         2.4.58
+// @version         2.4.59
 // @date            23/12/2018
 // @modified        13/9/2022
 // @homepage        https://greasyfork.org/zh-CN/scripts/375851
@@ -1435,8 +1435,8 @@
         const executor = new CmdExecutor(appropriate, execute);
         CmdExecuteCenter.addExecutor(executor);
     })();
-
-    (function () {
+    
+     (function () {
         const appropriate = function (cmd) {
             return cmd.indexOf("@stop ") == 0;
         };
