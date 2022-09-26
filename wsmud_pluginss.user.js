@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.275
+// @version      0.0.32.276
 // @date         01/07/2018
-// @modified     07/09/2022
+// @modified     26/09/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6158,7 +6158,7 @@
             }
             //任务进度 -- fork from Suqing funny
             if (data.type == 'dialog' && data.dialog == 'tasks' && data.items) {
-                let jl, fb, qa, wd, wd1, wd2, wd3, xy, mpb, boss, wdtz, sm1, sm2, ym1, ym2, yb1, yb2;
+                let jl, fb, qa, wd, wd1, wd2, wd3, xy, mpb, boss, wdtz, syt, ys, sm1, sm2, ym1, ym2, yb1, yb2;
                 data.items.forEach(task => {
                     if (task.state === 2) WG.SendCmd(`taskover ${task.id}`);//自动完成
                     if (task.id === 'signin') {
@@ -6193,7 +6193,7 @@
                         const f = task.desc.match(/尚未挑战门派BOSS/);
                         (f) ? mpb = `<hig>0</hig>` : mpb = 1;
                         //武神BOSS
-                        const g = task.desc.match(/挑战武神BOSS(\d+)次/);
+                        const g = task.desc.match(/挑战武神BOSS(\d+)次|挑战(\d+)次武神BOSS/);
                         if (g) {
                             boss = 5 - parseInt(g[1]);
                             boss = `<hig>${boss}</hig>`;
@@ -6203,6 +6203,14 @@
                         //武道塔主
                         const h = task.desc.match(/尚未挑战武道塔塔主/);
                         (h) ? wdtz = `<hig>0</hig>/1` : wdtz = `已打或未解锁`;
+                        //妖塔
+                        const i = task.desc.match(/挑战弑妖塔(\d+)\/50/);
+                        if (i) {
+                            syt = i[1];
+                        }
+                        //妖神
+                        const j = task.desc.match(/尚未挑战妖神/);
+                        (j) ? ys = `<hig>0</hig>/1` : ys = `已打或未解锁`;
                     } else if (task.id === 'sm') {
                         //师门任务
                         let a = task.desc.match(/目前完成(.*)\/20个，共连续完成(.*)个。/);
@@ -6227,6 +6235,7 @@
                 taskprog += `襄阳守城 => ${xy}/1 门派BOSS => ${mpb}/1\n`;
                 taskprog += `武道塔主 => ${wdtz}\n`;
                 if (boss) taskprog += `武神BOSS => ${boss}/5\n`;
+                if (syt) taskprog += `挑战弑妖塔 => ${syt}/50 挑战妖神 => ${ys}\n`;
                 $(".remove_taskprog").remove();
                 $(".content-message pre").append(`<span class="remove_taskprog">${taskprog}</span>`);
                 AutoScroll(".content-message");
