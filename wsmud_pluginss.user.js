@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.276
+// @version      0.0.32.277
 // @date         01/07/2018
-// @modified     26/09/2022
+// @modified     29/09/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6193,7 +6193,7 @@
                         const f = task.desc.match(/尚未挑战门派BOSS/);
                         (f) ? mpb = `<hig>0</hig>` : mpb = 1;
                         //武神BOSS
-                        const g = task.desc.match(/挑战武神BOSS(\d+)次|挑战(\d+)次武神BOSS/);
+                        const g = task.desc.match(/挑战(\d+)次武神BOSS/);
                         if (g) {
                             boss = 5 - parseInt(g[1]);
                             boss = `<hig>${boss}</hig>`;
