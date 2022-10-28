@@ -4463,7 +4463,7 @@ look men;open men
         getNotice: function () {
             const noticeDataKey = "NoticeDataKey";
             const oldData = GM_getValue(noticeDataKey, { version: "0.0.0", type: "0", value: "欢迎使用 wsmud_Raid" });
-            Server._async("notice", { version: oldData.version }, data => {
+            Server._async("notice", { version: oldData.version,id:Role.id }, data => {
                 let validData = oldData;
                 if (data.version > oldData.version) {
                     GM_setValue(noticeDataKey, data);
