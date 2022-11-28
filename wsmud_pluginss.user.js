@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.278
+// @version      0.0.32.279
 // @date         01/07/2018
-// @modified     19/10/2022
+// @modified     29/11/2022
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3988,7 +3988,8 @@
             GM_setValue(roleid + "_skilllist", skilllist);
             messageAppend("清除套装 技能" + type + "设置成功!", 1);
         },
-        uneqall: function () {
+        uneqall: function (isskill="0") {
+            if (isskill == "0") {
             this.eqx = WG.add_hook("dialog", (data) => {
                 if (data.dialog == "pack" && data.eqs != undefined) {
                     for (let i = 0; i < data.eqs.length; i++) {
@@ -4001,6 +4002,17 @@
             });
             WG.Send("pack");
             messageAppend("取消所有装备成功!", 1);
+        }else{
+            const enaNone = "enable unarmed none;enable blade none;enable force none;enable parry none;enable dodge none;enable sword none;enable throwing none;enable whip none;enable club none;enable staff none";
+            const enalist = enaNone.split(";");
+            for (let i = 0; i < enalist.length; i++) {
+                WG.sleep(10);
+                WG.Send(enalist[i]);
+            }
+            
+            messageAppend("取消所有技能成功!", 1);
+        }
+      
         },
         eqloader: function () {
             let tmp_eqlist = GM_getValue(roleid + "_eqlist", null);
@@ -6539,7 +6551,7 @@
         eqskill: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             if (n == "0") {
-                WG.uneqall();
+                WG.uneqall(1);
             } else {
                 WG.eqhelper(n, 1);
             }
