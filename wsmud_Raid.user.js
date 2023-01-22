@@ -4573,7 +4573,7 @@ look men;open men
             });
         },
 
-        _address: "mush.aize.org/api",
+        _address: "mush.fun/api",
         _async(uri, params, success, fail) {
             this._get(true, uri, params, success, fail);
         },
