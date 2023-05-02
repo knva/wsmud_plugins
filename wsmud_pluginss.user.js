@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.280
+// @version      0.0.32.281
 // @date         01/07/2018
-// @modified     26/04/2023
+// @modified     02/05/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5104,7 +5104,7 @@
                                 //$(".sm_button").click();
                                 $(".sm_button").text("停止(Q)");
                                 WG.sm_state = 0;
-                                setTimeout(WG.sm, 200);
+                                setTimeout(WG.smTask, 200);
                                 return
                             } else {
                                 WG.sm_state = -1;
