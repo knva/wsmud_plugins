@@ -8699,7 +8699,6 @@
             if (auto_pfm_mode == "开") {
                 G.auto_pfm_mode = true
             }
-
             auto_command = GM_getValue(roleid + "_auto_command", auto_command);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
@@ -8717,9 +8716,7 @@
             silence = GM_getValue(roleid + "_silence", silence);
             dpssakada = GM_getValue(roleid + "_dpssakada", dpssakada);
             funnycalc = GM_getValue(roleid + "_funnycalc", funnycalc);
-
             auto_buylist = GM_getValue(roleid + "_auto_buylist", auto_buylist);
-
             zdyskilllist = GM_getValue(roleid + "_zdyskilllist", zdyskilllist);
             zdyskills = GM_getValue(roleid + "_zdyskills", zdyskills);
             bagFull = GM_getValue(roleid + "_bagFull", bagFull);
