@@ -3233,6 +3233,10 @@
                     onekeydelaytest: function () {
                         WG.wsdelaytest();
                     },
+                    yuanshen: function () {
+                        //
+                        window.location.href = 'https://ys.mihoyo.com/cloud/?utm_source=default#/'
+                    },
                     onekeyyaota: function () {
                         T.goyt();
                     }
@@ -7477,6 +7481,7 @@
             <div class="item-commands">
                 <span @click='onekeyyaota'>一键妖塔</span>
                 <span @click='onekeydelaytest'>延迟测试</span>
+                <span @click='yuanshen'>原神</span>
             </div>
             </div>`,
         lxjsui: `
