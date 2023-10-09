@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.283
+// @version      0.0.32.284
 // @date         01/07/2018
 // @modified     09/10/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -866,7 +866,7 @@
     var zdy_btnlist = [];
     //自动购买
     var auto_buylist = "";
-    //自动秘籍贩卖
+    //自动回收残页清单
     var auto_skillPaperSelllist = "";
     //配色
     var color_select = "normal";
@@ -7315,7 +7315,7 @@
                 + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
 
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
-                + UI.html_input("autoSkillPaperSell", "自动售卖秘籍清单：(用半角逗号分隔)")
+                + UI.html_input("autoSkillPaperSell", "自动回收残页清单：(用半角逗号分隔)")
 
                 + `<h3>技能自定义</h3>`
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
