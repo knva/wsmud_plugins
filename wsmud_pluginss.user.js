@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.282
+// @version      0.0.32.283
 // @date         01/07/2018
-// @modified     27/06/2023
+// @modified     09/10/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -866,6 +866,8 @@
     var zdy_btnlist = [];
     //自动购买
     var auto_buylist = "";
+    //自动秘籍贩卖
+    var auto_skillPaperSelllist = "";
     //配色
     var color_select = "normal";
     //死亡提示
@@ -5368,6 +5370,7 @@
             $(".update_id_all").off('click')
             $(".clean_id_all").off('click')
             $('#autobuy').off('change')
+            $('#autoSkillPaperSell').off('change')
             $('#loginhml').off('change')
             $('#backimageurl').off('change')
             $('#statehml').off('change')
@@ -5687,6 +5690,10 @@
                 auto_buylist = $('#autobuy').val();
                 GM_setValue(roleid + "_auto_buylist", auto_buylist);
             });
+            $('#autoSkillPaperSell').change(function () {
+                auto_skillPaperSelllist = $('#autoSkillPaperSell').val();
+                GM_setValue(roleid + "_auto_skillPaperSelllist", auto_skillPaperSelllist);
+            });
             $(".update_id_all").on("click", WG.update_id_all);
             $(".clean_id_all").on("click", WG.clean_id_all);
             $(".update_store").on("click", WG.update_store);
@@ -5774,6 +5781,7 @@
             $("#backimageurl").val(backimageurl);
             $("#loginhml").val(loginhml);
             $("#autobuy").val(auto_buylist);
+            $("#autoSkillPaperSell").val(auto_skillPaperSelllist);
 
             $("#zdyskillsswitch").val(zdyskills);
             $("#zdyskilllist").val(zdyskilllist);
@@ -5915,6 +5923,7 @@
                 }
                 if (data.type == "text" && data.msg.indexOf("没有这个玩家") >= 0) {
                     messageAppend("执行结束");
+                    $(".dialog-close").click();
                     WG.remove_hook(WG.tnBuy_hook);
                 }
 
@@ -5923,7 +5932,37 @@
             WG.SendCmd("$to 扬州城-广场;$wait 100;$to 扬州城-当铺;$wait 200;list %唐楠%");
 
         },
+        zxBuy_hook: null,
+        zxBuy: function () {
+            WG.zxBuy_hook = WG.add_hook(["dialog", "text"], (data) => {
+                let _seller = WG.getIdByName("朱熹")
+                let _itemids = new Map();
+                let _sendcmd = ""
+                if (data.type == 'dialog' && data.dialog=='pack') {
+                  
+                    for (let item of data.items) {
+                        if (WG.inArray(item.name, auto_skillPaperSelllist.split(","))) {
+                            _itemids.set(item.id, item.count);
+                        }
+                    }
+                    _itemids.forEach((val, key, map) => {
+                        _sendcmd = _sendcmd + "sell " + val + " " + key + " to " + _seller + ";";
+                        _sendcmd = _sendcmd + "$wait 500;";
+                    });
+                    _sendcmd = _sendcmd + "look3 1;"
+                    WG.SendCmd(_sendcmd);
+                }
+                if (data.type == "text" && data.msg.indexOf("没有这个玩家") >= 0) {
+                    messageAppend("执行结束");
+                    $(".dialog-close").click();
+                    WG.remove_hook(WG.zxBuy_hook);
+                }
 
+            });
+
+            WG.SendCmd("$to 扬州城-广场;go east;go north;$wait 100;$wait 200;pack");
+
+        },
         selectLowKongfu: function (n = 0) {
 
             WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
@@ -6946,6 +6985,10 @@
             cmds = T.recmd(idx, cmds);
             WG.tnBuy();
             WG.SendCmd(cmds);
+        },zxbuy: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.zxBuy();
+            WG.SendCmd(cmds);
         }, atlx: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
 
@@ -7272,6 +7315,7 @@
                 + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
 
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
+                + UI.html_input("autoSkillPaperSell", "自动售卖秘籍清单：(用半角逗号分隔)")
 
                 + `<h3>技能自定义</h3>`
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
@@ -8722,6 +8766,7 @@
             dpssakada = GM_getValue(roleid + "_dpssakada", dpssakada);
             funnycalc = GM_getValue(roleid + "_funnycalc", funnycalc);
             auto_buylist = GM_getValue(roleid + "_auto_buylist", auto_buylist);
+            auto_skillPaperSelllist = GM_getValue(roleid + "_auto_skillPaperSelllist", auto_skillPaperSelllist);
             zdyskilllist = GM_getValue(roleid + "_zdyskilllist", zdyskilllist);
             zdyskills = GM_getValue(roleid + "_zdyskills", zdyskills);
             bagFull = GM_getValue(roleid + "_bagFull", bagFull);
