@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.284
+// @version      0.0.32.285
 // @date         01/07/2018
-// @modified     09/10/2023
+// @modified     10/10/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2811,7 +2811,22 @@
 
             $('#store_drop_info').val(zdy_item_drop);
         },
+        addzxbuy: (itemname) => {
+            if (itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
+                messageAppend("高级物品,不添加" + itemname);
+                return;
+            }
+            if (auto_skillPaperSelllist == "") {
+                auto_skillPaperSelllist = itemname;
+            } else {
+                auto_skillPaperSelllist = auto_skillPaperSelllist + "," + itemname;
+            }
+            GM_setValue(roleid + "_auto_skillPaperSelllist", auto_skillPaperSelllist);
+      
+            messageAppend("添加成功" + itemname);
 
+            $('#autoSkillPaperSell').val(auto_skillPaperSelllist);
+        },
         zdwk: async function (v, x = true) {
             if (x) {
                 if (G.level) {
@@ -7004,6 +7019,10 @@
             cmds = T.recmd(idx, cmds);
             WG.adddrop(n);
             WG.SendCmd(cmds);
+        },addzxbuy: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.addzxbuy(n);
+            WG.SendCmd(cmds);
         },
         clsSakada: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
@@ -7699,16 +7718,21 @@
             } else {
                 ui = ui + `<span class = "addlock" cmd='$addlock ${itemname}'> 添加物品锁 </span>`;
             }
+           
             if (itemname.indexOf("★") >= 0 || itemname.indexOf("☆") >= 0 || itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
                 ui = ui + `</div>`;
-
             } else {
-                ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
+                if(itemname.indexOf("残页")&&itemname!="武道残页"){
+                    ui = ui + `<span class = "addzxbuy"  cmd='$addzxbuy ${itemname}'> 添加到卖残页 </span>`;
+                }else{
+                    ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
+                }
                 if (lock_list.indexOf(itemname) == -1) {
                     ui = ui + `<span class = "adddrop" cmd='$adddrop ${itemname}'> 添加到丢弃 </span>`;
                 }
                 ui = ui + `</div>`;
             }
+          
             return ui;
         },
 
