@@ -2609,6 +2609,7 @@
                 WG.packup_listener = undefined;
                 return;
             }
+            WG.zxBuy()
             let stores = [];
             WG.packup_listener = WG.add_hook(["dialog", "text"], (data) => {
                 if (data.type == "dialog" && data.dialog == "list") {
@@ -2713,7 +2714,7 @@
             });
 
             messageAppend("<hio>包裹整理</hio>开始");
-            WG.zxbuy();
+            //WG.zxbuy();
             WG.go("扬州城-钱庄");
             WG.Send("store;pack");
         },
