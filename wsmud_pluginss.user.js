@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.285
+// @version      0.0.32.286
 // @date         01/07/2018
 // @modified     10/10/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2713,6 +2713,7 @@
             });
 
             messageAppend("<hio>包裹整理</hio>开始");
+            WG.zxbuy();
             WG.go("扬州城-钱庄");
             WG.Send("store;pack");
         },
