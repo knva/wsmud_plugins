@@ -2701,13 +2701,14 @@
                     cmds.push("sell all");
                     cmds.push("$wait 1000");
                     cmds = cmds.concat(dropcmds);
+                    cmds.push("$zxbuy");
                     cmds.push("look3 1");
                     if (cmds.length > 0 || WG.packup_ready) {
                         WG.SendCmd(cmds);
                         WG.packup_ready = true;
                     }
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
-                    WG.zxBuy()
+                    
                     messageAppend("<hio>包裹整理</hio>完成");
                     WG.packup_ready = false;
                     WG.remove_hook(WG.packup_listener);
