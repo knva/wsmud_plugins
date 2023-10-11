@@ -2609,7 +2609,7 @@
                 WG.packup_listener = undefined;
                 return;
             }
-            WG.zxBuy()
+           // WG.zxBuy()
             let stores = [];
             WG.packup_listener = WG.add_hook(["dialog", "text"], (data) => {
                 if (data.type == "dialog" && data.dialog == "list") {
