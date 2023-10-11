@@ -2609,7 +2609,7 @@
                 WG.packup_listener = undefined;
                 return;
             }
-           // WG.zxBuy()
+           
             let stores = [];
             WG.packup_listener = WG.add_hook(["dialog", "text"], (data) => {
                 if (data.type == "dialog" && data.dialog == "list") {
@@ -2683,6 +2683,7 @@
                                 dropcmds.push("drop " + data.items[i].count + " " + data.items[i].id);
                                 dropcmds.push("$wait 350");
                             }
+                            
 
                             messageAppend("<hio>包裹整理</hio>" + data.items[i].name + "丢弃");
 
@@ -2706,6 +2707,7 @@
                         WG.packup_ready = true;
                     }
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
+                    WG.zxBuy()
                     messageAppend("<hio>包裹整理</hio>完成");
                     WG.packup_ready = false;
                     WG.remove_hook(WG.packup_listener);
@@ -2714,7 +2716,7 @@
             });
 
             messageAppend("<hio>包裹整理</hio>开始");
-            //WG.zxbuy();
+            
             WG.go("扬州城-钱庄");
             WG.Send("store;pack");
         },
@@ -5970,7 +5972,7 @@
                     WG.SendCmd(_sendcmd);
                 }
                 if (data.type == "text" && data.msg.indexOf("没有这个玩家") >= 0) {
-                    messageAppend("执行结束");
+                    //messageAppend("执行结束");
                     $(".dialog-close").click();
                     WG.remove_hook(WG.zxBuy_hook);
                 }
