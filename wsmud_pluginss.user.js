@@ -612,6 +612,7 @@
         "住房-练功房": "jh fam 0 start;go west;go west;go north;go enter;go west",
         "扬州城-钱庄": "jh fam 0 start;go north;go west;store",
         "扬州城-广场": "jh fam 0 start",
+        "扬州城-书院": "jh fam 0 start;go east;go north",
         "扬州城-醉仙楼": "jh fam 0 start;go north;go north;go east",
         "扬州城-杂货铺": "jh fam 0 start;go east;go south",
         "扬州城-打铁铺": "jh fam 0 start;go east;go east;go south",
@@ -2701,7 +2702,7 @@
                     cmds.push("sell all");
                     cmds.push("$wait 1000");
                     cmds = cmds.concat(dropcmds);
-                    cmds.push("$zxbuy");
+                    // cmds.push("$zxbuy");
                     cmds.push("look3 1");
                     if (cmds.length > 0 || WG.packup_ready) {
                         WG.SendCmd(cmds);
@@ -9098,7 +9099,8 @@
                 "镖局": "扬州城-镖局正厅",
                 "当铺": "扬州城-当铺",
                 "擂台": "扬州城-擂台",
-                "药铺": "扬州城-药铺"
+                "药铺": "扬州城-药铺",
+                "书院": "扬州城-书院"
             }
             if (mp == 1) {
                 mptp = {
@@ -9174,6 +9176,12 @@
                                 name: "自动整理并清包",
                                 callback: function (key, opt) {
                                     WG.sell_all();
+                                }
+                            },
+                            "回收秘籍残页": {
+                                name: "回收秘籍残页",
+                                callback: function (key, opt) {
+                                    WG.zxBuy();
                                 }
                             },
                             "自动比试": {
