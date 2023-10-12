@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.286
+// @version      0.0.32.287
 // @date         01/07/2018
 // @modified     10/10/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7728,7 +7728,7 @@
                 ui = ui + `</div>`;
             } else {
                 if(itemname.indexOf("残页")&&itemname!="武道残页"){
-                    ui = ui + `<span class = "addzxbuy"  cmd='$addzxbuy ${itemname}'> 添加到卖残页 </span>`;
+                    ui = ui + `<span class = "addzxbuy"  cmd='$addzxbuy ${itemname}'> 添加到回收 </span>`;
                 }else{
                     ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
                 }
