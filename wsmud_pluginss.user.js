@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.290
+// @version      0.0.32.291
 // @date         01/07/2018
-// @modified     30/10/2023
+// @modified     08/11/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -8546,29 +8546,32 @@
                 //         WG.auto_preform();
                 //     }, 200);
                 // }
-                if (data.msg.indexOf("只能在战斗中使用。") >= 0 || data.msg.indexOf('这里不允许战斗') != -1 || data.msg.indexOf('没时间这么做') != -1) {
-                    if (G.in_fight) {
-                        G.in_fight = false;
-                        WG.auto_preform("stop");
-                        WG.clean_dps();
-
+                if (data.indexOf("说：")==-1){
+                    if (data.msg.indexOf("只能在战斗中使用。") >= 0 || data.msg.indexOf('这里不允许战斗') != -1 || data.msg.indexOf('没时间这么做') != -1) {
+                        if (G.in_fight) {
+                            G.in_fight = false;
+                            WG.auto_preform("stop");
+                            WG.clean_dps();
+    
+                        }
+                    }
+                    if (data.msg.indexOf("加油，加油！！") >= 0) {
+                        if (G.in_fight == false) {
+                            G.in_fight = true;
+                            WG.auto_preform();
+                        }
+                    }
+                    if (data.msg.indexOf("你的内力不够，无法使用") >= 0) {
+                        // if (G.in_fight == false) {
+                        //     G.in_fight = true;
+                        // }
+                        if (G.preform_timer != null) {
+                            WG.auto_preform("stop");
+                            messageAppend("内力不足,停止自动出招", 1, 0)
+                        }
                     }
                 }
-                if (data.msg.indexOf("加油，加油！！") >= 0) {
-                    if (G.in_fight == false) {
-                        G.in_fight = true;
-                        WG.auto_preform();
-                    }
-                }
-                if (data.msg.indexOf("你的内力不够，无法使用") >= 0) {
-                    // if (G.in_fight == false) {
-                    //     G.in_fight = true;
-                    // }
-                    if (G.preform_timer != null) {
-                        WG.auto_preform("stop");
-                        messageAppend("内力不足,停止自动出招", 1, 0)
-                    }
-                }
+             
                 if (data.type == 'text') {
                     if (data.msg.indexOf(`${role}身上东西太多了`) >= 0 || data.msg.indexOf("你身上东西太多了") >= 0 || data.msg.indexOf("你拿不下那么多东西。") >= 0) {
                         WG.Send("tm 友情提示：请检查是否背包已满！");
