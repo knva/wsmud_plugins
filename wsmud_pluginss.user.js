@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.292
+// @version      0.0.32.293
 // @date         01/07/2018
-// @modified     08/11/2023
+// @modified     14/11/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1572,6 +1572,7 @@
                 KEY.do_command("pack");
                 KEY.do_command("score");
                 WG.SendCmd("score2");
+                WG.SendCmd("party load");
                 setTimeout(() => {
                     //bind settingbox
                     KEY.do_command("score");
@@ -7765,6 +7766,7 @@
         wk_listener: undefined,
         status: new Map(),
         score: undefined,
+        party:'',
         yaoyuan: 0,
         yaotaFlag: false,
         yaotaCount: 0,
@@ -7894,6 +7896,9 @@
                             }
                         }
                     }
+                }
+                if(data.dialog=='party'){
+                    G.party=data.name;
                 }
 
 
@@ -8245,6 +8250,7 @@
                         if (die_str != '' && data.relive == null) {
                             textShow(die_str)
                         }
+                        break;
                     default:
                         break;
                 }
