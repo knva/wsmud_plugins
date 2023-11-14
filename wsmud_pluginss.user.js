@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.291
+// @version      0.0.32.292
 // @date         01/07/2018
 // @modified     08/11/2023
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -8546,7 +8546,7 @@
                 //         WG.auto_preform();
                 //     }, 200);
                 // }
-                if (data.indexOf("说：")==-1){
+                if (data.msg.indexOf("说：")==-1){
                     if (data.msg.indexOf("只能在战斗中使用。") >= 0 || data.msg.indexOf('这里不允许战斗') != -1 || data.msg.indexOf('没时间这么做') != -1) {
                         if (G.in_fight) {
                             G.in_fight = false;
