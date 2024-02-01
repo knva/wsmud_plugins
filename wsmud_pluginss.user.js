@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.293
+// @version      0.0.32.294
 // @date         01/07/2018
-// @modified     14/11/2023
+// @modified     01/02/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -233,7 +233,7 @@
             set onclose(fn) {
                 ws.onclose = (e) => {
                     WG.online = false;
-					G.connected = false;
+                    G.connected = false;
                     auto_relogin = GM_getValue(roleid + "_auto_relogin", auto_relogin);
                     fn(e);
                     if (auto_relogin == "开") {
@@ -252,12 +252,12 @@
                 ws.onerror = fn;
             },
             send: function (text) {
-				if (G.cookie == undefined){
-				    G.cookie = text;
-				}
-				if (text.indexOf(G.id) > -1&&!G.connected){
-					text = G.cookie + ' ' + G.id
-				}
+                if (G.cookie == undefined) {
+                    G.cookie = text;
+                }
+                if (text.indexOf(G.id) > -1 && !G.connected) {
+                    text = G.cookie + ' ' + G.id
+                }
                 if (G.cmd_echo) {
                     show_msg('<hiy>' + text + '</hiy>');
                 }
@@ -2275,7 +2275,7 @@
                     }
                 });
             }
-            while (WG.sm_state !=-1) {
+            while (WG.sm_state != -1) {
                 try {
                     await WG.doSmTask(WG.sm_state);
                     await WG.sleep(1000);
@@ -2611,7 +2611,7 @@
                 WG.packup_listener = undefined;
                 return;
             }
-           
+
             let stores = [];
             WG.packup_listener = WG.add_hook(["dialog", "text"], (data) => {
                 if (data.type == "dialog" && data.dialog == "list") {
@@ -2685,7 +2685,7 @@
                                 dropcmds.push("drop " + data.items[i].count + " " + data.items[i].id);
                                 dropcmds.push("$wait 350");
                             }
-                            
+
 
                             messageAppend("<hio>包裹整理</hio>" + data.items[i].name + "丢弃");
 
@@ -2710,7 +2710,7 @@
                         WG.packup_ready = true;
                     }
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
-                    
+
                     messageAppend("<hio>包裹整理</hio>完成");
                     WG.packup_ready = false;
                     WG.remove_hook(WG.packup_listener);
@@ -2719,7 +2719,7 @@
             });
 
             messageAppend("<hio>包裹整理</hio>开始");
-            
+
             WG.go("扬州城-钱庄");
             WG.Send("store;pack");
         },
@@ -2829,7 +2829,7 @@
                 auto_skillPaperSelllist = auto_skillPaperSelllist + "," + itemname;
             }
             GM_setValue(roleid + "_auto_skillPaperSelllist", auto_skillPaperSelllist);
-      
+
             messageAppend("添加成功" + itemname);
 
             $('#autoSkillPaperSell').val(auto_skillPaperSelllist);
@@ -5960,8 +5960,8 @@
                 let _seller = WG.getIdByName("朱熹")
                 let _itemids = new Map();
                 let _sendcmd = ""
-                if (data.type == 'dialog' && data.dialog=='pack') {
-                  
+                if (data.type == 'dialog' && data.dialog == 'pack') {
+
                     for (let item of data.items) {
                         if (WG.inArray(item.name.toLowerCase(), auto_skillPaperSelllist.split(","))) {
                             _itemids.set(item.id, item.count);
@@ -7007,7 +7007,7 @@
             cmds = T.recmd(idx, cmds);
             WG.tnBuy();
             WG.SendCmd(cmds);
-        },zxbuy: function (idx, n, cmds) {
+        }, zxbuy: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.zxBuy();
             WG.SendCmd(cmds);
@@ -7026,7 +7026,7 @@
             cmds = T.recmd(idx, cmds);
             WG.adddrop(n);
             WG.SendCmd(cmds);
-        },addzxbuy: function (idx, n, cmds) {
+        }, addzxbuy: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.addzxbuy(n);
             WG.SendCmd(cmds);
@@ -7725,13 +7725,13 @@
             } else {
                 ui = ui + `<span class = "addlock" cmd='$addlock ${itemname}'> 添加物品锁 </span>`;
             }
-           
+
             if (itemname.indexOf("★") >= 0 || itemname.indexOf("☆") >= 0 || itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
                 ui = ui + `</div>`;
             } else {
-                if(itemname.indexOf("残页")>=0&&itemname!="武道残页"){
+                if (itemname.indexOf("残页") >= 0 && itemname != "武道残页") {
                     ui = ui + `<span class = "addzxbuy"  cmd='$addzxbuy ${itemname}'> 添加到回收 </span>`;
-                }else{
+                } else {
                     ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
                 }
                 if (lock_list.indexOf(itemname) == -1) {
@@ -7739,7 +7739,7 @@
                 }
                 ui = ui + `</div>`;
             }
-          
+
             return ui;
         },
 
@@ -7758,6 +7758,7 @@
         stat_xiyan_find: 0,
         cds: new Map(),
         in_fight: false,
+        fight_id: "",
         auto_preform: false,
         auto_pfm_mode: false,
         can_auto: false,
@@ -7766,7 +7767,7 @@
         wk_listener: undefined,
         status: new Map(),
         score: undefined,
-        party:'',
+        party: '',
         yaoyuan: 0,
         yaotaFlag: false,
         yaotaCount: 0,
@@ -7804,8 +7805,8 @@
                 return false
             }
         },
-		cookie:undefined,
-		connected: false
+        cookie: undefined,
+        connected: false
     };
 
     //GlobalInit
@@ -7897,8 +7898,8 @@
                         }
                     }
                 }
-                if(data.dialog=='party'){
-                    G.party=data.name;
+                if (data.dialog == 'party') {
+                    G.party = data.name;
                 }
 
 
@@ -7907,7 +7908,7 @@
                 switch (data.type) {
                     case "login":
                         G.id = data.id;
-						G.connected = true;
+                        G.connected = true;
                         WG.online = true;
                         break;
                     case "exits":
@@ -8552,13 +8553,13 @@
                 //         WG.auto_preform();
                 //     }, 200);
                 // }
-                if (data.msg.indexOf("说：")==-1){
+                if (data.msg.indexOf("说：") == -1) {
                     if (data.msg.indexOf("只能在战斗中使用。") >= 0 || data.msg.indexOf('这里不允许战斗') != -1 || data.msg.indexOf('没时间这么做') != -1) {
                         if (G.in_fight) {
                             G.in_fight = false;
                             WG.auto_preform("stop");
                             WG.clean_dps();
-    
+
                         }
                     }
                     if (data.msg.indexOf("加油，加油！！") >= 0) {
@@ -8577,7 +8578,7 @@
                         }
                     }
                 }
-             
+
                 if (data.type == 'text') {
                     if (data.msg.indexOf(`${role}身上东西太多了`) >= 0 || data.msg.indexOf("你身上东西太多了") >= 0 || data.msg.indexOf("你拿不下那么多东西。") >= 0) {
                         WG.Send("tm 友情提示：请检查是否背包已满！");
@@ -8653,6 +8654,17 @@
                         }
                     }
                 }
+
+                // 获取id
+                let match = data.msg.match(/看起来(.*)想杀死你！/) || data.msg.match(/你扑向(.*)/);
+                if (Array.isArray(match) && match.length > 1) {
+                    let name = match[1];
+                    let room = roomData.find(room => room.name && room.name.includes(name));
+                    if (room) {
+                        G.fight_id = room.id;
+                    }
+                }
+
 
             });
             WG.add_hook('dialog', function (data) {
