@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.294
+// @version      0.0.32.295
 // @date         01/07/2018
-// @modified     01/02/2024
+// @modified     03/05/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6190,10 +6190,16 @@
                     G.wsdelaySetTime = new Date().getTime()
                     WG.SendCmd("test")
                 } else {
+                   
                     G.wsdelay = (new Date().getTime() - G.wsdelaySetTime + G.wsdelay) / 2
                     WG.SendCmd("tm 服务器到本地来回延迟约 " + G.wsdelay + " 毫秒")
                     G.wsdelaySetTime = undefined;
                     G.wsdelaySetCount = undefined;
+                    setTimeout(() => {
+                        let content = $(".content-message pre").html();
+                        content = content.replaceAll('什么？\n', '');
+                        $(".content-message pre").html(content);
+                    }, 10);
                 }
             }
 
