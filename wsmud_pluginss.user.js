@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.295
+// @version      0.0.32.296
 // @date         01/07/2018
 // @modified     03/05/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4369,6 +4369,8 @@
             var tmpitme = med_item.split('|');
             var med_items = [];
             for (let pitem of tmpitme) {
+                //去除空格
+                pitem = pitem.replace(/(^\s*)|(\s*$)/g, "");
                 med_items.push(pitem.split(","));
             }
 
