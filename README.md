@@ -5,7 +5,7 @@
 
 文档地址:
 
-https://www.yuque.com/wsmud/doc/gm0b8i
+[Raid.js以及wsmud_pluginss插件命令教程入口](https://www.yuque.com/wsmud/doc/gm0b8i)
 
 ### 脚本需要使用tampermonkey 插件
 
