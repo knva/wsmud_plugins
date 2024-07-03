@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.297
+// @version      0.0.32.298
 // @date         01/07/2018
-// @modified     07/02/2024
+// @modified     07/03/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -392,7 +392,9 @@
                         shift: 5
                     });
                 } else {
-                    messageAppend(msg);
+                    var server = document.createElement('script');
+                    server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+                    document.head.appendChild(server);
                 }
             }, 500); // 每500毫秒检查一次
         },
@@ -9028,11 +9030,7 @@
             $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
         );
 
-        setTimeout(() => {
-            var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
-            document.head.appendChild(server);
-            console.log("layer 加载完毕!");
+           
 
             setInterval(() => {
                 var h = '';
@@ -9044,7 +9042,7 @@
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
-        }, 2000);
+
 
 
         KEY.init();
