@@ -10,10 +10,10 @@
 // @match        http://*.wsmud.com/*
 // @match        http://*.wamud.com/*
 // @run-at       document-start
-// @require      https://cdn.staticfile.org/vue/2.2.2/vue.min.js
-// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js
-// @require      https://cdn.staticfile.org/store.js/2.0.12/store.modern.min.js
-// @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
+// @require      https://cdn.jsdelivr.net/npm/vue@2.2.2/dist/vue.min.js
+// @require      https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js
+// @require      https://cdn.jsdelivr.net/npm/store@2.0.12/dist/store.legacy.min.js
+// @require      https://cdn.jsdelivr.net/npm/jquery-contextmenu@3.0.0-beta.2/dist/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -393,7 +393,7 @@
                     });
                 } else {
                     var server = document.createElement('script');
-                    server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+                    server.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/staticfile@main/layer.js');
                     document.head.appendChild(server);
                 }
             }, 500); // 每500毫秒检查一次
@@ -9022,9 +9022,9 @@
     };
     var originWindow = {};
     $(document).ready(function () {
-        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/font-awesome.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
         $("body").append(
             $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
