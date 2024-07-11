@@ -10,7 +10,7 @@
 // @match           http://*.wsmud.com/*
 // @match           http://*.wamud.com/*
 // @run-at          document-end
-// @require         https://cdn.jsdmirror.com/npm/vue@2.2.2/dist/vue.min.js
+// @require         https://s4.zstatic.net/ajax/libs/vue/2.2.2/vue.min.js
 // @grant           unsafeWindow
 // @grant           GM_getValue
 // @grant           GM_setValue
