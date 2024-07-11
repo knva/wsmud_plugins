@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.299
+// @version      0.0.32.300
 // @date         01/07/2018
 // @modified     07/09/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -10,10 +10,10 @@
 // @match        http://*.wsmud.com/*
 // @match        http://*.wamud.com/*
 // @run-at       document-start
-// @require      https://cdn.jsdelivr.net/npm/vue@2.2.2/dist/vue.min.js
-// @require      https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js
-// @require      https://cdn.jsdelivr.net/npm/store@2.0.12/dist/store.legacy.min.js
-// @require      https://cdn.jsdelivr.net/npm/jquery-contextmenu@3.0.0-beta.2/dist/jquery.contextMenu.min.js
+// @require      https://cdn.jsdmirror.com/npm/vue@2.2.2/dist/vue.min.js
+// @require      https://cdn.jsdmirror.com/npm/jquery@3.3.1/dist/jquery.min.js
+// @require      https://cdn.jsdmirror.com/npm/store@2.0.12/dist/store.legacy.min.js
+// @require      https://cdn.jsdmirror.com/npm/jquery-contextmenu@3.0.0-beta.2/dist/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -393,7 +393,7 @@
                     });
                 } else {
                     var server = document.createElement('script');
-                    server.setAttribute('src', 'https://cdn.jsdelivr.net/gh/knva/staticfile@main/layer.js');
+                    server.setAttribute('src', 'https://cdn.jsdmirror.com/gh/knva/staticfile@main/layer.js');
                     document.head.appendChild(server);
                 }
             }, 500); // 每500毫秒检查一次
@@ -747,8 +747,8 @@
     };
     var diff_colors = {
         'normal': '',
-        'access': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
-        'flat': 'https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
+        'access': 'https://cdn.jsdmirror.com/gh/mapleobserver/wsmud-script/plugins/wsmud_color_accessibility.css',
+        'flat': 'https://cdn.jsdmirror.com/gh/mapleobserver/wsmud-script/plugins/wsmud_color_flat.css'
     };
     var fb_path = [];
     var drop_list = [];
@@ -3203,7 +3203,7 @@
                         // 导入三三懒人包流程，方便后续导入操作
                         // 自命令类型选 Raidjs流程
                         // 四区白三三
-                        ($f_ss)={"name":"三三懒人包","source":"https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/三三懒人包.flow.txt","finder":"根文件夹"}
+                        ($f_ss)={"name":"三三懒人包","source":"https://cdn.jsdmirror.com/gh/mapleobserver/wsmud-script/三三懒人包.flow.txt","finder":"根文件夹"}
                         @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
                         @await 2000
                         tm 【三三懒人包】流程已导入，如果曾用早期版本的懒人包导入过流程，请先删除这些流程后再使用。`;
@@ -9022,12 +9022,12 @@
     };
     var originWindow = {};
     $(document).ready(function () {
-        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/font-awesome.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.jsdelivr.net/gh/knva/staticfile@main/layer.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdmirror.com/gh/knva/staticfile@main/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdmirror.com/gh/knva/staticfile@main/font-awesome.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.jsdmirror.com/gh/knva/staticfile@main/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
         $("body").append(
-            $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
+            $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdmirror.com/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
         );
 
            
