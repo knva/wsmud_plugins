@@ -4606,7 +4606,7 @@ look men;open men
             });
         },
 
-        _address: "mush.fun/api",
+        _address: "wsmud.ii74.com/S",
         _async(uri, params, success, fail) {
             this._get(true, uri, params, success, fail);
         },
@@ -4616,7 +4616,7 @@ look men;open men
         _get(async, uri, params, success, fail) {
             $.ajax({
                 type: "post",
-                url: `http://${Server._address}/${uri}`,
+                url: `https://${Server._address}/${uri}`,
                 data: params,
                 async: async,
                 success: function (data) {
