@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.300
+// @version      0.0.32.301
 // @date         01/07/2018
 // @modified     07/03/2024
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2271,7 +2271,7 @@
                     if (data.msg.indexOf("辛苦了， 你先去休息") >= 0 ||
                         data.msg.indexOf("和本门毫无瓜葛") >= 0 ||
                         data.msg.indexOf("你没有") >= 0
-                    ) {
+                       ) {
                         WG.Send("taskover signin");
                         WG.sm_state = -1;
                         $(".sm_button").text("师门(Q)");
@@ -3272,7 +3272,7 @@
                 }
             })
 
-        },
+            },
         dsj_hook: undefined,
         dsj_func: function () {
             if (WG.dsj_hook) {
@@ -3406,7 +3406,7 @@
                 }
             })
 
-        },
+            },
         lxjs: function () {
             messageClear();
             var html = UI.lxjsui;
@@ -3434,12 +3434,12 @@
                             this.jsqsx[key] = Number(value);
                         })
                         const lxObj = WG.lx(this.jsqsx.xtwx, this.jsqsx.htwx, this.jsqsx.lxxl,
-                            this.jsqsx.clevel, this.jsqsx.mlevel, this.jsqsx.color);
+                                            this.jsqsx.clevel, this.jsqsx.mlevel, this.jsqsx.color);
                         messageAppend("需要潜能:" + lxObj.qianneng + "     所需时间:" + lxObj.time);
                     }
                 }
             })
-        },
+            },
         khjs: function () {
             messageClear();
             var html = UI.khjsui;
@@ -3467,26 +3467,26 @@
                     }
                 }
             })
-        }, zcjs: function () {
-            messageClear();
-            var html = UI.zcjsui;
-            messageAppend(html);
-            const khvue = new Vue({
-                el: ".ZiChuangCalc",
-                data: {
-                    zcsx: {
-                        level: 0,
-                        percentage: 0
+            }, zcjs: function () {
+                messageClear();
+                var html = UI.zcjsui;
+                messageAppend(html);
+                const khvue = new Vue({
+                    el: ".ZiChuangCalc",
+                    data: {
+                        zcsx: {
+                            level: 0,
+                            percentage: 0
+                        }
+                    },
+                    methods: {
+                        zcjscalc: function () {
+                            messageAppend("自创" + this.zcsx.level + "级,词条百分比:" + this.zcsx.percentage + " 需要词条等级:" +
+                                          Math.ceil((this.zcsx.percentage - 4 - 2.5e-3 * this.zcsx.level) / this.zcsx.level / 2.5e-5));
+                        }
                     }
+                })
                 },
-                methods: {
-                    zcjscalc: function () {
-                        messageAppend("自创" + this.zcsx.level + "级,词条百分比:" + this.zcsx.percentage + " 需要词条等级:" +
-                            Math.ceil((this.zcsx.percentage - 4 - 2.5e-3 * this.zcsx.level) / this.zcsx.level / 2.5e-5));
-                    }
-                }
-            })
-        },
         switchReversal: function (e) {
             let p = e.hasClass("on");
             if (!p) {
@@ -3556,7 +3556,7 @@
             // 如果 auto_pfm_mode 等于 true 则使用智能施法
             if (G.auto_pfm_mode) {
                 let force_buff_skill = ['force.cui', 'force.power', 'force.xi',
-                    'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
+                                        'force.xin', 'force.chu', 'force.ztd', 'force.zhen', 'force.busi', 'force.wang'];
                 let buff_skill_dict = {
                     "weapon": ['sword.wu', 'blade.shi', 'sword.yu'],
                     "ztd": ["force.ztd"],
@@ -4509,7 +4509,7 @@
 
                 }
             })
-        },
+            },
         zml_edit: function () {
             zml = GM_getValue(roleid + "_zml", zml);
             if (! typeof zml instanceof Array) {
@@ -4611,7 +4611,7 @@
                 }
             })
 
-        },
+            },
         isseted: false,
         zml_showp: function () {
             $(".zdy-commands").empty();
@@ -4945,9 +4945,9 @@
                                             }
                                         }
                                     } else if ((item == "谣言" && data.ch == "rumor") ||
-                                        (item == "系统" && data.ch == 'sys') ||
-                                        (item == "门派" && data.ch == 'fam') ||
-                                        (item == "帮派" && data.ch == 'pty')) {
+                                               (item == "系统" && data.ch == 'sys') ||
+                                               (item == "门派" && data.ch == 'fam') ||
+                                               (item == "帮派" && data.ch == 'pty')) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 if (v.istip != "0") {
@@ -5297,7 +5297,7 @@
                                 await WG.sleep(1000);
                             }
                             while (!WG.getIdByName("程药发"))
-                            WG.SendCmd("ask3 $pname(\"程药发\")");
+                                WG.SendCmd("ask3 $pname(\"程药发\")");
                         }
 
                     }
@@ -6081,7 +6081,7 @@
                 try {
                     var listener = this.hooks[i];
                     if (listener.types == data.type || (listener.types instanceof Array && $
-                        .inArray(data.type, listener.types) >= 0)) {
+                                                        .inArray(data.type, listener.types) >= 0)) {
                         listener.fn(data);
                     }
                 }
@@ -6151,7 +6151,7 @@
                 if (shieldswitch == '开') {
                     if (shield != undefined &&
                         (shield.indexOf(data.name) >= 0 ||
-                            shield.indexOf(data.uid) >= 0))
+                         shield.indexOf(data.uid) >= 0))
                         return;
                     var skey = shieldkey.split(",");
                     for (let keyword of skey) {
@@ -6197,7 +6197,7 @@
                     G.wsdelaySetTime = new Date().getTime()
                     WG.SendCmd("test")
                 } else {
-                   
+
                     G.wsdelay = (new Date().getTime() - G.wsdelaySetTime + G.wsdelay) / 2
                     WG.SendCmd("tm 服务器到本地来回延迟约 " + G.wsdelay + " 毫秒")
                     G.wsdelaySetTime = undefined;
@@ -7259,7 +7259,7 @@
                     <option value="flat"> flat模式 </option>
                     <option value="access"> 色若模式</option>
                 </select> *此功能刷新后生效
-                </span></div>  
+                </span></div>
                 <div class="setting-item" >
                 <span><label for="family">门派选择：</label><select id="family" style="width:80px">
                         <option value="武当">武当</option>
@@ -7327,7 +7327,7 @@
                 </select>
                 </span></div> `
                 + UI.html_lninput("pushToken", "推送方式对应的Token或Key(只要Key不要填整个网址)：")
-                //+ UI.html_lninput("pushUrl", "推演方式对应的推送网址(末尾不要加斜杠/)：")
+            //+ UI.html_lninput("pushUrl", "推演方式对应的推送网址(末尾不要加斜杠/)：")
 
                 + `<h3>自动BOSS配置</h3>`
                 + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
@@ -7791,15 +7791,15 @@
         wsdelaySetCount: undefined,
         wsdelay: undefined,
         enable_skills: [{ type: "unarmed", name: "none" },
-        { type: "force", name: "none" },
-        { type: "parry", name: "none" },
-        { type: "dodge", name: "none" },
-        { type: "sword", name: "none" },
-        { type: "throwing", name: "none" },
-        { type: "blade", name: "none" },
-        { type: "whip", name: "none" },
-        { type: "club", name: "none" },
-        { type: "staff", name: "none" },],
+                        { type: "force", name: "none" },
+                        { type: "parry", name: "none" },
+                        { type: "dodge", name: "none" },
+                        { type: "sword", name: "none" },
+                        { type: "throwing", name: "none" },
+                        { type: "blade", name: "none" },
+                        { type: "whip", name: "none" },
+                        { type: "club", name: "none" },
+                        { type: "staff", name: "none" },],
 
         eqs: [],
         isGod: function () {
@@ -8248,7 +8248,7 @@
                             }
                         }
                         if ((data.msg.indexOf("不要急") >= 0 || data.msg.indexOf("你现在手忙脚乱") >= 0 ||
-                            data.msg.indexOf("你正在昏迷") >= 0 || data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
+                             data.msg.indexOf("你正在昏迷") >= 0 || data.msg.indexOf("你上个技能") >= 0) && G.auto_preform) {
                             if (!G.gcd) {
                                 G.gcd = true;
                                 setTimeout(() => {
@@ -8548,15 +8548,15 @@
                 if (G.getitemShow) {
                     if (data.msg.indexOf("恭喜你得到") >= 0 ||
                         (data.msg.indexOf("获得") >= 0 &&
-                            data.msg.indexOf("经验") == -1 &&
-                            data.msg.indexOf("潜能") == -1 &&
-                            data.msg.indexOf("提升") == -1) ||
+                         data.msg.indexOf("经验") == -1 &&
+                         data.msg.indexOf("潜能") == -1 &&
+                         data.msg.indexOf("提升") == -1) ||
                         data.msg.indexOf("你找到") == 0 ||
                         data.msg.indexOf("你从") == 0 ||
                         (data.msg.indexOf("得到") >= 0 &&
-                            data.msg.indexOf("郭襄在得到倚天剑") == -1 &&
-                            data.msg.indexOf("长白山得到剑谱") == -1)
-                    ) {
+                         data.msg.indexOf("郭襄在得到倚天剑") == -1 &&
+                         data.msg.indexOf("长白山得到剑谱") == -1)
+                       ) {
                         messageAppend(data.msg);
                     }
                 }
@@ -8931,31 +8931,31 @@
                 return;
             }
             switch (String(pushType)) {
-                //Server酱
+                    //Server酱
                 case "0":
                     $.post(`https://sctapi.ftqq.com/${pushToken}.send?title=${text}`);
                     break;
-                //Bark iOS
+                    //Bark iOS
                 case "1":
                     $.post(`https://api.day.app/${pushToken}/武神传说/${encodeURIComponent(text)}`);
                     break;
-                //PushPlus
+                    //PushPlus
                 case "2":
                     var pushJosn = { "token": pushToken, "title": "武神传说", "content": text };
                     $.ajaxSetup({ contentType: "application/json; charset=utf-8" });
                     $.post(`http://www.pushplus.plus/send/`, JSON.stringify(pushJosn));
                     break;
-                //飞书机器人
+                    //飞书机器人
                 case "3":
                     var pushJosn = { "msg_type": "text", "content": { "text": text } };
                     $.ajaxSetup({ contentType: "application/json; charset=utf-8" });
                     $.post(`https://open.feishu.cn/open-apis/bot/v2/hook/${pushToken}`, JSON.stringify(pushJosn));
                     break;
-                //Qmsg私聊
+                    //Qmsg私聊
                 case "4":
                     $.post(`https://qmsg.zendee.cn/send/${pushToken}?msg=${text}`);
                     break;
-                //Qmsg群聊
+                    //Qmsg群聊
                 case "5":
                     $.post(`https://qmsg.zendee.cn/group/${pushToken}?msg=${text}`);
                     break;
@@ -9030,18 +9030,18 @@
             $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
         );
 
-           
 
-            setInterval(() => {
-                var h = '';
-                if (parseInt(Math.random() * 10) < 3) {
-                    h = "<hir>【插件】有任何问题欢迎加入 武神传说-仙界 367657589 进行技术交流，脚本讨论。\n<hir>"
-                } else if (parseInt(Math.random() * 10) < 10) {
-                    h = "<hir>【插件】欢迎访问 https://emeisuqing.github.io/wsmud.old/ 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
-                }
-                parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
-                $(".channel")[0].scrollTop = 99999;
-            }, 320 * 1000);
+
+        setInterval(() => {
+            var h = '';
+            if (parseInt(Math.random() * 10) < 3) {
+                h = "<hir>【插件】有任何问题欢迎加入 武神传说-仙界 367657589 进行技术交流，脚本讨论。\n<hir>"
+            } else if (parseInt(Math.random() * 10) < 10) {
+                h = "<hir>【插件】欢迎访问 https://emeisuqing.github.io/wsmud.old/ 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
+            }
+            parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
+            $(".channel")[0].scrollTop = 99999;
+        }, 320 * 1000);
 
 
 
@@ -9093,6 +9093,10 @@
                 console.log("Run at message");
             }
             if (typeof data == 'string') {
+                //包含setImmediate 跳过
+                if(data.indexOf("setImmediate") >= 0){
+                    return;
+                }
                 if (data === '挖矿' || data === '修炼') {
                     WG.zdwk();
                 } else if (data === '日常') {
