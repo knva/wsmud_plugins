@@ -86,31 +86,6 @@ gulp.task("minifyjs2", function () {
     ]) //压缩多个文件
     .pipe(concat("wg.js")) //合并js
     .pipe(gulp.dest("./public/wg")) //输出
-    .pipe(
-      replace(
-        "https://s4.zstatic.net/ajax/libs/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css",
-        "https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css"
-      )
-    ) // 替换URL
-    .pipe(
-      replace(
-        "https://s4.zstatic.net/ajax/libs/layer/2.3/skin/layer.css",
-        "https://cdn.staticfile.org/layer/2.3/skin/layer.css"
-      )
-    ) // 替换URL
-    .pipe(
-      replace(
-        "https://s4.zstatic.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.css",
-        "https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css"
-      )
-    ) // 替换URL
-    .pipe(
-      replace(
-        "https://s4.zstatic.net/ajax/libs/layer/2.3/layer.js",
-        "https://cdn.staticfile.org/layer/2.3/layer.js"
-      )
-    ) // 替换URL
-
     .pipe(rename({ suffix: ".min" })) //重命名
     .pipe(uglify()) //压缩
     .pipe(gulp.dest("./public/wg")); //输出
