@@ -3263,8 +3263,14 @@
                         WG.wsdelaytest();
                     },
                     yuanshen: function () {
-                        //
-                        window.location.href = 'https://ys.mihoyo.com/cloud/?utm_source=default#/'
+                        //增加询问确实是否离开
+                        layer.confirm('将要退出，确定吗?', function(index){
+                            // do something
+                            // …
+                              window.location.href = 'https://ys.mihoyo.com/cloud/?utm_source=default#/'
+                            layer.close(index);
+                          });
+                      
                     },
                     onekeyyaota: function () {
                         T.goyt();
