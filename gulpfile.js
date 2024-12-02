@@ -1,92 +1,79 @@
 var gulp = require("gulp");
-var concat = require("gulp-concat"); //合并文件
-var rename = require("gulp-rename"); //文件重命名
-var uglify = require("gulp-uglify"); //js压缩
-var minifycss = require("gulp-minify-css"); //css压缩
-var replace = require("gulp-replace"); //替换URL
+var concat = require("gulp-concat");
+var rename = require("gulp-rename");
+var uglify = require("gulp-uglify");
+var minifycss = require("gulp-minify-css");
+var replace = require("gulp-replace");
 var download = require("gulp-download-stream");
-
 var rm = require("gulp-rm");
-/**
- * 压缩js(css压缩原理类同)
- * 解压文件路径： ['./js/index.js'] js多个文件进行压缩
- * 解出文件路径： ./js
- */
-gulp.task("minifyjs", function () {
+
+// File paths and URLs for better reusability
+var jsFiles = [
+  "./src/gen/GMfuc.js",
+  "./src/gen/wsp.js",
+  "./src/gen/l1.js",
+  "./src/gen/raid.js",
+  "./src/gen/tri.js"
+];
+
+var jsDownloadUrls = [
+  {
+    file: "wsp.js",
+    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_pluginss.user.js"
+  },
+  {
+    file: "tri.js",
+    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Trigger.user.js"
+  },
+  {
+    file: "raid.js",
+    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Raid.user.js"
+  }
+];
+
+var gameUpdateUrls = [
+  {
+    file: "index.html",
+    url: "http://www.wamud.com/"
+  },
+  {
+    file: "./dist/ws.min.js",
+    url: "http://www.wamud.com/dist/ws.min.js"
+  }
+];
+
+// Minify JS task (optimized for reusability)
+function minifyJs(srcFiles, destFolder) {
   return gulp
-    .src([
-      "./src/gen/GMfuc.js",
-      "./src/gen/wsp.js",
-      "./src/gen/l1.js",
-      "./src/gen/raid.js",
-      "./src/gen/tri.js",
-    ]) //压缩多个文件
-    .pipe(concat("wg.js")) //合并js
-    .pipe(gulp.dest("./public/wg")) //输出
-    .pipe(rename({ suffix: ".min" })) //重命名
-    .pipe(uglify()) //压缩
-    .pipe(gulp.dest("./public/wg")); //输出
+    .src(srcFiles)
+    .pipe(concat("wg.js"))
+    .pipe(gulp.dest(destFolder))
+    .pipe(rename({ suffix: ".min" }))
+    .pipe(uglify())
+    .pipe(gulp.dest(destFolder));
+}
+
+// Task to clean the src/gen directory
+gulp.task("clean", function () {
+  return gulp.src("src/gen/*", { allowEmpty: true, read: false }).pipe(rm());
 });
 
-// Gulp 任务：删除 src/gen 目录
-gulp.task("clean", function (done) {
-  //rm
-  return gulp.src("src/gen/*", {allowEmpty: true, read: false }).pipe(rm());
-});
-/**
- * 下载最新插件
- */
+// Task to download the latest plugins
 gulp.task("download", function () {
-  // https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_pluginss.user.js 到src/wsp.js
-  // https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Trigger.user.js 到src/tri.js
-  // https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Raid.user.js 到src/raid.js
-  return download([
-    {
-      file: "wsp.js",
-      url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_pluginss.user.js",
-    },
-    {
-      file: "tri.js",
-      url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Trigger.user.js",
-    },
-    {
-      file: "raid.js",
-      url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Raid.user.js",
-    },
-  ]).pipe(gulp.dest("./src/"));
+  return download(jsDownloadUrls).pipe(gulp.dest("./src/"));
 });
-/**
- * 下载最新游戏
- */
+
+// Task to update the latest game files
 gulp.task("update", function () {
-  return download([
-    {
-      file: "index.html",
-      url: "http://www.wamud.com/",
-    },
-    {
-      file: "./dist/ws.min.js",
-      url: "http://www.wamud.com/dist/ws.min.js",
-    }
-  ]).pipe(gulp.dest("./public/"));
+  return download(gameUpdateUrls).pipe(gulp.dest("./public/"));
 });
-/**
- * 压缩js(css压缩原理类同)
- * 解压文件路径： ['./js/index.js'] js多个文件进行压缩
- * 解出文件路径： ./js
- */
+
+// Task to minify JavaScript files
+gulp.task("minifyjs", function () {
+  return minifyJs(jsFiles, "./public/wg");
+});
+
+// Combining both minify tasks into one reusable task
 gulp.task("minifyjs2", function () {
-  return gulp
-    .src([
-      "./src/GMfuc.js",
-      "./src/wsp.js",
-      "./src/l1.js",
-      "./src/raid.js",
-      "./src/tri.js",
-    ]) //压缩多个文件
-    .pipe(concat("wg.js")) //合并js
-    .pipe(gulp.dest("./public/wg")) //输出
-    .pipe(rename({ suffix: ".min" })) //重命名
-    .pipe(uglify()) //压缩
-    .pipe(gulp.dest("./public/wg")); //输出
+  return minifyJs(jsFiles.map(file => file.replace('src/gen', 'src')), "./public/wg");
 });
