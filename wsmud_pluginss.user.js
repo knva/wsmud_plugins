@@ -378,9 +378,7 @@
         };
 
     } else {
-        console.log("插件不可运行,请打开'https://greasyfork.org/zh-CN/forum/discussion/41547/x'");
-        //document.getElementsByClassName("signinfo")[0].innerHTML = "<HIR>武神传说SS插件没有正常运行！请使用CTRL+F5刷新 QQ群 367657589</HIR>"
-
+        console.log("插件不可运行，请访问: https://greasyfork.org/zh-CN/forum/discussion/41547/x");
     }
     var L = {
         msg: function (msg) {
