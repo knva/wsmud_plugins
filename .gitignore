@@ -1,0 +1,69 @@
+# 依赖目录
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnp/
+.pnp.js
+
+# 构建输出
+/dist
+/build
+/out
+/.next
+
+# 环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 缓存目录
+.npm
+.eslintcache
+.cache
+.parcel-cache
+
+# 日志文件
+logs
+*.log
+
+# 编辑器和IDE相关
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.directory
+.project
+.settings/
+.classpath
+.c9/
+*.launch
+*.sublime-workspace
+
+# 测试覆盖率报告
+/coverage
+.nyc_output
+
+# 临时文件
+/tmp
+/temp
+
+# 调试文件
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 本地配置文件
+config.local.js
+config.dev.js
+
+# 打包文件
+*.tgz
+*.zip
+*.tar.gz
+
+# TypeScript
+*.tsbuildinfo
