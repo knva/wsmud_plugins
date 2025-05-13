@@ -141,7 +141,7 @@
     }
 
     //滚动 -- fork from Suqing funny ---------------fixed
-    function AutoScroll(name) {
+    function AutoScrollBak(name) {
         if (name) {
             if ($(name).length != 0) {
                 let scrollTop = $(name)[0].scrollTop;
@@ -157,7 +157,69 @@
             }
         }
     }
+    function AutoScroll(selector) {
+        const element = document.querySelector(selector); // 使用原生 API
 
+        if (!element) {
+            // console.warn(`Element not found for selector: ${selector}`);
+            return; // 元素不存在，直接返回
+        }
+
+        const SCROLL_SPEED_FACTOR = 120; // 滚动速度因子
+        const MIN_SCROLL_INCREMENT = 1;   // 最小滚动步长
+
+        let animationFrameId = null;
+
+        function step() {
+            const currentScrollTop = element.scrollTop;
+            const scrollHeight = element.scrollHeight;
+            const clientHeight = element.clientHeight; // 元素内部可见高度
+            const targetScrollTop = scrollHeight - clientHeight;
+
+            // 检查是否已到达或超过底部 (加一点容差)
+            if (currentScrollTop >= targetScrollTop - MIN_SCROLL_INCREMENT) {
+                // 确保精确滚动到底部（可选）
+                element.scrollTop = targetScrollTop;
+                // 不需要取消动画帧，因为不再请求下一帧
+                animationFrameId = null; // 标记动画已结束
+                return;
+            }
+
+            const remainingScroll = targetScrollTop - currentScrollTop;
+
+            // 计算增量
+            const increment = Math.max(
+                MIN_SCROLL_INCREMENT,
+                Math.ceil(remainingScroll / SCROLL_SPEED_FACTOR)
+            );
+
+            // 更新滚动位置 (可以直接设置，无需 + add)
+            element.scrollTop += increment;
+            // 或者为了防止过冲： element.scrollTop = Math.min(currentScrollTop + increment, targetScrollTop);
+
+            // 请求下一帧
+            animationFrameId = requestAnimationFrame(step);
+        }
+
+        // --- 启动逻辑 ---
+        // 如果已有动画在运行，先取消它
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        // 只有当元素没有完全滚动到底部时才启动动画
+        if (element.scrollTop < element.scrollHeight - element.clientHeight - 1) { // 加个小容差
+            animationFrameId = requestAnimationFrame(step);
+        }
+
+
+        // 可以返回一个停止函数
+        // return () => {
+        //     if (animationFrameId) {
+        //         cancelAnimationFrame(animationFrameId);
+        //         animationFrameId = null;
+        //     }
+        // };
+    }
 
     /**
      * 为数字加上单位：万或亿
@@ -1401,8 +1463,6 @@
         }, t);
     }
     function messageAppend(m, t = 0, area = 0) {
-
-
         if (area) {
             var ap = m + "\n";
             if (t == 1) {
