@@ -43,6 +43,7 @@
         return this.replace(new RegExp(s1, "gm"), s2);
     };
 
+
     /**
     * 将文本复制到剪贴板，优先使用现代 Clipboard API，
     * 如果失败或不可用，则回退到旧的 execCommand 方法。
@@ -241,19 +242,26 @@
      * @return {string} 加上单位后的数字
      */
 
-    function addWan(integer, number, mutiple, decimalDigit) {
+    function addWan(integer, number, multiple, decimalDigit) {
+        const digit = String(integer).length; // More direct way to get digit length
 
-        var digit = getDigit(integer);
         if (digit > 3) {
-            var remainder = digit % 8;
-            if (remainder >= 5) { // ‘十万’、‘百万’、‘千万’显示为‘万’
+            let remainder = digit % 8;
+            if (remainder >= 5) { // ‘十万’、‘百万’、‘千万’显示为‘万’ (Keep this logic if it's a specific requirement)
                 remainder = 4;
             }
-            return Math.round(number / Math.pow(10, remainder + mutiple - decimalDigit)) / Math.pow(10, decimalDigit) + '万';
+            // Use template literals for cleaner string concatenation
+            // Consolidate Math.pow calculations
+            const divisor = Math.pow(10, remainder + multiple - decimalDigit);
+            const result = Math.round(number / divisor) / Math.pow(10, decimalDigit);
+            return `${result}万`;
         } else {
-            return Math.round(number / Math.pow(10, mutiple - decimalDigit)) / Math.pow(10, decimalDigit);
+            const divisor = Math.pow(10, multiple - decimalDigit);
+            const result = Math.round(number / divisor) / Math.pow(10, decimalDigit);
+            return result;
         }
     }
+
     function getDigit(integer) {
         var digit = -1;
         while (integer >= 1) {
