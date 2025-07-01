@@ -1422,7 +1422,79 @@
             $(".room_items .item-commands span:eq(" + index + ")").click();
         },
     }
+   // 1. 定义并注入CSS样式
+    // 我们将之前的所有CSS代码都放在这里。使用 GM_addStyle 可以确保样式被正确注入。
+  const supernovaCSS = `
+    /* 超新星特效的CSS样式 */
+    .supernova-text {
+        position: relative !important; /* 使用!important提高优先级 */
+        font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+        font-weight: bold;
+        font-size: 16px; /* 默认大小，可以根据目标网页调整 */
+        letter-spacing: 2px;
+        color: transparent !important; /* 确保文字本体透明 */
+        
+        /* [核心修改] 将这些不参与动画的属性移到这里 */
+        background: linear-gradient(90deg, #f0f, #0ff, #ff0, #f0f);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
 
+        /* [核心修改] 动画现在只负责一件事：移动背景位置 */
+        animation: text-flow 6s linear infinite;
+    }
+
+    /* --- 动画关键帧定义 --- */
+
+    /* 动画1: 文字本体的流动彩虹效果 (简化且更稳定) */
+    @keyframes text-flow {
+        0% {
+            /* 动画开始时背景的位置 */
+            background-position: 0% 50%;
+        }
+        100% {
+            /* 动画结束时背景的位置 */
+            background-position: 300% 50%;
+        }
+    }
+`;
+    GM_addStyle(supernovaCSS);
+
+
+    // 2. 定义一个函数来应用特效
+    function applyEffect(selector) {
+        if (!selector) {
+            console.log("未提供选择器，操作取消。");
+            return;
+        }
+
+        try {
+            const elements = document.querySelectorAll(selector);
+            if (elements.length === 0) {
+                alert(`未找到匹配 "${selector}" 的元素！请检查CSS选择器是否正确。`);
+                return;
+            }
+
+            elements.forEach(el => {
+                const originalText = el.textContent.trim();
+                // 设置 data-text 属性，为伪元素提供内容
+                el.dataset.text = originalText;
+                // 添加特效的 class
+                el.classList.add('supernova-text');
+
+                // 可选：将原始文本清空，避免在某些情况下文字重叠
+                // el.innerHTML = '';
+
+                console.log(`已为元素 "${selector}" 添加超新星特效，内容为: "${originalText}"`);
+            });
+
+            alert(`成功为 ${elements.length} 个元素添加了特效！`);
+
+        } catch (error) {
+            alert(`选择器 "${selector}" 无效或发生错误: ${error.message}`);
+            console.error(error);
+        }
+    }
     function textBecomeImg(text, fontsize, fontcolor) {
         var canvas = document.createElement('canvas');
         //小于32字加1  小于60字加2  小于80字加4    小于100字加6
@@ -1737,7 +1809,7 @@
                             $.get("https://wsmud.ii74.com/hello/" + role, (result) => {
 
                                 let tmp = `
-                                <hiy>欢迎${rolep},插件已加载！
+                                <hiy>欢迎<span class="supernova-text">${rolep}</span>,插件已加载！
                                 插件版本: ${GM_info.script.version}
                                 更新日志: ${result}
                                 </hiy>`;
