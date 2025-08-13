@@ -19,15 +19,19 @@ var jsFiles = [
 var jsDownloadUrls = [
   {
     file: "wsp.js",
-    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_pluginss.user.js"
+    url: "https://cdn.jsdelivr.net/gh/knva/wsmud_plugins@master/wsmud_pluginss.user.js"
   },
   {
     file: "tri.js",
-    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Trigger.user.js"
+    url: "https://cdn.jsdelivr.net/gh/knva/wsmud_plugins@master/wsmud_Trigger.user.js"
   },
   {
     file: "raid.js",
-    url: "https://cdn.jsdmirror.com/gh/knva/wsmud_plugins@master/wsmud_Raid.user.js"
+    url: "https://cdn.jsdelivr.net/gh/knva/wsmud_plugins@master/wsmud_Raid.user.js"
+  },
+  {
+    file: "l1.js",
+    url: "https://update.greasyfork.org/scripts/443214/wsmud_login1.user.js"
   }
 ];
 
